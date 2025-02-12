@@ -2,6 +2,8 @@
 
 # How to launch project
 
+In terminal: python splash.py
+
 # Github usernames to real names:
 Matthew-Cool -> Matthew Wilkinson
 
