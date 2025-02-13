@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import Toplevel
 from PIL import Image, ImageTk
+import playerEntryScreen
 
 # Splash Screen
 class SplashScreen:
@@ -33,14 +34,12 @@ class SplashScreen:
     def showApp(self):
         self.splash.destroy()
         self.root.deiconify()
+        playerEntryScreen.PlayerEntryScreen(self.root) #opens the playerEntryScreen
 
 # Main App
 class MainApp:
     def __init__(self, root):
-        self.root = root
-        self.root.title("Player Entry Screen") # Window Title
-        self.root.geometry("500x550") # Window Size
-        self.root.configure(bg="white") # Background Color
+        pass
 
 root = tk.Tk()
 SplashScreen(root)
