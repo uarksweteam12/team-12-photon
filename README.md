@@ -12,3 +12,5 @@ python splash.py
 Matthew-Cool -> Matthew Wilkinson
 
 bvqua12 -> Brian Quach
+
+joshiosimoe -> Joshua Yustana
