@@ -52,7 +52,17 @@ class PlayerEntryScreen:
         gameModeFrame = tk.Frame(root, bg="black")
         gameModeFrame.pack(pady=2)
         gameModeButton = tk.Button(gameModeFrame, text=f"Game Mode: {gameMode}", command=self.changeGameMode, bg="grey")
-        gameModeButton.pack(padx=10, pady=1)
+        gameModeButton.pack(padx=10, pady=1, side=tk.LEFT)
+
+        #adds a way to change ip from entry screen
+        ipChangeFrame = tk.Frame(gameModeFrame, bg="grey")
+        ipChangeFrame.pack(side=tk.LEFT)
+
+        ipChangeLabel = tk.Label(ipChangeFrame, text="Change Database IP:", bg="grey", fg="black")
+        ipChangeLabel.pack(side=tk.LEFT)
+        ipChangeEntry = tk.Entry(ipChangeFrame, width=15)
+        ipChangeEntry.pack(side=tk.LEFT)
+
 
         # Command Line what has all the f1, f2, f3, etc
         commandLineFrame = tk.Frame(root, bg="black")
