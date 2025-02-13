@@ -3,8 +3,7 @@ from tkinter import Toplevel
 
 gameMode = "Standard public mode"
 
-redPlayers = {str(i): ['', ''] for i in range(20)} #makes obj from 0 to 19 (players) that has a list with 2 strings
-greenPlayers = {str(i): ['', ''] for i in range(20)}
+
 # ^^^ need to move to member var, but thats for another time...
 
 class PlayerEntryScreen:
@@ -18,11 +17,40 @@ class PlayerEntryScreen:
         self.currentTeamNum = 0
         self.player_labels = []
 
+        #self.redPlayers = {str(i): [tk.StringVar(), tk.StringVar()] for i in range(20)}
+        self.redPlayers = {
+            '0': [tk.StringVar(), tk.StringVar()],
+            '1': [tk.StringVar(), tk.StringVar()],
+            '2': [tk.StringVar(), tk.StringVar()],
+            '3': [tk.StringVar(), tk.StringVar()],
+            '4': [tk.StringVar(), tk.StringVar()],
+            '5': [tk.StringVar(), tk.StringVar()],
+            '6': [tk.StringVar(), tk.StringVar()],
+            '7': [tk.StringVar(), tk.StringVar()],
+            '8': [tk.StringVar(), tk.StringVar()],
+            '9': [tk.StringVar(), tk.StringVar()],
+            '10': [tk.StringVar(), tk.StringVar()],
+            '11': [tk.StringVar(), tk.StringVar()],
+            '12': [tk.StringVar(), tk.StringVar()],
+            '13': [tk.StringVar(), tk.StringVar()],
+            '14': [tk.StringVar(), tk.StringVar()],
+            '15': [tk.StringVar(), tk.StringVar()],
+            '16': [tk.StringVar(), tk.StringVar()],
+            '17': [tk.StringVar(), tk.StringVar()],
+            '18': [tk.StringVar(), tk.StringVar()],
+            '19': [tk.StringVar(), tk.StringVar()]
+        }
+        
+        
+         #makes obj from 0 to 19 (players) that has a list with 2 strings
+        self.greenPlayers = {str(i): [tk.StringVar(), tk.StringVar()] for i in range(20)}
+
         # arrow keys function
         self.root.bind("<Up>", self.on_key_press)
         self.root.bind("<Down>", self.on_key_press)
         self.root.bind("<Left>", self.on_key_press)
         self.root.bind("<Right>", self.on_key_press)
+        self.root.bind("<Return>", self.on_key_press)
 
         # title
         titleFrame = tk.Frame(root, bg="black")
@@ -120,6 +148,16 @@ class PlayerEntryScreen:
                 self.currentTeamNum = 0
             else:
                 self.currentTeamNum = 1
+        elif event.keysym == "Return":
+            #print(self.currentPlayerNum)
+            if self.currentTeamNum == 0:
+                idvar = self.redPlayers[str(self.currentPlayerNum)][0].get()
+                codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get()
+            else:
+                idvar = self.greenPlayers[str(self.currentPlayerNum)][0].get()
+                codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
+            #print(idvar)
+
 
         self.refresh_display()
         #print(f"player={self.currentPlayerNum}, team={self.currentTeamNum}") to make sure it is changing correctly
@@ -152,10 +190,17 @@ class PlayerEntryScreen:
 
         tk.Label(frame, text=str(playerNum), width=3, bg=teamFrame["bg"], fg="white").pack(side=tk.LEFT, padx=2)
 
-        tk.Entry(frame, width=15).pack(side=tk.LEFT, padx=2)
-        tk.Entry(frame, width=20).pack(side=tk.LEFT, padx=2)
+        if teamNum == 0:
+            tk.Entry(frame, width=15, textvariable=self.redPlayers[str(playerNum)][0]).pack(side=tk.LEFT, padx=2)
+            tk.Entry(frame, width=20, textvariable=self.redPlayers[str(playerNum)][1]).pack(side=tk.LEFT, padx=2)
+            #self.redPlayers[str(self.currentPlayerNum)][0] = idvar
+            #self.redPlayers[str(self.currentPlayerNum)][1] = codenamevar
+        else:
+            tk.Entry(frame, width=15, textvariable=self.greenPlayers[str(playerNum)][0]).pack(side=tk.LEFT, padx=2)
+            tk.Entry(frame, width=20, textvariable=self.greenPlayers[str(playerNum)][1]).pack(side=tk.LEFT, padx=2)
 
         # Store reference to arrow labels for easy updates
         self.player_labels.append((arrow_label, playerNum, teamNum))
+        #print(self.redPlayers)
 
 
