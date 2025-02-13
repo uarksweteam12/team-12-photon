@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import Toplevel
 
-gameMode = "Standard public mode"
+gameMode = "Standard Public Mode"
 
 
 # ^^^ need to move to member var, but thats for another time...
