@@ -7,13 +7,13 @@ imgSize = (200,200) ### Change size
 imageSelected = 'logo.png' ### Change image
 
 splash_root.overrideredirect(True)
-splash_root.wm_attributes('-transparentcolor', 'black')
+splash_root.wm_attributes('-transparentcolor', '#252526')
 
 # Load and display the logo
 logo = Image.open(imageSelected)
 logoSize = logo.resize(imgSize)
 logo = ImageTk.PhotoImage(logoSize)
-splash_label = Label(splash_root, image=logo, bg='black')
+splash_label = Label(splash_root, image=logo, bg='#252526')
 splash_label.pack()
 
 # Center window
