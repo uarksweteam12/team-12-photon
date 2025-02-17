@@ -1,11 +1,13 @@
 import tkinter as tk
 from tkinter import Toplevel
+
 import database
+import udp_handler
+import ipaddress
+
 
 gameMode = "Standard Public Mode"
 
-
-# ^^^ need to move to member var, but thats for another time...
 
 class PlayerEntryScreen:
     def __init__(self, root):
@@ -63,62 +65,74 @@ class PlayerEntryScreen:
         teamsFrame = tk.Frame(root, bg="black")
         teamsFrame.pack(fill="x", expand=True, side=tk.TOP)
 
+        # need to center redTeam, InstructMiddle, and greenTeam frame
+        teamsFrameCenter = tk.Frame(teamsFrame, bg="black")
+        teamsFrameCenter.pack(padx=5, pady=5)
+
         # Red Team
-        redTeam = tk.Frame(teamsFrame, bg="red")
+        redTeam = tk.Frame(teamsFrameCenter, bg="red")
         tk.Label(redTeam, text="Red Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
-        redTeam.pack(padx=100, pady=0, side=tk.LEFT)
+        redTeam.pack(padx=10, pady=0, side=tk.LEFT)
+
+        # instructions for controls, adding players, etc.
+        instructMiddleFrame = tk.Frame(teamsFrameCenter, bg="grey")
+        tk.Label(instructMiddleFrame, text="Press the <ENTER> key to add player\nEnsure player is selected by using arrow keys").pack(padx=10, pady=5)
+        instructMiddleFrame.pack(side=tk.LEFT)
 
         # Green Team
-        greenTeam = tk.Frame(teamsFrame, bg="green")
+        greenTeam = tk.Frame(teamsFrameCenter, bg="green")
         tk.Label(greenTeam, text="Green Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
-        greenTeam.pack(padx=100, pady=0, side=tk.RIGHT)
+        greenTeam.pack(padx=10, pady=0, side=tk.LEFT)
 
         # lets make 20 players for each team
         self.createPlayerSlots(redTeam, 0)
         self.createPlayerSlots(greenTeam, 1)
 
         # game mode frame with button that doesn't work right now
-        gameModeFrame = tk.Frame(root, bg="black")
+        gameModeFrame = tk.Frame(root, bg="grey")
         gameModeFrame.pack(pady=2)
         gameModeButton = tk.Button(gameModeFrame, text=f"Game Mode: {gameMode}", command=self.changeGameMode, bg="grey")
-        gameModeButton.pack(padx=10, pady=1, side=tk.LEFT)
+        gameModeButton.pack(padx=3, pady=2, side=tk.LEFT)
 
         #adds a way to change ip from entry screen
         ipChangeFrame = tk.Frame(gameModeFrame, bg="grey")
         ipChangeFrame.pack(side=tk.LEFT)
 
-        ipChangeLabel = tk.Label(ipChangeFrame, text="Change Database IP:", bg="grey", fg="black")
-        ipChangeLabel.pack(side=tk.LEFT)
-        ipChangeEntry = tk.Entry(ipChangeFrame, width=15)
-        ipChangeEntry.pack(side=tk.LEFT)
+        ipChangeLabel = tk.Label(ipChangeFrame, text="Change IP:", bg="grey", fg="black")
+        ipChangeLabel.pack(side=tk.LEFT) 
+        self.ipChangeEntry = tk.Entry(ipChangeFrame, width=15) #need self. to get ip from text entry in the changeIP func
+        self.ipChangeEntry.pack(side=tk.LEFT)
+        ipChangeSubmit = tk.Button(ipChangeFrame, text="Confirm", command=self.changeIP, bg="grey")
+        ipChangeSubmit.pack(side=tk.LEFT, padx=3, pady=2)
 
 
         # Command Line what has all the f1, f2, f3, etc
         commandLineFrame = tk.Frame(root, bg="black")
         commandLineFrame.pack(fill="x", pady=2)
 
-        # I want it to looke somewhat nice, so center this thing
+        # I want it to look somewhat nice, so center this thing
         commandLineCenterFrame = tk.Frame(commandLineFrame, bg="black")
         commandLineCenterFrame.pack(padx=5, pady=5)
 
         #alright, lets add all the commands for the command line
-        self.addCommandToLine(commandLineCenterFrame, "F1", "Edit\nGame", False)
-        self.addCommandToLine(commandLineCenterFrame, "F2", "Game\nParameters", False)
-        self.addCommandToLine(commandLineCenterFrame, "F3", "Start\nGame", False)
+        #blacking out everything right now since we don't need it for sprint 2
+        self.addCommandToLine(commandLineCenterFrame, "F1", "Edit\nGame", True)
+        self.addCommandToLine(commandLineCenterFrame, "F2", "Game\nParameters", True)
+        self.addCommandToLine(commandLineCenterFrame, "F3", "Start\nGame", True)
         self.addCommandToLine(commandLineCenterFrame, "F4", "", True)
-        self.addCommandToLine(commandLineCenterFrame, "F5", "PreEntered\nGames", False)
+        self.addCommandToLine(commandLineCenterFrame, "F5", "PreEntered\nGames", True)
         self.addCommandToLine(commandLineCenterFrame, "F6", "", True)
-        self.addCommandToLine(commandLineCenterFrame, "F7", "\t\n\t", False)
-        self.addCommandToLine(commandLineCenterFrame, "F8", "View\nGame", False)
+        self.addCommandToLine(commandLineCenterFrame, "F7", "\t\n\t", True)
+        self.addCommandToLine(commandLineCenterFrame, "F8", "View\nGame", True)
         self.addCommandToLine(commandLineCenterFrame, "F9", "", True)
-        self.addCommandToLine(commandLineCenterFrame, "F10", "Flick\nSync", False)
+        self.addCommandToLine(commandLineCenterFrame, "F10", "Flick\nSync", True)
         self.addCommandToLine(commandLineCenterFrame, "F11", "", True)
-        self.addCommandToLine(commandLineCenterFrame, "F12", "Clear\nGame", False)
+        self.addCommandToLine(commandLineCenterFrame, "F12", "Clear\nGame", True)
 
         # lets put some instructions at the bottom and show that we can do stuff...
         instructionLineFrame = tk.Frame(root, bg="grey", height=50)
         instructionLineFrame.pack(fill="x", pady=10)
-        instructionLineLabel = tk.Label(instructionLineFrame, text="<Del> to Delete Player, <Ins> to Manually Insert, or edit codename", fg="black", bg="grey")
+        instructionLineLabel = tk.Label(instructionLineFrame, text="Press the <ENTER> key to add player", fg="black", bg="grey")
         instructionLineLabel.pack(padx=5, pady=5)
 
     def refresh_display(self):
@@ -149,7 +163,7 @@ class PlayerEntryScreen:
                 self.currentTeamNum = 0
             else:
                 self.currentTeamNum = 1
-        elif event.keysym == "Return":
+        elif event.keysym == "Return": #<ENTER> key to add player
             #print(self.currentPlayerNum)
             # database.tryUpdate = True
             
@@ -157,14 +171,18 @@ class PlayerEntryScreen:
             if self.currentTeamNum == 0:
                 idvar = self.redPlayers[str(self.currentPlayerNum)][0].get()
                 codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get()
-
+                team = "Red"
             else:
                 idvar = self.greenPlayers[str(self.currentPlayerNum)][0].get()
                 codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
-
+                team = "Green"
+            
             database.insert_player(idvar, codenamevar)
             database.fetch_players()
-
+            
+            # Send player info via UDP
+            if idvar and codenamevar:
+                udp_handler.send_equipment_code(idvar, codenamevar, team)
             #print(idvar)
 
 
@@ -184,7 +202,19 @@ class PlayerEntryScreen:
             label.pack(padx=2, pady=2)
 
     def changeGameMode(self):
-        print("changing mode, idk what to do rn...") #for the future
+        print("todo in future sprint") #for the future
+
+    def changeIP(self):
+        newip = self.ipChangeEntry.get().strip() #already gets you the ip to change somehow, good luck!
+
+        try:
+            ipaddress.IPv4Address(newip) # raises a value error if invalid IPv4 address
+            udp_handler.set_server_ip(newip) # update network for udp sockets
+            print(f"Server IP updated to: {newip}")
+        
+        except Exception as e:
+            print(f"Invalid IP address: {e}")
+            
 
     def createPlayerSlots(self, teamFrame, teamNum): #lets do a loop and create playerSlots
         for i in range(20): 

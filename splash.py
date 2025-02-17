@@ -1,47 +1,45 @@
-import tkinter as tk
-from tkinter import Toplevel
+from tkinter import *
 from PIL import Image, ImageTk
 import playerEntryScreen
 
-# Splash Screen
-class SplashScreen:
-    def __init__(self, root):
-        self.root = root
-        self.root.withdraw()  # Hides main window (for now)
+splash_root = Tk()
+imgSize = (200,200) ### Change size
+imageSelected = 'logo.png' ### Change image
 
-        self.splash = Toplevel() # Creates a window on top basically
-        self.splash.overrideredirect(True)  # Removes window borders
+splash_root.overrideredirect(True)
 
-        # Load and display the logo
-        self.logo = Image.open("logo.png")
-        self.logo = ImageTk.PhotoImage(self.logo)
+# Load and display the logo
+logo = Image.open(imageSelected)
+logoSize = logo.resize(imgSize)
+logo = ImageTk.PhotoImage(logoSize)
+splash_label = Label(splash_root, image=logo, bg='#252526')
+splash_label.pack()
 
-        self.splash_label = tk.Label(self.splash, image=self.logo, borderwidth=0)
-        self.splash_label.pack()
+# Center window
+appWidth = 200
+appHeight = 200
+screenWidth = splash_root.winfo_screenwidth()
+screenHeight = splash_root.winfo_screenheight()
+trueX = (screenWidth/2) - (appWidth/2)
+trueY = (screenHeight/2) - (appHeight/2)
 
-        # Position splash screen in the center
-        self.splash.update_idletasks()
-        width = self.splash.winfo_width()
-        height = self.splash.winfo_height()
-        x = (self.splash.winfo_screenwidth() // 2) - (width // 2)
-        y = (self.splash.winfo_screenheight() // 2) - (height // 2)
-        self.splash.geometry(f"+{x}+{y}")
+splash_root.geometry(f'{appWidth}x{appHeight}+{int(trueX)}+{int(trueY)}')
 
-        # Closes splash screen and after 2 seconds, opens playerEntry
-        self.splash.after(2000, self.showApp)
+# Function to destroy splash and open player entry screen
+def showApp():
+    splash_root.destroy()
+    root = Tk()
+    # Center window
+    appWidth = 1000
+    appHeight = 750
+    screenWidth = root.winfo_screenwidth()
+    screenHeight = root.winfo_screenheight()
+    trueX = (screenWidth/2) - (appWidth/2)
+    trueY = (screenHeight/2) - (appHeight/2)
 
-    # Destroys splash screen and shows player entry
-    def showApp(self):
-        self.splash.destroy()
-        self.root.deiconify()
-        playerEntryScreen.PlayerEntryScreen(self.root) #opens the playerEntryScreen
+    root.geometry(f'{appWidth}x{appHeight}+{int(trueX)}+{int(trueY)}')
+    playerEntryScreen.PlayerEntryScreen(root)  # Opens the playerEntryScreen
 
-# Main App
-class MainApp:
-    def __init__(self, root):
-        pass
-
-root = tk.Tk()
-SplashScreen(root)
-MainApp(root)
-root.mainloop()
+# Call showApp after 2 seconds
+splash_root.after(2000, showApp)
+mainloop()
