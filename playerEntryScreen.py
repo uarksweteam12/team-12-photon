@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import Toplevel
+import database
 
 gameMode = "Standard Public Mode"
 
@@ -154,12 +155,15 @@ class PlayerEntryScreen:
             
             # Add the variable values into dababase file
             if self.currentTeamNum == 0:
-                database.new_player_id = self.redPlayers[str(self.currentPlayerNum)][0].get()
-                database.new_codename = self.redPlayers[str(self.currentPlayerNum)][1].get()
+                idvar = self.redPlayers[str(self.currentPlayerNum)][0].get()
+                codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get()
 
             else:
-                database.new_player_id = self.greenPlayers[str(self.currentPlayerNum)][0].get()
-                database.new_codename = self.greenPlayers[str(self.currentPlayerNum)][1].get()
+                idvar = self.greenPlayers[str(self.currentPlayerNum)][0].get()
+                codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
+            
+            database.insert_player(idvar, codenamevar)
+            database.fetch_players()
 
             #print(idvar)
 

@@ -5,55 +5,51 @@ from psycopg2 import sql
 connection_params = {
     'dbname': 'photon',
     'user': 'student',
-    #'password': 'student', # Uncomment and provide password if needed
-    #'host': 'localhost',   # Uncomment and provide host if needed
-    #'port': '5432'         # Uncomment and provide port if needed
+    'password': 'student',  # Uncomment and provide password if needed
+    'host': 'localhost',    # Uncomment and provide host if needed
+    'port': '5432'          # Uncomment and provide port if needed
 }
 
-cursor = None
-conn = None
+def connect_to_db():
+    """Connect to PostgreSQL database and return connection and cursor."""
+    try:
+        conn = psycopg2.connect(**connection_params)
+        cursor = conn.cursor()
+        return conn, cursor
+    except Exception as e:
+        print(f"Error connecting to database: {e}")
+        return None, None
 
-try:
-    # Connect to PostgreSQL
-    conn = psycopg2.connect(**connection_params)
-    cursor = conn.cursor()
+def insert_player(player_id, codename):
+    """Insert a new player into the database."""
+    conn, cursor = connect_to_db()
+    if conn and cursor:
+        try:
+            cursor.execute('''INSERT INTO players (id, codename) VALUES (%s, %s);''', (player_id, codename))
+            conn.commit()
+            print(f"Inserted player {player_id} with codename {codename}")
+        except Exception as e:
+            print(f"Error inserting player: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        print("Failed to connect to the database.")
 
-    # Execute a query
-    cursor.execute("SELECT version();")
-
-    # Fetch and display the result
-    version = cursor.fetchone()
-    print(f"Connected to - {version}")
-
-    # Create the players table
-    cursor.execute('''
-       CREATE TABLE IF NOT EXISTS players (
-           id INT PRIMARY KEY,
-           codename VARCHAR(60) UNIQUE NOT NULL
-       );
-    ''')
-
-    # Insert sample data
-    cursor.execute('''
-        INSERT INTO players (id, codename)
-        VALUES (%s, %s);
-    ''', (500, 'BhodiLi'))
-
-    # Commit the changes
-    conn.commit()
-
-    # Fetch and display data from the table
-    cursor.execute("SELECT * FROM players;")
-    rows = cursor.fetchall()
-    for row in rows:
-        print(row)
-
-except Exception as error:
-    print(f"Error connecting to PostgreSQL database: {error}")
-
-finally:
-    # Close the cursor and connection if they were created
-    if cursor:
-        cursor.close()
-    if conn:
-        conn.close()
+def fetch_players():
+    """Fetch all players from the database."""
+    conn, cursor = connect_to_db()
+    players = []
+    if conn and cursor:
+        try:
+            cursor.execute("SELECT * FROM players;")
+            players = cursor.fetchall()
+            print("Fetched players from the database:", players)
+        except Exception as e:
+            print(f"Error fetching players: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        print("Failed to connect to the database.")
+    return players
