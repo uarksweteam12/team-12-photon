@@ -150,12 +150,17 @@ class PlayerEntryScreen:
                 self.currentTeamNum = 1
         elif event.keysym == "Return":
             #print(self.currentPlayerNum)
+            database.tryUpdate = True
+            
+            # Add the variable values into dababase file
             if self.currentTeamNum == 0:
-                idvar = self.redPlayers[str(self.currentPlayerNum)][0].get()
-                codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get()
+                database.new_player_id = self.redPlayers[str(self.currentPlayerNum)][0].get()
+                database.new_codename = self.redPlayers[str(self.currentPlayerNum)][1].get()
+
             else:
-                idvar = self.greenPlayers[str(self.currentPlayerNum)][0].get()
-                codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
+                database.new_player_id = self.greenPlayers[str(self.currentPlayerNum)][0].get()
+                database.new_codename = self.greenPlayers[str(self.currentPlayerNum)][1].get()
+
             #print(idvar)
 
 
