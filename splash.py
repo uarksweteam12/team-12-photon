@@ -42,9 +42,9 @@ class MainApp:
     def __init__(self, root):
         pass
     
-    def start_database_timer(self):
-        database.update_database()  # Call the database update function
-        self.root.after(5000, self.start_database_timer)  # Schedule next update in 5 seconds
+    # def start_database_timer(self):
+    #     database.update_database()  # Call the database update function
+    #     self.root.after(5000, self.start_database_timer)  # Schedule next update in 5 seconds
 
 root = tk.Tk()
 SplashScreen(root)

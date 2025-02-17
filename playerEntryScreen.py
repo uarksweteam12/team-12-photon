@@ -150,7 +150,7 @@ class PlayerEntryScreen:
                 self.currentTeamNum = 1
         elif event.keysym == "Return":
             #print(self.currentPlayerNum)
-            database.tryUpdate = True
+            # database.tryUpdate = True
             
             # Add the variable values into dababase file
             if self.currentTeamNum == 0:
