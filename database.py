@@ -38,7 +38,6 @@ try:
 
 except Exception as e:
     print(f"Error connecting to database: {e}")
-    return None, None
 
 def insert_player(player_id, codename):
     """Insert a new player into the database."""
