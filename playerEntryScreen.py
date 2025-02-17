@@ -1,7 +1,10 @@
 import tkinter as tk
 from tkinter import Toplevel
+
+import database
 import udp_handler
 import ipaddress
+
 
 gameMode = "Standard Public Mode"
 
@@ -162,6 +165,9 @@ class PlayerEntryScreen:
                 self.currentTeamNum = 1
         elif event.keysym == "Return": #<ENTER> key to add player
             #print(self.currentPlayerNum)
+            # database.tryUpdate = True
+            
+            # Add the variable values into dababase file
             if self.currentTeamNum == 0:
                 idvar = self.redPlayers[str(self.currentPlayerNum)][0].get()
                 codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get()
@@ -170,6 +176,9 @@ class PlayerEntryScreen:
                 idvar = self.greenPlayers[str(self.currentPlayerNum)][0].get()
                 codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
                 team = "Green"
+            
+            database.insert_player(idvar, codenamevar)
+            database.fetch_players()
             
             # Send player info via UDP
             if idvar and codenamevar:
