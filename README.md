@@ -7,7 +7,7 @@
 2. Install Pillow to load images, please run command in terminal:
 pip install Pillow
 
-3. Also install the Python adapter psycopg2 for interacting with the PostgreSQL database
+3. Also install the Python adapter psycopg2, please run this command in terminal:
 pip install psycopg2
 
 4. Now to run the software, please run this command in terminal:
