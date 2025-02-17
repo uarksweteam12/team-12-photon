@@ -2,7 +2,7 @@
 
 # How to launch project
 
-1. Download all the files included in this repo
+1. Download all the files included
    
 2. Install Pillow to load images, please run command in terminal:
 pip install Pillow
