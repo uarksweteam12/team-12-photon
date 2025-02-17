@@ -5,10 +5,13 @@ from psycopg2 import sql
 connection_params = {
     'dbname': 'photon',
     'user': 'student',
-    #'password': 'student',
-    #'host': 'localhost',
-    #'port': '5432'
+    #'password': 'student', # Uncomment and provide password if needed
+    #'host': 'localhost',   # Uncomment and provide host if needed
+    #'port': '5432'         # Uncomment and provide port if needed
 }
+
+cursor = None
+conn = None
 
 try:
     # Connect to PostgreSQL
@@ -22,21 +25,19 @@ try:
     version = cursor.fetchone()
     print(f"Connected to - {version}")
 
-    # Example: creating a table
-    #cursor.execute('''
-    #    CREATE TABLE IF NOT EXISTS employees (
-    #        id SERIAL PRIMARY KEY,
-    #        name VARCHAR(100),
-    #        department VARCHAR(50),
-    #        salary DECIMAL
-    #    );
-    #''')
+    # Create the players table
+    cursor.execute('''
+       CREATE TABLE IF NOT EXISTS players (
+           id INT PRIMARY KEY,
+           codename VARCHAR(60) UNIQUE NOT NULL
+       );
+    ''')
 
     # Insert sample data
     cursor.execute('''
         INSERT INTO players (id, codename)
         VALUES (%s, %s);
-    ''', ('500', 'BhodiLi'))
+    ''', (500, 'BhodiLi'))
 
     # Commit the changes
     conn.commit()
@@ -51,7 +52,7 @@ except Exception as error:
     print(f"Error connecting to PostgreSQL database: {error}")
 
 finally:
-    # Close the cursor and connection
+    # Close the cursor and connection if they were created
     if cursor:
         cursor.close()
     if conn:
