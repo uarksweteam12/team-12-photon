@@ -7,7 +7,6 @@
 ```sh
 chmod +x setup.sh
 ./setup.sh
-pip install psycopg2
 ```
 
 2. Now to activate the database in the software, please run this command in your terminal:
