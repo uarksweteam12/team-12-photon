@@ -2,13 +2,15 @@
 
 # How to launch project
 
-1. Install Pillow to load images, please run command in terminal:
+1. Download all the files included in this repo
+   
+2. Install Pillow to load images, please run command in terminal:
 pip install Pillow
 
-2. Also install the Python adapter psycopg2 for interacting with the PostgreSQL database
+3. Also install the Python adapter psycopg2 for interacting with the PostgreSQL database
 pip install psycopg2
 
-3. Now run the software, please run command in terminal:
+4. Now to run the software, please run this command in terminal:
 python splash.py
 
 # Github usernames to real names:
