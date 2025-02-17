@@ -28,7 +28,7 @@ def connect_to_db():
 
         cursor.execute('''
            CREATE TABLE IF NOT EXISTS employees (
-               id INT PRIMARY KEY,
+               id VARCHAR(60),
                name VARCHAR(60)
            );
         ''')
