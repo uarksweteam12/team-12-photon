@@ -41,6 +41,10 @@ except Exception as e:
 
 def insert_player(player_id, codename):
     """Insert a new player into the database."""
+    # Connect to PostgreSQL
+    conn = psycopg2.connect(**connection_params)
+    cursor = conn.cursor()
+
     if conn and cursor:
         try:
             cursor.execute('''INSERT INTO players (id, codename) VALUES (%s, %s);''', (player_id, codename))
@@ -56,6 +60,9 @@ def insert_player(player_id, codename):
 
 def fetch_players():
     """Fetch all players from the database."""
+    # Connect to PostgreSQL
+    conn = psycopg2.connect(**connection_params)
+    cursor = conn.cursor()
     players = []
     if conn and cursor:
         try:
