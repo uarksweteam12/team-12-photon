@@ -2,16 +2,16 @@
 
 # How to launch project
 
-1. Download all the files included
-   
-2. Install Pillow to load images, please run command in terminal:
-pip install Pillow
+1. Download all dependencies:
 
-3. Also install the Python adapter psycopg2, please run this command in terminal:
-pip install psycopg2
+    Type the following lines into your terminal:
+        chmod +x setup.sh
+        ./setup.sh
+        pip install psycopg2
 
-4. Now to run the software, please run this command in terminal:
-python splash.py
+2. Now to run the software, please run this command in terminal:
+    
+    python splash.py
 
 # Github usernames to real names:
 Matthew-Cool -> Matthew Wilkinson
