@@ -161,7 +161,7 @@ class PlayerEntryScreen:
             else:
                 idvar = self.greenPlayers[str(self.currentPlayerNum)][0].get()
                 codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
-            
+
             database.insert_player(idvar, codenamevar)
             database.fetch_players()
 

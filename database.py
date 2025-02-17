@@ -10,12 +10,32 @@ connection_params = {
     'port': '5432'          # Uncomment and provide port if needed
 }
 
+
+
 def connect_to_db():
     """Connect to PostgreSQL database and return connection and cursor."""
     try:
+        # Connect to PostgreSQL
         conn = psycopg2.connect(**connection_params)
         cursor = conn.cursor()
-        return conn, cursor
+
+        # Execute a query
+        cursor.execute("SELECT version();")
+
+        # Fetch and display the result
+        version = cursor.fetchone()
+        print(f"Connected to - {version}")
+
+        cursor.execute('''
+           CREATE TABLE IF NOT EXISTS employees (
+               id INT PRIMARY KEY,
+               name VARCHAR(60)
+           );
+        ''')
+
+        # Commit the changes
+        conn.commit()
+
     except Exception as e:
         print(f"Error connecting to database: {e}")
         return None, None
