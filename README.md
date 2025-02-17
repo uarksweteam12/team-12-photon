@@ -16,6 +16,11 @@ pip install psycopg2
 python splash.py
 ```
 
+3. Now to activate the database in the software, please run this command in your terminal:
+```sh
+pip install psycopg2-binary
+```
+
 # Github usernames to real names:
 Matthew-Cool -> Matthew Wilkinson
 
