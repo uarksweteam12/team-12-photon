@@ -13,7 +13,10 @@ pip install psycopg2
 ```
 
 2. Now to run the software, please run this command in terminal:
-    python splash.py
+
+```sh
+python splash.py
+```
 
 # Github usernames to real names:
 Matthew-Cool -> Matthew Wilkinson
