@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import Toplevel
+import udp_handler
+import ipaddress
 
 gameMode = "Standard Public Mode"
 
@@ -163,9 +165,15 @@ class PlayerEntryScreen:
             if self.currentTeamNum == 0:
                 idvar = self.redPlayers[str(self.currentPlayerNum)][0].get()
                 codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get()
+                team = "Red"
             else:
                 idvar = self.greenPlayers[str(self.currentPlayerNum)][0].get()
                 codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
+                team = "Green"
+            
+            # Send player info via UDP
+            if idvar and codenamevar:
+                udp_handler.send_equipment_code(idvar, codenamevar, team)
             #print(idvar)
 
 
@@ -188,8 +196,16 @@ class PlayerEntryScreen:
         print("todo in future sprint") #for the future
 
     def changeIP(self):
-        newip = self.ipChangeEntry.get() #already gets you the ip to change somehow, good luck!
-        print(f"new ip= {newip}")
+        newip = self.ipChangeEntry.get().strip() #already gets you the ip to change somehow, good luck!
+
+        try:
+            ipaddress.IPv4Address(newip) # raises a value error if invalid IPv4 address
+            udp_handler.set_server_ip(newip) # update network for udp sockets
+            print(f"Server IP updated to: {newip}")
+        
+        except Exception as e:
+            print(f"Invalid IP address: {e}")
+            
 
     def createPlayerSlots(self, teamFrame, teamNum): #lets do a loop and create playerSlots
         for i in range(20): 
