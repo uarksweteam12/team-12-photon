@@ -7,7 +7,6 @@ imgSize = (200,200) ### Change size
 imageSelected = 'logo.png' ### Change image
 
 splash_root.overrideredirect(True)
-splash_root.wm_attributes('-transparentcolor', '#252526')
 
 # Load and display the logo
 logo = Image.open(imageSelected)
