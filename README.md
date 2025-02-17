@@ -10,15 +10,14 @@ chmod +x setup.sh
 pip install psycopg2
 ```
 
-2. Now to run the software, please run this command in your terminal:
-
-```sh
-python splash.py
-```
-
-3. Now to activate the database in the software, please run this command in your terminal:
+2. Now to activate the database in the software, please run this command in your terminal:
 ```sh
 pip install psycopg2-binary
+```
+
+3. Now to run the software, please run this command in your terminal:
+```sh
+python3 splash.py
 ```
 
 # Github usernames to real names:
