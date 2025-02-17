@@ -10,39 +10,38 @@ connection_params = {
     'port': '5432'          # Uncomment and provide port if needed
 }
 
+global conn
+global cursor
 
+print("""Connect to PostgreSQL database and return connection and cursor.""")
+try:
+    # Connect to PostgreSQL
+    conn = psycopg2.connect(**connection_params)
+    cursor = conn.cursor()
 
-def connect_to_db():
-    """Connect to PostgreSQL database and return connection and cursor."""
-    try:
-        # Connect to PostgreSQL
-        conn = psycopg2.connect(**connection_params)
-        cursor = conn.cursor()
+    # Execute a query
+    cursor.execute("SELECT version();")
 
-        # Execute a query
-        cursor.execute("SELECT version();")
+    # Fetch and display the result
+    version = cursor.fetchone()
+    print(f"Connected to - {version}")
 
-        # Fetch and display the result
-        version = cursor.fetchone()
-        print(f"Connected to - {version}")
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS employees (
+            id VARCHAR(60),
+            name VARCHAR(60)
+        );
+    ''')
 
-        cursor.execute('''
-           CREATE TABLE IF NOT EXISTS employees (
-               id VARCHAR(60),
-               name VARCHAR(60)
-           );
-        ''')
+    # Commit the changes
+    conn.commit()
 
-        # Commit the changes
-        conn.commit()
-
-    except Exception as e:
-        print(f"Error connecting to database: {e}")
-        return None, None
+except Exception as e:
+    print(f"Error connecting to database: {e}")
+    return None, None
 
 def insert_player(player_id, codename):
     """Insert a new player into the database."""
-    conn, cursor = connect_to_db()
     if conn and cursor:
         try:
             cursor.execute('''INSERT INTO players (id, codename) VALUES (%s, %s);''', (player_id, codename))
@@ -58,7 +57,6 @@ def insert_player(player_id, codename):
 
 def fetch_players():
     """Fetch all players from the database."""
-    conn, cursor = connect_to_db()
     players = []
     if conn and cursor:
         try:
