@@ -5,7 +5,10 @@
 1. Install Pillow to load images, please run command in terminal:
 pip install Pillow
 
-2. Now run the software, please run command in terminal:
+2. Also install the Python adapter psycopg2 for interacting with the PostgreSQL database
+pip install psycopg2
+
+3. Now run the software, please run command in terminal:
 python splash.py
 
 # Github usernames to real names:
