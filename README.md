@@ -2,9 +2,7 @@
 
 # How to launch project
 
-1. Download all dependencies:
-
-Type the following lines into your terminal:
+1. To download all dependencies, please run these commands in your terminal:
 
 ```sh
 chmod +x setup.sh
@@ -12,7 +10,7 @@ chmod +x setup.sh
 pip install psycopg2
 ```
 
-2. Now to run the software, please run this command in terminal:
+2. Now to run the software, please run this command in your terminal:
 
 ```sh
 python splash.py
