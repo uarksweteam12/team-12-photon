@@ -3,7 +3,7 @@ from PIL import Image, ImageTk
 import playerEntryScreen
 
 splash_root = Tk()
-imgSize = (1000,2000) ### Change size
+imgSize = (3487,2221) ### Change size
 imageSelected = 'logo.jpg' ### Change image
 
 splash_root.overrideredirect(True)
@@ -16,8 +16,8 @@ splash_label = Label(splash_root, image=logo, bg='#252526')
 splash_label.pack()
 
 # Center window
-appWidth = 1000
-appHeight = 2000
+appWidth = 3487
+appHeight = 2221
 screenWidth = splash_root.winfo_screenwidth()
 screenHeight = splash_root.winfo_screenheight()
 trueX = (screenWidth/2) - (appWidth/2)
