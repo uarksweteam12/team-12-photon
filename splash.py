@@ -16,8 +16,8 @@ splash_label = Label(splash_root, image=logo, bg='#252526')
 splash_label.pack()
 
 # Center window
-appWidth = 200
-appHeight = 200
+appWidth = 1000
+appHeight = 2000
 screenWidth = splash_root.winfo_screenwidth()
 screenHeight = splash_root.winfo_screenheight()
 trueX = (screenWidth/2) - (appWidth/2)
