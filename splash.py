@@ -3,8 +3,8 @@ from PIL import Image, ImageTk
 import playerEntryScreen
 
 splash_root = Tk()
-imgSize = (200,200) ### Change size
-imageSelected = 'logo.png' ### Change image
+imgSize = (1000,2000) ### Change size
+imageSelected = 'logo.jpg' ### Change image
 
 splash_root.overrideredirect(True)
 
@@ -40,6 +40,6 @@ def showApp():
     root.geometry(f'{appWidth}x{appHeight}+{int(trueX)}+{int(trueY)}')
     playerEntryScreen.PlayerEntryScreen(root)  # Opens the playerEntryScreen
 
-# Call showApp after 2 seconds
-splash_root.after(2000, showApp)
+# Call showApp after 5 seconds
+splash_root.after(5000, showApp)
 mainloop()
