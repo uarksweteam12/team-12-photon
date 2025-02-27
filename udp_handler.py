@@ -1,7 +1,7 @@
 import socket
 
-UDP_IP = "10.172.0.202" # I'm not entirely sure if this is the IP address we should be using
-UDP_PORT = 5005
+UDP_IP = "127.0.0.1" # I'm not entirely sure if this is the IP address we should be using
+UDP_PORT = 7500
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
