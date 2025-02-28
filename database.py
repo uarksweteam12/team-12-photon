@@ -58,6 +58,10 @@ def insert_player(player_id, codename):
     else:
         print("Failed to connect to the database.")
 
+def playerIdExist(playerid):
+    #what to do
+    pass
+
 def fetch_players():
     """Fetch all players from the database."""
     # Connect to PostgreSQL
