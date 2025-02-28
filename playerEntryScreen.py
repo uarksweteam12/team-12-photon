@@ -4,6 +4,7 @@ from tkinter import Toplevel
 import database
 import udp_handler
 import ipaddress
+import askWindow
 
 
 gameMode = "Standard Public Mode"
@@ -13,7 +14,7 @@ class PlayerEntryScreen:
     def __init__(self, root):
         self.root = root
         self.root.title("Entry Terminal")
-        self.root.geometry("1000x750")
+        #self.root.geometry("1000x750") dont need this becuase we using pack and stuff below (auto resize)
         self.root.configure(bg="black")
 
         self.currentPlayerNum = 0
@@ -120,14 +121,14 @@ class PlayerEntryScreen:
         self.addCommandToLine(commandLineCenterFrame, "F2", "Game\nParameters", True)
         self.addCommandToLine(commandLineCenterFrame, "F3", "Start\nGame", True)
         self.addCommandToLine(commandLineCenterFrame, "F4", "", True)
-        self.addCommandToLine(commandLineCenterFrame, "F5", "PreEntered\nGames", True)
+        self.addCommandToLine(commandLineCenterFrame, "F5", "PreEntered\nGames", False)
         self.addCommandToLine(commandLineCenterFrame, "F6", "", True)
         self.addCommandToLine(commandLineCenterFrame, "F7", "\t\n\t", True)
         self.addCommandToLine(commandLineCenterFrame, "F8", "View\nGame", True)
         self.addCommandToLine(commandLineCenterFrame, "F9", "", True)
         self.addCommandToLine(commandLineCenterFrame, "F10", "Flick\nSync", True)
         self.addCommandToLine(commandLineCenterFrame, "F11", "", True)
-        self.addCommandToLine(commandLineCenterFrame, "F12", "Clear\nGame", True)
+        self.addCommandToLine(commandLineCenterFrame, "F12", "Clear\nGame", False)
 
         # lets put some instructions at the bottom and show that we can do stuff...
         instructionLineFrame = tk.Frame(root, bg="grey", height=50)
@@ -140,7 +141,7 @@ class PlayerEntryScreen:
             if playerNum == self.currentPlayerNum and teamNum == self.currentTeamNum:
                 label.config(text=">")
             else:
-                label.config(text=" ")
+                label.config(text="\u00A0\u00A0")
 
     def on_key_press(self, event):
         if event.keysym == "Up": # probably a better way to toggle all this stuff, but I'm kinda dumb,
@@ -172,13 +173,41 @@ class PlayerEntryScreen:
                 idvar = self.redPlayers[str(self.currentPlayerNum)][0].get()
                 codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get()
                 team = "Red"
+
+                #create window to ask for codename
+                # SANTOSH need to add a check to see if code name already exists in database, if so, we skip this step
+                window = askWindow.AskWindow(self.root, True) #false = hardware id window, true = code name window
+
+                codenamertn = window.getResult() #gets the result of text entry box from the window created
+                self.redPlayers[str(self.currentPlayerNum)][1].set(str(codenamertn)) #changes the text entry so 
+
+                window = askWindow.AskWindow(self.root, False) 
+
+                hardwareidrtn = window.getResult() #gets the result of text entry box from the window created
+                print(hardwareidrtn)
             else:
                 idvar = self.greenPlayers[str(self.currentPlayerNum)][0].get()
                 codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
                 team = "Green"
+
+                #create window to ask for codename
+                # SANTOSH need to add a check to see if code name already exists in database, if so, we skip this step
+                window = askWindow.AskWindow(self.root, True) #false = hardware id window, true = code name window
+
+                codenamertn = window.getResult() #gets the result of text entry box from the window created
+                self.greenPlayers[str(self.currentPlayerNum)][1].set(str(codenamertn)) #changes the text entry so 
+
+                window = askWindow.AskWindow(self.root, False) 
+
+                hardwareidrtn = window.getResult() #gets the result of text entry box from the window created
+                print(hardwareidrtn)
             
-            database.insert_player(idvar, codenamevar)
-            database.fetch_players()
+            #database.insert_player(idvar, codenamevar) # removed for now so I can test askWindow
+            #database.fetch_players()
+
+            #
+            # SANTOSH: Need to make it where we can see if a code id is in database and do x or y based on that.
+            #  See above
             
             # Send player info via UDP
             if idvar and codenamevar:
@@ -224,19 +253,19 @@ class PlayerEntryScreen:
         frame = tk.Frame(teamFrame, bg=teamFrame["bg"]) #creats the player lines in the team...
         frame.pack(pady=2)                              #arrow, number, text, text longer
 
-        arrow_label = tk.Label(frame, text=">" if (playerNum == self.currentPlayerNum and teamNum == self.currentTeamNum) else " ", bg=teamFrame["bg"], fg="white")
+        arrow_label = tk.Label(frame, text=">" if (playerNum == self.currentPlayerNum and teamNum == self.currentTeamNum) else "\u00A0\u00A0", bg=teamFrame["bg"], fg="white")
         arrow_label.pack(side=tk.LEFT, padx=2)
 
         tk.Label(frame, text=str(playerNum), width=3, bg=teamFrame["bg"], fg="white").pack(side=tk.LEFT, padx=2)
 
         if teamNum == 0:
             tk.Entry(frame, width=15, textvariable=self.redPlayers[str(playerNum)][0]).pack(side=tk.LEFT, padx=2)
-            tk.Entry(frame, width=20, textvariable=self.redPlayers[str(playerNum)][1]).pack(side=tk.LEFT, padx=2)
+            tk.Entry(frame, width=20, state=tk.DISABLED, textvariable=self.redPlayers[str(playerNum)][1]).pack(side=tk.LEFT, padx=2)
             #self.redPlayers[str(self.currentPlayerNum)][0] = idvar
             #self.redPlayers[str(self.currentPlayerNum)][1] = codenamevar
         else:
             tk.Entry(frame, width=15, textvariable=self.greenPlayers[str(playerNum)][0]).pack(side=tk.LEFT, padx=2)
-            tk.Entry(frame, width=20, textvariable=self.greenPlayers[str(playerNum)][1]).pack(side=tk.LEFT, padx=2)
+            tk.Entry(frame, width=20, state=tk.DISABLED, textvariable=self.greenPlayers[str(playerNum)][1]).pack(side=tk.LEFT, padx=2)
 
         # Store reference to arrow labels for easy updates
         self.player_labels.append((arrow_label, playerNum, teamNum))
