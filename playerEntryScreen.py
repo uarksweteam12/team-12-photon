@@ -172,7 +172,7 @@ class PlayerEntryScreen:
 
                 hardwareidRtn = window.getResult() 
                 self.redPlayers[str(self.currentPlayerNum)][2].set(int(hardwareidRtn))
-                print(self.redPlayers[str(self.currentPlayerNum)][2])
+                print(self.redPlayers[str(self.currentPlayerNum)][2].get())
             else:
                 idvar = self.greenPlayers[str(self.currentPlayerNum)][0].get()
                 codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
