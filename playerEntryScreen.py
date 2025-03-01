@@ -113,6 +113,8 @@ class PlayerEntryScreen:
         instructionLineLabel = tk.Label(instructionLineFrame, text="Press the <ENTER> key to add player", fg="black", bg="grey")
         instructionLineLabel.pack(padx=5, pady=5)
 
+        self.root.update_idletasks()
+
     def refresh_display(self):
         for label, playerNum, teamNum in self.player_labels:
             if playerNum == self.currentPlayerNum and teamNum == self.currentTeamNum:
