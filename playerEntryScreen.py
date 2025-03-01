@@ -203,12 +203,12 @@ class PlayerEntryScreen:
         elif event.keysym == "F12": #<F12> key to remove player entries
             print("F12 pressed")
             for x in range(20):
-                self.redPlayers[x][0].set("")
-                self.redPlayers[x][1].set("")
-                self.redPlayers[x][2].set(-1)
-                self.greenPlayers[x][0].set("")
-                self.greenPlayers[x][1].set("")
-                self.greenPlayers[x][2].set(-1)
+                self.redPlayers[str(x)][0].set("")
+                self.redPlayers[str(x)][1].set("")
+                self.redPlayers[str(x)][2].set(-1)
+                self.greenPlayers[str(x)][0].set("")
+                self.greenPlayers[str(x)][1].set("")
+                self.greenPlayers[str(x)][2].set(-1)
 
         elif event.keysym == "F5": #<F5> key to switch to play action screen
             pass
