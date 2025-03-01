@@ -203,7 +203,7 @@ class PlayerEntryScreen:
             database.fetch_players()
             # Send player info via UDP
             if idvar and codenamevar:
-                udp_handler.send_equipment_code(idvar, codenamevar, team)
+                udpClient.send_equipment_code(hardwareidRtn)
             #print(idvar)
 
 
