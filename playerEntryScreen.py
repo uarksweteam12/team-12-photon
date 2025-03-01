@@ -148,15 +148,18 @@ class PlayerEntryScreen:
             # Add the variable values into dababase file
             if self.currentTeamNum == 0:
                 idvar = self.redPlayers[str(self.currentPlayerNum)][0].get()
-                codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get()
+                codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get() #we may not need this anymore lol
                 team = "Red"
 
-                if database.playerIdExist(idvar) == None: #ask for codename if it isn't in database
+                result = database.playerIdExist(idvar)
+                if result == None: #ask for codename if it isn't in database
                     window = askWindow.AskWindow(self.root, True) 
 
                     codenameRtn = window.getResult() 
                     self.redPlayers[str(self.currentPlayerNum)][1].set(str(codenameRtn))
                     database.insert_player(idvar, codenameRtn) #add to database so that they exist now
+                else:
+                    self.redPlayers[str(self.currentPlayerNum)][1].set(str(result)) #populate codename text entry on screen
 
                 #ask for hardwareID
                 window = askWindow.AskWindow(self.root, False) 
@@ -168,12 +171,15 @@ class PlayerEntryScreen:
                 codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
                 team = "Green"
 
-                if database.playerIdExist(idvar) == None: #ask for codename if it isn't in database
+                result = database.playerIdExist(idvar)
+                if result == None: #ask for codename if it isn't in database
                     window = askWindow.AskWindow(self.root, True) 
 
                     codenameRtn = window.getResult() 
                     self.greenPlayers[str(self.currentPlayerNum)][1].set(str(codenameRtn))
                     database.insert_player(idvar, codenameRtn) #add to database so that they exist now
+                else:
+                    self.greenPlayers[str(self.currentPlayerNum)][1].set(str(result)) #populate codename text entry on screen
 
                 #ask for hardwareID
                 window = askWindow.AskWindow(self.root, False) 
