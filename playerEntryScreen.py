@@ -2,7 +2,8 @@ import tkinter as tk
 from tkinter import Toplevel
 
 import database
-import udp_handler
+import udpClient
+import udpServer
 import ipaddress
 import askWindow
 
