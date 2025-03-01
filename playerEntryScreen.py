@@ -14,7 +14,7 @@ class PlayerEntryScreen:
     def __init__(self, root):
         self.root = root
         self.root.title("Entry Terminal")
-        self.root.geometry("1000x750") #dont need this becuase we using pack and stuff below (auto resize)
+        #self.root.geometry("1000x750") #dont need this becuase we using pack and stuff below (auto resize)
         self.root.configure(bg="black")
 
         self.currentPlayerNum = 0
@@ -41,26 +41,26 @@ class PlayerEntryScreen:
 
         # teams Frame that both teams go into
         teamsFrame = tk.Frame(root, bg="black")
-        teamsFrame.pack(fill="x", expand=True, side=tk.TOP)
+        teamsFrame.pack(fill="both", expand=True, side=tk.TOP)
 
         # need to center redTeam, InstructMiddle, and greenTeam frame
         teamsFrameCenter = tk.Frame(teamsFrame, bg="black")
-        teamsFrameCenter.pack(padx=5, pady=5)
+        teamsFrameCenter.pack(padx=5, pady=5, expand=True)
 
         # Red Team
         redTeam = tk.Frame(teamsFrameCenter, bg="red")
         tk.Label(redTeam, text="Red Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
-        redTeam.pack(padx=10, pady=0, side=tk.LEFT)
+        redTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
 
         # instructions for controls, adding players, etc.
         instructMiddleFrame = tk.Frame(teamsFrameCenter, bg="grey")
         tk.Label(instructMiddleFrame, text="Press the <ENTER> key to add player\nEnsure player is selected by using arrow keys").pack(padx=10, pady=5)
-        instructMiddleFrame.pack(side=tk.LEFT)
+        instructMiddleFrame.pack(side=tk.LEFT, fill="x")
 
         # Green Team
         greenTeam = tk.Frame(teamsFrameCenter, bg="green")
         tk.Label(greenTeam, text="Green Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
-        greenTeam.pack(padx=10, pady=0, side=tk.LEFT)
+        greenTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
 
         # lets make 20 players for each team
         self.createPlayerSlots(redTeam, 0)
