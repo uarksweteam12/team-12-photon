@@ -3,7 +3,7 @@ import socket
 UDP_IP = "127.0.0.1" 
 UDP_PORT = 7500
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 buffer = 1024
 
 
