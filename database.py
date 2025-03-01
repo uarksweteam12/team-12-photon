@@ -59,8 +59,27 @@ def insert_player(player_id, codename):
         print("Failed to connect to the database.")
 
 def playerIdExist(playerid):
-    #what to do
-    pass
+    """Check to see if playerID exists in database"""
+    # Connect to PostgreSQL
+    conn = psycopg2.connect(**connection_params)
+    cursor = conn.cursor()
+
+    if conn and cursor:
+        try:
+            cursor.execute("SELECT codename FROM players WHERE id = %s;", (playerid))
+            result = cursor.fetchone()
+            if result:
+                return result[0]
+            else:
+                return None
+        except Exception as e:
+            print(f"Error checking player id: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        print("Failed to connect to the database.")
+        return None
 
 def fetch_players():
     """Fetch all players from the database."""
