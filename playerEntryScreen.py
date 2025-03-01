@@ -22,10 +22,10 @@ class PlayerEntryScreen:
         self.currentTeamNum = 0
         self.player_labels = []
 
-        self.redPlayers = {str(i): [tk.StringVar(), tk.StringVar()] for i in range(20)}
+        self.redPlayers = {str(i): [tk.StringVar(), tk.StringVar(), tk.IntVar()] for i in range(20)}
         
         #makes obj from 0 to 19 (players) that has a list with 2 strings
-        self.greenPlayers = {str(i): [tk.StringVar(), tk.StringVar()] for i in range(20)}
+        self.greenPlayers = {str(i): [tk.StringVar(), tk.StringVar(), tk.IntVar()] for i in range(20)}
 
         # key function
         self.root.bind("<Up>", self.on_key_press)
@@ -171,7 +171,8 @@ class PlayerEntryScreen:
                 window = askWindow.AskWindow(self.root, False) 
 
                 hardwareidRtn = window.getResult() 
-                print(hardwareidRtn)
+                self.redPlayers[str(self.currentPlayerNum)][2].set(int(hardwareidRtn))
+                print(self.redPlayers[str(self.currentPlayerNum)][2])
             else:
                 idvar = self.greenPlayers[str(self.currentPlayerNum)][0].get()
                 codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
@@ -191,20 +192,14 @@ class PlayerEntryScreen:
                 window = askWindow.AskWindow(self.root, False) 
 
                 hardwareidRtn = window.getResult() 
-                print(hardwareidRtn)
-            
-            #database.insert_player(idvar, codenamevar) # removed for now so I can test askWindow
-            #database.fetch_players()
-
-            #
-            # SANTOSH: Need to make it where we can see if a code id is in database and do x or y based on that.
-            #  See above
+                self.greenPlayers[str(self.currentPlayerNum)][2].set(int(hardwareidRtn))
             
             database.fetch_players()
             # Send player info via UDP
-            print("I was here")
             udpClient.send_equipment_code(hardwareidRtn)
             #print(idvar)
+
+
 
 
         self.refresh_display()

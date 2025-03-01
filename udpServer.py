@@ -1,6 +1,6 @@
 import socket
 
-localIP = "127.0.0.1"
+localIP = "127.0.0.1" # NOTE: Don't need this rn but maybe in future, anyways cya
 localPort = 7501
 sbuffer = 1024
 

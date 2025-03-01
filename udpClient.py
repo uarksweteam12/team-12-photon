@@ -15,8 +15,6 @@ def send_equipment_code(hardwareid) -> bool:
 
     message = f"{hardwareid}" # We can change this later if we want
 
-    print("we are here")
-
     try:
         sock.sendto(message.encode(), (UDP_IP, UDP_PORT))
         print(f"Sent: {message} to {UDP_IP}:{UDP_PORT}") # Same here
