@@ -14,42 +14,19 @@ class PlayerEntryScreen:
     def __init__(self, root):
         self.root = root
         self.root.title("Entry Terminal")
-        #self.root.geometry("1000x750") dont need this becuase we using pack and stuff below (auto resize)
+        #self.root.geometry("1000x750") #dont need this becuase we using pack and stuff below (auto resize)
         self.root.configure(bg="black")
 
         self.currentPlayerNum = 0
         self.currentTeamNum = 0
         self.player_labels = []
 
-        #self.redPlayers = {str(i): [tk.StringVar(), tk.StringVar()] for i in range(20)}
-        self.redPlayers = {
-            '0': [tk.StringVar(), tk.StringVar()],
-            '1': [tk.StringVar(), tk.StringVar()],
-            '2': [tk.StringVar(), tk.StringVar()],
-            '3': [tk.StringVar(), tk.StringVar()],
-            '4': [tk.StringVar(), tk.StringVar()],
-            '5': [tk.StringVar(), tk.StringVar()],
-            '6': [tk.StringVar(), tk.StringVar()],
-            '7': [tk.StringVar(), tk.StringVar()],
-            '8': [tk.StringVar(), tk.StringVar()],
-            '9': [tk.StringVar(), tk.StringVar()],
-            '10': [tk.StringVar(), tk.StringVar()],
-            '11': [tk.StringVar(), tk.StringVar()],
-            '12': [tk.StringVar(), tk.StringVar()],
-            '13': [tk.StringVar(), tk.StringVar()],
-            '14': [tk.StringVar(), tk.StringVar()],
-            '15': [tk.StringVar(), tk.StringVar()],
-            '16': [tk.StringVar(), tk.StringVar()],
-            '17': [tk.StringVar(), tk.StringVar()],
-            '18': [tk.StringVar(), tk.StringVar()],
-            '19': [tk.StringVar(), tk.StringVar()]
-        }
+        self.redPlayers = {str(i): [tk.StringVar(), tk.StringVar()] for i in range(20)}
         
-        
-         #makes obj from 0 to 19 (players) that has a list with 2 strings
+        #makes obj from 0 to 19 (players) that has a list with 2 strings
         self.greenPlayers = {str(i): [tk.StringVar(), tk.StringVar()] for i in range(20)}
 
-        # arrow keys function
+        # key function
         self.root.bind("<Up>", self.on_key_press)
         self.root.bind("<Down>", self.on_key_press)
         self.root.bind("<Left>", self.on_key_press)
@@ -64,26 +41,26 @@ class PlayerEntryScreen:
 
         # teams Frame that both teams go into
         teamsFrame = tk.Frame(root, bg="black")
-        teamsFrame.pack(fill="x", expand=True, side=tk.TOP)
+        teamsFrame.pack(fill="both", expand=True, side=tk.TOP)
 
         # need to center redTeam, InstructMiddle, and greenTeam frame
         teamsFrameCenter = tk.Frame(teamsFrame, bg="black")
-        teamsFrameCenter.pack(padx=5, pady=5)
+        teamsFrameCenter.pack(padx=5, pady=5, expand=True)
 
         # Red Team
         redTeam = tk.Frame(teamsFrameCenter, bg="red")
         tk.Label(redTeam, text="Red Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
-        redTeam.pack(padx=10, pady=0, side=tk.LEFT)
+        redTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
 
         # instructions for controls, adding players, etc.
         instructMiddleFrame = tk.Frame(teamsFrameCenter, bg="grey")
         tk.Label(instructMiddleFrame, text="Press the <ENTER> key to add player\nEnsure player is selected by using arrow keys").pack(padx=10, pady=5)
-        instructMiddleFrame.pack(side=tk.LEFT)
+        instructMiddleFrame.pack(side=tk.LEFT, fill="x")
 
         # Green Team
         greenTeam = tk.Frame(teamsFrameCenter, bg="green")
         tk.Label(greenTeam, text="Green Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
-        greenTeam.pack(padx=10, pady=0, side=tk.LEFT)
+        greenTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
 
         # lets make 20 players for each team
         self.createPlayerSlots(redTeam, 0)
@@ -136,6 +113,11 @@ class PlayerEntryScreen:
         instructionLineLabel = tk.Label(instructionLineFrame, text="Press the <ENTER> key to add player", fg="black", bg="grey")
         instructionLineLabel.pack(padx=5, pady=5)
 
+        self.root.update_idletasks()
+        width = self.root.winfo_reqwidth()
+        height = self.root.winfo_reqheight()
+        self.root.geometry(f"{width}x{height}") #makes sure the window size is correct and not wrong... don't worry this code is perfect
+
     def refresh_display(self):
         for label, playerNum, teamNum in self.player_labels:
             if playerNum == self.currentPlayerNum and teamNum == self.currentTeamNum:
@@ -171,36 +153,44 @@ class PlayerEntryScreen:
             # Add the variable values into dababase file
             if self.currentTeamNum == 0:
                 idvar = self.redPlayers[str(self.currentPlayerNum)][0].get()
-                codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get()
+                codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get() #we may not need this anymore lol
                 team = "Red"
 
-                #create window to ask for codename
-                # SANTOSH need to add a check to see if code name already exists in database, if so, we skip this step
-                window = askWindow.AskWindow(self.root, True) #false = hardware id window, true = code name window
+                result = database.playerIdExist(idvar)
+                if result == None: #ask for codename if it isn't in database
+                    window = askWindow.AskWindow(self.root, True) 
 
-                codenamertn = window.getResult() #gets the result of text entry box from the window created
-                self.redPlayers[str(self.currentPlayerNum)][1].set(str(codenamertn)) #changes the text entry so 
+                    codenameRtn = window.getResult() 
+                    self.redPlayers[str(self.currentPlayerNum)][1].set(str(codenameRtn))
+                    database.insert_player(idvar, codenameRtn) #add to database so that they exist now
+                else:
+                    self.redPlayers[str(self.currentPlayerNum)][1].set(str(result)) #populate codename text entry on screen
 
+                #ask for hardwareID
                 window = askWindow.AskWindow(self.root, False) 
 
-                hardwareidrtn = window.getResult() #gets the result of text entry box from the window created
-                print(hardwareidrtn)
+                hardwareidRtn = window.getResult() 
+                print(hardwareidRtn)
             else:
                 idvar = self.greenPlayers[str(self.currentPlayerNum)][0].get()
                 codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
                 team = "Green"
 
-                #create window to ask for codename
-                # SANTOSH need to add a check to see if code name already exists in database, if so, we skip this step
-                window = askWindow.AskWindow(self.root, True) #false = hardware id window, true = code name window
+                result = database.playerIdExist(idvar)
+                if result == None: #ask for codename if it isn't in database
+                    window = askWindow.AskWindow(self.root, True) 
 
-                codenamertn = window.getResult() #gets the result of text entry box from the window created
-                self.greenPlayers[str(self.currentPlayerNum)][1].set(str(codenamertn)) #changes the text entry so 
+                    codenameRtn = window.getResult() 
+                    self.greenPlayers[str(self.currentPlayerNum)][1].set(str(codenameRtn))
+                    database.insert_player(idvar, codenameRtn) #add to database so that they exist now
+                else:
+                    self.greenPlayers[str(self.currentPlayerNum)][1].set(str(result)) #populate codename text entry on screen
 
+                #ask for hardwareID
                 window = askWindow.AskWindow(self.root, False) 
 
-                hardwareidrtn = window.getResult() #gets the result of text entry box from the window created
-                print(hardwareidrtn)
+                hardwareidRtn = window.getResult() 
+                print(hardwareidRtn)
             
             #database.insert_player(idvar, codenamevar) # removed for now so I can test askWindow
             #database.fetch_players()
@@ -209,6 +199,7 @@ class PlayerEntryScreen:
             # SANTOSH: Need to make it where we can see if a code id is in database and do x or y based on that.
             #  See above
             
+            database.fetch_players()
             # Send player info via UDP
             if idvar and codenamevar:
                 udp_handler.send_equipment_code(idvar, codenamevar, team)
