@@ -198,6 +198,18 @@ class PlayerEntryScreen:
             # Send player info via UDP
             udpClient.send_equipment_code(hardwareidRtn)
             #print(idvar)
+        elif event.keysym == "F12": #<F12> key to remove player entries
+            print("f12 pressed")
+            for x in range(20):
+                self.redPlayers[x][0].set("")
+                self.redPlayers[x][1].set("")
+                self.redPlayers[x][2].set(-1)
+                self.greenPlayers[x][0].set("")
+                self.greenPlayers[x][1].set("")
+                self.greenPlayers[x][2].set(-1)
+                
+        elif event.keysym == "F5": #<F5> key to switch to play action screen
+            pass
 
 
 
