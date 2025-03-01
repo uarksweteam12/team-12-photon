@@ -114,13 +114,9 @@ class PlayerEntryScreen:
         instructionLineLabel.pack(padx=5, pady=5)
 
         self.root.update_idletasks()
-
-        # Get the required width and height of the window
         width = self.root.winfo_reqwidth()
         height = self.root.winfo_reqheight()
-
-        # Set the window's geometry to fit the content
-        self.root.geometry(f"{width}x{height}")
+        self.root.geometry(f"{width}x{height}") #makes sure the window size is correct and not wrong... don't worry this code is perfect
 
     def refresh_display(self):
         for label, playerNum, teamNum in self.player_labels:
