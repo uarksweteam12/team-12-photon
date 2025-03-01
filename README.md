@@ -16,7 +16,7 @@ pip install psycopg2-binary
 
 3. Now to run the software, please run this command in your terminal:
 ```sh
-python3 splash.py
+python3 main.py
 ```
 
 # Github usernames to real names:
