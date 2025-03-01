@@ -14,7 +14,7 @@ class PlayerEntryScreen:
     def __init__(self, root):
         self.root = root
         self.root.title("Entry Terminal")
-        #self.root.geometry("1000x750") dont need this becuase we using pack and stuff below (auto resize)
+        self.root.geometry("1000x750") #dont need this becuase we using pack and stuff below (auto resize)
         self.root.configure(bg="black")
 
         self.currentPlayerNum = 0
