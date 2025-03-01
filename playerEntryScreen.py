@@ -3,7 +3,7 @@ from tkinter import Toplevel
 
 import database
 import udpClient
-import udpServer
+#import udpServer
 import ipaddress
 import askWindow
 
