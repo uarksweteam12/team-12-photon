@@ -115,6 +115,13 @@ class PlayerEntryScreen:
 
         self.root.update_idletasks()
 
+        # Get the required width and height of the window
+        width = self.root.winfo_reqwidth()
+        height = self.root.winfo_reqheight()
+
+        # Set the window's geometry to fit the content
+        self.root.geometry(f"{width}x{height}")
+
     def refresh_display(self):
         for label, playerNum, teamNum in self.player_labels:
             if playerNum == self.currentPlayerNum and teamNum == self.currentTeamNum:
