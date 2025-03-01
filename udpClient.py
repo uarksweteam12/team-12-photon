@@ -1,16 +1,19 @@
 import socket
 
-UDP_IP = "127.0.0.1" # I'm not entirely sure if this is the IP address we should be using
+UDP_IP = "127.0.0.1" 
 UDP_PORT = 7500
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+buffer = 1024
 
-def send_equipment_code(player_id, codename, team) -> bool:
+
+
+def send_equipment_code(hardwareid) -> bool:
     """
     Sends a player's ID, codename, and team to the UDP server
     """
 
-    message = f"{team}, {player_id}, {codename}" # We can change this later if we want
+    message = f"{hardwareid}" # We can change this later if we want
 
     try:
         sock.sendto(message.encode(), (UDP_IP, UDP_PORT))

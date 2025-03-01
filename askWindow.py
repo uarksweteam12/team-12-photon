@@ -45,7 +45,6 @@ class AskWindow:
 
     def closeWindow(self):
         self.result = self.changeEntry.get()
-        print(self.result)
         self.top.destroy()
 
     def getResult(self):
