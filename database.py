@@ -27,7 +27,7 @@ try:
     print(f"Connected to - {version}")
 
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS employees (
+        CREATE TABLE IF NOT EXISTS players (
             id VARCHAR(60),
             name VARCHAR(60)
         );
