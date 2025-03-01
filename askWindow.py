@@ -6,7 +6,7 @@ class AskWindow:
         if operation:
             title = "Code Name Prompt"
             titleFrameText = "Code ID not found in database\nPlease enter Code Name below"
-            entryText = "Code ID:"
+            entryText = "Code Name:"
         else:
             titleFrameText = "Please enter Hardware ID for player below"
             title = "Hardware ID Prompt"
