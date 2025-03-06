@@ -156,11 +156,7 @@ class PlayerEntryScreen:
             # Add the variable values into dababase file
             if self.currentTeamNum == 0:
                 idvar = str(self.redPlayers[str(self.currentPlayerNum)][0].get())
-                #codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get() #we may not need this anymore lol
                 team = "Red"
-
-                print(f"\n\nIDvar: {idvar}\n\n")
-
 
                 result = database.playerIdExist(idvar)
                 if result == None: #ask for codename if it isn't in database
@@ -177,13 +173,9 @@ class PlayerEntryScreen:
 
                 hardwareidRtn = window.getResult() 
                 self.redPlayers[str(self.currentPlayerNum)][2].set(int(hardwareidRtn))
-                print(self.redPlayers[str(self.currentPlayerNum)][2].get())
             else:
                 idvar = str(self.greenPlayers[str(self.currentPlayerNum)][0].get())
-                #codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
                 team = "Green"
-
-                print(f"\n\nIDvar: {idvar}\n\n")
 
                 result = database.playerIdExist(idvar)
                 if result == None: #ask for codename if it isn't in database
@@ -204,7 +196,6 @@ class PlayerEntryScreen:
             database.fetch_players()
             # Send player info via UDP
             udpClient.send_equipment_code(hardwareidRtn)
-            #print(idvar)
         elif event.keysym == "F12": #<F12> key to remove player entries
             print("F12 pressed")
             for x in range(20):
@@ -214,7 +205,6 @@ class PlayerEntryScreen:
                 self.greenPlayers[str(x)][0].set("")
                 self.greenPlayers[str(x)][1].set("")
                 self.greenPlayers[str(x)][2].set(-1)
-
         elif event.keysym == "F5": #<F5> key to switch to play action screen
             pass
 
