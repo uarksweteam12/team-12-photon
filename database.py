@@ -68,7 +68,7 @@ def playerIdExist(playerid):
 
     if conn and cursor:
         try:
-            cursor.execute("SELECT codename FROM players WHERE id = %s;", (playerid))
+            cursor.execute("SELECT codename FROM players WHERE id = %s;", (str(playerid)))
             result = cursor.fetchone()
             if result:
                 return result[0]
