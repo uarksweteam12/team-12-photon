@@ -101,7 +101,7 @@ class PlayerEntryScreen:
         self.addCommandToLine(commandLineCenterFrame, "F2", "Game\nParameters", True)
         self.addCommandToLine(commandLineCenterFrame, "F3", "Start\nGame", True)
         self.addCommandToLine(commandLineCenterFrame, "F4", "", True)
-        self.addCommandToLine(commandLineCenterFrame, "F5", "PreEntered\nGames", False)
+        self.addCommandToLine(commandLineCenterFrame, "F5", "Start\nGame", False)
         self.addCommandToLine(commandLineCenterFrame, "F6", "", True)
         self.addCommandToLine(commandLineCenterFrame, "F7", "\t\n\t", True)
         self.addCommandToLine(commandLineCenterFrame, "F8", "View\nGame", True)
@@ -155,8 +155,8 @@ class PlayerEntryScreen:
             
             # Add the variable values into dababase file
             if self.currentTeamNum == 0:
-                idvar = self.redPlayers[str(self.currentPlayerNum)][0].get()
-                codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get() #we may not need this anymore lol
+                idvar = str(self.redPlayers[str(self.currentPlayerNum)][0].get())
+                #codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get() #we may not need this anymore lol
                 team = "Red"
 
                 result = database.playerIdExist(idvar)
@@ -176,8 +176,8 @@ class PlayerEntryScreen:
                 self.redPlayers[str(self.currentPlayerNum)][2].set(int(hardwareidRtn))
                 print(self.redPlayers[str(self.currentPlayerNum)][2].get())
             else:
-                idvar = self.greenPlayers[str(self.currentPlayerNum)][0].get()
-                codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
+                idvar = str(self.greenPlayers[str(self.currentPlayerNum)][0].get())
+                #codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
                 team = "Green"
 
                 result = database.playerIdExist(idvar)
@@ -239,7 +239,7 @@ class PlayerEntryScreen:
 
         try:
             ipaddress.IPv4Address(newip) # raises a value error if invalid IPv4 address
-            udp_handler.set_server_ip(newip) # update network for udp sockets
+            udpClient.set_server_ip(newip) # update network for udp sockets
             print(f"Server IP updated to: {newip}")
         
         except Exception as e:
