@@ -159,6 +159,9 @@ class PlayerEntryScreen:
                 #codenamevar = self.redPlayers[str(self.currentPlayerNum)][1].get() #we may not need this anymore lol
                 team = "Red"
 
+                print(f"\n\nIDvar: {idvar}\n\n")
+
+
                 result = database.playerIdExist(idvar)
                 if result == None: #ask for codename if it isn't in database
                     window = askWindow.AskWindow(self.root, True) 
@@ -179,6 +182,8 @@ class PlayerEntryScreen:
                 idvar = str(self.greenPlayers[str(self.currentPlayerNum)][0].get())
                 #codenamevar = self.greenPlayers[str(self.currentPlayerNum)][1].get()
                 team = "Green"
+
+                print(f"\n\nIDvar: {idvar}\n\n")
 
                 result = database.playerIdExist(idvar)
                 if result == None: #ask for codename if it isn't in database
