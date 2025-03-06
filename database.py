@@ -64,6 +64,8 @@ def playerIdExist(playerid):
     conn = psycopg2.connect(**connection_params)
     cursor = conn.cursor()
 
+    print(f"\n\nplayeridexist idvar: {playerid}\n\n")
+
     if conn and cursor:
         try:
             cursor.execute("SELECT codename FROM players WHERE id = %s;", (playerid))
