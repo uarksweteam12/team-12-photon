@@ -6,6 +6,7 @@ import udpClient
 #import udpServer
 import ipaddress
 import askWindow
+import actionScreen
 
 
 gameMode = "Standard Public Mode"
@@ -206,7 +207,7 @@ class PlayerEntryScreen:
                 self.greenPlayers[str(x)][1].set("")
                 self.greenPlayers[str(x)][2].set(-1)
         elif event.keysym == "F5": #<F5> key to switch to play action screen
-            pass
+            actionScreen.ActionScreen(self.root, self.redPlayers, self.greenPlayers)
 
 
 
