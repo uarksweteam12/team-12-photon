@@ -1,5 +1,8 @@
 import tkinter as tk
 from tkinter import Toplevel
+from pathlib import Path
+
+
 
 class ActionScreen:
     def __init__(self, root, redPlayers, greenPlayers):
@@ -19,6 +22,11 @@ class ActionScreen:
         # ****
         # PUT ALL THE CODE FOR THE PLAY ACTION SCREEN HERE!!!
         # ****
+
+        # countdown timer
+        
+        countdown_images/"0.tif"
+
         print(f"codename: {redPlayers[str(0)][1].get()}")
 
 
