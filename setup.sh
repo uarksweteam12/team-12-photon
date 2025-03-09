@@ -4,6 +4,9 @@ set -e
 # update package lists
 sudo apt-get update
 
+# install git
+sudo apt install git -y
+
 # install Python 3.9 and necessary dependencies
 sudo apt-get install -y --no-upgrade python3.9 python3.9-venv python3.9-dev python3-pip python3-tk git python3-pil python3-pil.imagetk
 
