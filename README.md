@@ -2,9 +2,10 @@
 
 # How to launch project
 
-1. First, make sure you have git installed. Please run this command in your terminal:
+1. First, make sure you have git installed. Please run these commands in your terminal:
 
 ```
+sudo apt update
 sudo apt install git -y
 ```
 
@@ -14,19 +15,25 @@ sudo apt install git -y
 git clone https://github.com/uarksweteam12/team-12-photon.git
 ```
 
-3. To download all dependencies, please run these commands in your terminal:
+3. Now, navigate to the repository. Please type this command in your terminal:
+
+```
+cd team-12-photon
+```
+
+4. To download all dependencies, please run these commands in your terminal:
 
 ```sh
 chmod +x setup.sh
 ./setup.sh
 ```
 
-4. Now to activate the database in the software, please run this command in your terminal:
+5. Now to activate the database in the software, please run this command in your terminal:
 ```sh
 pip install psycopg2-binary
 ```
-
-5. Now to run the software, please run this command in your terminal:
+/
+6. Now to run the software, please run this command in your terminal:
 ```sh
 python3 main.py
 ```
