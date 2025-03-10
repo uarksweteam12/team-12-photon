@@ -10,6 +10,9 @@ import actionScreen
 
 
 gameMode = "Standard Public Mode"
+debugMode = False
+# ^^^ disables database to code will function on windows/mac without VM. 
+# WARNING: stuff may not function correctly so be careful!
 
 
 class PlayerEntryScreen:
@@ -23,10 +26,11 @@ class PlayerEntryScreen:
         self.currentTeamNum = 0
         self.player_labels = []
 
-        self.redPlayers = {str(i): [tk.StringVar(), tk.StringVar(), tk.IntVar()] for i in range(20)}
+        # 0=id, 1=codename, 2=hardwareid, 3=gameScore
+        self.redPlayers = {str(i): [tk.StringVar(), tk.StringVar(), tk.IntVar(), tk.IntVar()] for i in range(15)}
         
         #makes obj from 0 to 19 (players) that has a list with 2 strings
-        self.greenPlayers = {str(i): [tk.StringVar(), tk.StringVar(), tk.IntVar()] for i in range(20)}
+        self.greenPlayers = {str(i): [tk.StringVar(), tk.StringVar(), tk.IntVar(), tk.IntVar()] for i in range(15)}
 
         # key function
         self.root.bind("<Up>", self.on_key_press)
@@ -36,6 +40,7 @@ class PlayerEntryScreen:
         self.root.bind("<Return>", self.on_key_press)
         self.root.bind("<F12>", self.on_key_press)
         self.root.bind("<F5>", self.on_key_press)
+        self.root.bind("<F11>", self.debugMode)
 
         # title
         titleFrame = tk.Frame(root, bg="black")
@@ -108,7 +113,7 @@ class PlayerEntryScreen:
         self.addCommandToLine(commandLineCenterFrame, "F8", "View\nGame", True)
         self.addCommandToLine(commandLineCenterFrame, "F9", "", True)
         self.addCommandToLine(commandLineCenterFrame, "F10", "Flick\nSync", True)
-        self.addCommandToLine(commandLineCenterFrame, "F11", "", True)
+        self.addCommandToLine(commandLineCenterFrame, "F11", "Toggle\nDebug Mode", False)
         self.addCommandToLine(commandLineCenterFrame, "F12", "Clear\nGame", False)
 
         # lets put some instructions at the bottom and show that we can do stuff...
@@ -152,20 +157,23 @@ class PlayerEntryScreen:
                 self.currentTeamNum = 1
         elif event.keysym == "Return": #<ENTER> key to add player
             #print(self.currentPlayerNum)
-            # database.tryUpdate = True
             
             # Add the variable values into dababase file
             if self.currentTeamNum == 0:
                 idvar = str(self.redPlayers[str(self.currentPlayerNum)][0].get())
                 team = "Red"
+                result = None
 
-                result = database.playerIdExist(idvar)
+                if(not debugMode):
+                    result = database.playerIdExist(idvar)
                 if result == None: #ask for codename if it isn't in database
                     window = askWindow.AskWindow(self.root, True) 
 
                     codenameRtn = window.getResult() 
                     self.redPlayers[str(self.currentPlayerNum)][1].set(str(codenameRtn))
-                    database.insert_player(idvar, codenameRtn) #add to database so that they exist now
+
+                    if(not debugMode):
+                        database.insert_player(idvar, codenameRtn) #add to database so that they exist now
                 else:
                     self.redPlayers[str(self.currentPlayerNum)][1].set(str(result)) #populate codename text entry on screen
 
@@ -177,14 +185,18 @@ class PlayerEntryScreen:
             else:
                 idvar = str(self.greenPlayers[str(self.currentPlayerNum)][0].get())
                 team = "Green"
+                result = None
 
-                result = database.playerIdExist(idvar)
+                if(not debugMode):
+                    result = database.playerIdExist(idvar)
                 if result == None: #ask for codename if it isn't in database
                     window = askWindow.AskWindow(self.root, True) 
 
                     codenameRtn = window.getResult() 
                     self.greenPlayers[str(self.currentPlayerNum)][1].set(str(codenameRtn))
-                    database.insert_player(idvar, codenameRtn) #add to database so that they exist now
+                    
+                    if(not debugMode):
+                        database.insert_player(idvar, codenameRtn) #add to database so that they exist now
                 else:
                     self.greenPlayers[str(self.currentPlayerNum)][1].set(str(result)) #populate codename text entry on screen
 
@@ -194,18 +206,21 @@ class PlayerEntryScreen:
                 hardwareidRtn = window.getResult() 
                 self.greenPlayers[str(self.currentPlayerNum)][2].set(int(hardwareidRtn))
             
-            database.fetch_players()
+            if(not debugMode):
+                database.fetch_players()
             # Send player info via UDP
             udpClient.send_equipment_code(hardwareidRtn)
         elif event.keysym == "F12": #<F12> key to remove player entries
             print("F12 pressed")
-            for x in range(20):
+            for x in range(15):
                 self.redPlayers[str(x)][0].set("")
                 self.redPlayers[str(x)][1].set("")
                 self.redPlayers[str(x)][2].set(-1)
+                self.redPlayers[str(x)][3].set(0)
                 self.greenPlayers[str(x)][0].set("")
                 self.greenPlayers[str(x)][1].set("")
                 self.greenPlayers[str(x)][2].set(-1)
+                self.greenPlayers[str(x)][3].set(0)
         elif event.keysym == "F5": #<F5> key to switch to play action screen
             actionScreen.ActionScreen(self.root, self.redPlayers, self.greenPlayers)
 
@@ -214,6 +229,11 @@ class PlayerEntryScreen:
 
         self.refresh_display()
         #print(f"player={self.currentPlayerNum}, team={self.currentTeamNum}") to make sure it is changing correctly
+
+    def debugMode(self, event):
+        global debugMode
+        debugMode = not debugMode
+        print(f"Debug: {debugMode}")
 
     def addCommandToLine(self, frame, cmd, action, blackout):
         if not blackout: 
@@ -243,7 +263,7 @@ class PlayerEntryScreen:
             
 
     def createPlayerSlots(self, teamFrame, teamNum): #lets do a loop and create playerSlots
-        for i in range(20): 
+        for i in range(15): 
             self.playerSlot(teamFrame, i, teamNum)
 
     def playerSlot(self, teamFrame, playerNum, teamNum):
