@@ -5,9 +5,9 @@ from psycopg2 import sql
 connection_params = {
     'dbname': 'photon',
     'user': 'student',
-    'password': 'student',  # Uncomment and provide password if needed
-    'host': 'localhost',    # Uncomment and provide host if needed
-    'port': '5432'          # Uncomment and provide port if needed
+    #'password': 'student',  # Uncomment and provide password if needed
+    #'host': 'localhost',    # Uncomment and provide host if needed
+    #'port': '5432'          # Uncomment and provide port if needed
 }
 
 global conn
