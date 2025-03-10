@@ -26,11 +26,11 @@ class PlayerEntryScreen:
         self.currentTeamNum = 0
         self.player_labels = []
 
-        # 0=id, 1=codename, 2=hardwareid, 3=gameScore
-        self.redPlayers = {str(i): [tk.StringVar(), tk.StringVar(), tk.IntVar(), tk.IntVar()] for i in range(15)}
+        # 0=id, 1=codename, 2=hardwareid
+        self.redPlayers = {str(i): [tk.StringVar(), tk.StringVar(), tk.IntVar()] for i in range(15)}
         
         #makes obj from 0 to 19 (players) that has a list with 2 strings
-        self.greenPlayers = {str(i): [tk.StringVar(), tk.StringVar(), tk.IntVar(), tk.IntVar()] for i in range(15)}
+        self.greenPlayers = {str(i): [tk.StringVar(), tk.StringVar(), tk.IntVar()] for i in range(15)}
 
         # key function
         self.root.bind("<Up>", self.on_key_press)
@@ -216,11 +216,9 @@ class PlayerEntryScreen:
                 self.redPlayers[str(x)][0].set("")
                 self.redPlayers[str(x)][1].set("")
                 self.redPlayers[str(x)][2].set(-1)
-                self.redPlayers[str(x)][3].set(0)
                 self.greenPlayers[str(x)][0].set("")
                 self.greenPlayers[str(x)][1].set("")
                 self.greenPlayers[str(x)][2].set(-1)
-                self.greenPlayers[str(x)][3].set(0)
         elif event.keysym == "F5": #<F5> key to switch to play action screen
             actionScreen.ActionScreen(self.root, self.redPlayers, self.greenPlayers)
 
