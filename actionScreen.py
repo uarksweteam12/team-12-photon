@@ -22,7 +22,7 @@ class ActionScreen:
         self.greenTotalScore = tk.IntVar()
 
         # does countdown_images exist?
-        if os.path.exists(countdown_images):
+        if os.path.exists('/countdown_images'):
             print('exists')
         else:
             print('DNE')
