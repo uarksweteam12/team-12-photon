@@ -5,6 +5,7 @@ from PIL import Image
 import os
 import time
 
+
 class ActionScreen:
     def __init__(self, root, redPlayers, greenPlayers):
         self.top = Toplevel(root)  # dont rlly know why but I'm not asking
@@ -46,6 +47,11 @@ class ActionScreen:
         # ****
         # PUT ALL THE CODE FOR THE PLAY ACTION SCREEN HERE!!!
         # ****
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> origin/countdownTimer
 
 
 
