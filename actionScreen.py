@@ -1,5 +1,9 @@
 import tkinter as tk
 from tkinter import Toplevel
+from pathlib import Path
+from PIL import Image
+import os
+import time
 
 class ActionScreen:
     def __init__(self, root, redPlayers, greenPlayers):
@@ -17,7 +21,23 @@ class ActionScreen:
         self.greenTotalScore = tk.IntVar()
 
 
-        #FELIX: do your 30 second timer, then call self.makePlayActionScreen
+        # 30 second timer starts here
+
+        # find images and store in list
+        try:
+            images = []
+            for i in range(31):
+                image_path= os.path.join(countdown_images, f"{i}.tif")
+                image_paths.append(image_path)
+            
+        except FileNotFoundError:
+            print(f"Image not found: {image_path}")
+
+        # timer loop
+        for image_path in image_paths:
+            image = Image.open(image_path)
+            image.show() # displays image
+            time.sleep(1)
 
 
         self.makePlayActionScreen(redPlayers, greenPlayers)
