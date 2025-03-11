@@ -51,13 +51,13 @@ class ActionScreen:
 
     def updateImage(self):
 
-        if self.current_index < len(self.image_paths):
-            image_path = self.image_paths[self.current_index]
+        if self.index < len(self.image_paths):
+            image_path = self.image_paths[self.index]
             img = Image.open(image_path)
             self.photo = ImageTk.PhotoImage(img)
 
             self.image_label.config(image=self.photo)  # update existing label
-            self.current_index += 1
+            self.index += 1
 
             # schedule the next image update after 1 second
             self.root.after(1000, self.update_image)
