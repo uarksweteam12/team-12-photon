@@ -34,6 +34,9 @@ class ActionScreen:
 
         self.index = 0
         self.frame = tk.Frame(self.top, bg="black")
+        self.frame.pack()
+        self.image_label = tk.Label(self.frame, bg="black")
+        self.image_label.pack()
         self.updateImage() # self.frame.destroy() is called in this function
 
         self.makePlayActionScreen(redPlayers, greenPlayers)
