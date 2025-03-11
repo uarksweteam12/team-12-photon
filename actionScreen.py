@@ -29,7 +29,7 @@ class ActionScreen:
         # find images and store in list
         self.image_paths = []
         for i in range(30, -1, -1):
-            image_path= os.path.join(countdown_images, f"{i}.tif")
+            image_path= os.path.join(self.countdown_images, f"{i}.tif")
             self.image_paths.append(image_path)
 
         self.index = 0
