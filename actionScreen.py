@@ -28,9 +28,9 @@ class ActionScreen:
 
         # find images and store in list
         image_paths = []
-            for i in range(31):
-                image_path= os.path.join(countdown_images, f"{i}.tif")
-                image_paths.append(image_path)
+        for i in range(31):
+            image_path= os.path.join(countdown_images, f"{i}.tif")
+            image_paths.append(image_path)
 
         # timer loop
         try:
