@@ -47,11 +47,6 @@ class ActionScreen:
         # ****
         # PUT ALL THE CODE FOR THE PLAY ACTION SCREEN HERE!!!
         # ****
-<<<<<<< HEAD
-=======
-
-
->>>>>>> origin/countdownTimer
 
 
 
