@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import Toplevel
 from pathlib import Path
-from PIL import Image
+from PIL import Image, ImageTk
 import os
 import time
 
@@ -24,24 +24,17 @@ class ActionScreen:
         # 30 second timer starts here
 
         # access images folder
-        countdown_images = os.path.join(os.path.dirname(os.path.abspath(__file__)), "countdown_images")
+        self.countdown_images = os.path.join(os.path.dirname(os.path.abspath(__file__)), "countdown_images")
 
         # find images and store in list
-        image_paths = []
-        for i in range(31):
+        self.image_paths = []
+        for i in range(30, -1, -1):
             image_path= os.path.join(countdown_images, f"{i}.tif")
-            image_paths.append(image_path)
+            self.image_paths.append(image_path)
 
-        # timer loop
-        try:
-            for image_path in image_paths:
-                image = Image.open(image_path)
-                image.show() # displays image
-                time.sleep(1)
-
-        except FileNotFoundError:
-            print(f"Error opening image: {image_path}")
-
+        self.index = 0
+        self.frame = tk.Frame(self.top, bg="black")
+        self.updateImage() # self.frame.destroy() is called in this function
 
         self.makePlayActionScreen(redPlayers, greenPlayers)
 
@@ -55,6 +48,23 @@ class ActionScreen:
         # This must be at the end of the __init__ function, don't move!
         self.centerWindow()
         self.top.wait_window(self.top)
+
+    def updateImage(self):
+
+        if self.current_index < len(self.image_paths):
+            image_path = self.image_paths[self.current_index]
+            img = Image.open(image_path)
+            self.photo = ImageTk.PhotoImage(img)
+
+            self.image_label.config(image=self.photo)  # update existing label
+            self.current_index += 1
+
+            # schedule the next image update after 1 second
+            self.root.after(1000, self.update_image)
+
+        else:
+            self.frame.destroy()
+
 
     def makePlayActionScreen(self, redPlayers, greenPlayers): #call this func to make the rest of play action screen after 30 sec timer
         #title that tells you what to do
