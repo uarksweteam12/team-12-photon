@@ -20,6 +20,9 @@ class AskWindow:
 
         self.result = None
 
+        # you can also press the enter key to close window
+        self.top.bind("<Return>", self.onKeyPress)
+
         #title that tells you what to do
         titleFrame = tk.Frame(self.top, bg="black")
         titleLabel = tk.Label(titleFrame, text=titleFrameText, font=("Arial", 16), fg="blue", bg="black")
@@ -42,6 +45,9 @@ class AskWindow:
         self.centerWindow()
 
         self.top.wait_window(self.top)
+
+    def onKeyPress(self, event):
+        self.closeWindow()
 
     def closeWindow(self):
         self.result = self.changeEntry.get()
