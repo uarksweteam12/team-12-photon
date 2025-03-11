@@ -1,7 +1,9 @@
 import tkinter as tk
 from tkinter import Toplevel
 from pathlib import Path
-
+from PIL import image
+import os
+import time
 
 
 class ActionScreen:
@@ -23,11 +25,21 @@ class ActionScreen:
         # PUT ALL THE CODE FOR THE PLAY ACTION SCREEN HERE!!!
         # ****
 
-        # countdown timer
-        
-        countdown_images/"0.tif"
+        # countdown timer starts here
 
-        print(f"codename: {redPlayers[str(0)][1].get()}")
+        # find images and store in list
+        try:
+            images = []
+            for i in range(31):
+                image_path = os.path.join(countdown_images, f"{i}.tif")
+                images.append(image_path)
+            
+        except FileNotFoundError:
+            print(f"Image not found: {image_path}")
+
+        
+        
+
 
 
 
