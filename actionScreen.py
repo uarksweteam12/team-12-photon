@@ -21,6 +21,11 @@ class ActionScreen:
         self.redTotalScore = tk.IntVar()
         self.greenTotalScore = tk.IntVar()
 
+        # does countdown_images exist?
+        if os.path.exists(countdown_images):
+            print('exists')
+        else:
+            print('DNE')
 
         # 30 second timer starts here
 
