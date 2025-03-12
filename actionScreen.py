@@ -64,7 +64,7 @@ class ActionScreen:
             self.index += 1
 
             # schedule the next image update after 1 second
-            self.root.after(1000, self.update_image)
+            self.root.after(1000, self.updateImage)
 
         else:
             self.frame.destroy()
