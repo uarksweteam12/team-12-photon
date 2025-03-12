@@ -24,6 +24,9 @@ class ActionScreen:
 
         # 30 second timer starts here
 
+        self.background = Image.open("countdown_images/background.tif")
+        print('background found')
+
         # access images folder
         self.countdown_images = os.path.join(os.path.dirname(os.path.abspath(__file__)), "countdown_images")
 
