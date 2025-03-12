@@ -45,7 +45,7 @@ class ActionScreen:
         # self.timer_frame = tk.Frame(self.top, bg="black")
         # self.timer_frame.pack()
         self.timer_label = tk.Label(self.top, bg="black")
-        self.timer_label.place(relx=0.5, rely=0.5, anchor='center') # positioning for timer_label
+        self.timer_label.place(relx=0.5, rely=0.55, anchor='center') # positioning for timer_label
         # self.timer_label.pack()
         self.updateImage() # self.frame.destroy() and self.makePlayActionScreen() are called in this function
 
