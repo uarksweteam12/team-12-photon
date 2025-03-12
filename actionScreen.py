@@ -25,7 +25,7 @@ class ActionScreen:
         # 30 second timer starts here
 
         self.background = Image.open("countdown_images/background.tif")
-        self.background_img = ImageTk.PhotoImage(self.background_img)
+        self.background_img = ImageTk.PhotoImage(self.background)
 
         self.background_label = tk.Label(self.root, image=self.background_img)
         self.background_label.pack()
