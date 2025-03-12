@@ -220,6 +220,7 @@ class PlayerEntryScreen:
                 self.greenPlayers[str(x)][1].set("")
                 self.greenPlayers[str(x)][2].set(-1)
         elif event.keysym == "F5": #<F5> key to switch to play action screen
+            self.titleFrame.destroy()
             actionScreen.ActionScreen(self.root, self.redPlayers, self.greenPlayers)
 
 
