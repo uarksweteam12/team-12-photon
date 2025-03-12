@@ -43,63 +43,63 @@ class PlayerEntryScreen:
         self.root.bind("<F11>", self.debugMode)
 
         # title
-        titleFrame = tk.Frame(root, bg="black")
-        titleLabel = tk.Label(titleFrame, text="Edit Current Game", font=("Arial", 16), fg="blue", bg="black")
-        titleLabel.pack(pady=0)
-        titleFrame.pack(pady=0, fill="x")
+        self.titleFrame = tk.Frame(root, bg="black")
+        self.titleLabel = tk.Label(titleFrame, text="Edit Current Game", font=("Arial", 16), fg="blue", bg="black")
+        self.titleLabel.pack(pady=0)
+        self.titleFrame.pack(pady=0, fill="x")
 
         # teams Frame that both teams go into
-        teamsFrame = tk.Frame(root, bg="black")
-        teamsFrame.pack(fill="both", expand=True, side=tk.TOP)
+        self.teamsFrame = tk.Frame(root, bg="black")
+        self.teamsFrame.pack(fill="both", expand=True, side=tk.TOP)
 
         # need to center redTeam, InstructMiddle, and greenTeam frame
-        teamsFrameCenter = tk.Frame(teamsFrame, bg="black")
-        teamsFrameCenter.pack(padx=5, pady=5, expand=True)
+        self.teamsFrameCenter = tk.Frame(teamsFrame, bg="black")
+        self.teamsFrameCenter.pack(padx=5, pady=5, expand=True)
 
         # Red Team
-        redTeam = tk.Frame(teamsFrameCenter, bg="red")
-        tk.Label(redTeam, text="Red Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
-        redTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
+        self.redTeam = tk.Frame(teamsFrameCenter, bg="red")
+        self.tk.Label(redTeam, text="Red Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
+        self.redTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
 
         # instructions for controls, adding players, etc.
-        instructMiddleFrame = tk.Frame(teamsFrameCenter, bg="grey")
-        tk.Label(instructMiddleFrame, text="Press the <ENTER> key to add player\nEnsure player is selected by using arrow keys").pack(padx=10, pady=5)
-        instructMiddleFrame.pack(side=tk.LEFT, fill="x")
+        self.instructMiddleFrame = tk.Frame(teamsFrameCenter, bg="grey")
+        self.tk.Label(instructMiddleFrame, text="Press the <ENTER> key to add player\nEnsure player is selected by using arrow keys").pack(padx=10, pady=5)
+        self.instructMiddleFrame.pack(side=tk.LEFT, fill="x")
 
         # Green Team
-        greenTeam = tk.Frame(teamsFrameCenter, bg="green")
-        tk.Label(greenTeam, text="Green Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
-        greenTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
+        self.greenTeam = tk.Frame(teamsFrameCenter, bg="green")
+        self.tk.Label(greenTeam, text="Green Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
+        self.greenTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
 
         # lets make 20 players for each team
         self.createPlayerSlots(redTeam, 0)
         self.createPlayerSlots(greenTeam, 1)
 
         # game mode frame with button that doesn't work right now
-        gameModeFrame = tk.Frame(root, bg="grey")
-        gameModeFrame.pack(pady=2)
-        gameModeButton = tk.Button(gameModeFrame, text=f"Game Mode: {gameMode}", command=self.changeGameMode, bg="grey")
-        gameModeButton.pack(padx=3, pady=2, side=tk.LEFT)
+        self.gameModeFrame = tk.Frame(root, bg="grey")
+        self.gameModeFrame.pack(pady=2)
+        self.gameModeButton = tk.Button(gameModeFrame, text=f"Game Mode: {gameMode}", command=self.changeGameMode, bg="grey")
+        self.gameModeButton.pack(padx=3, pady=2, side=tk.LEFT)
 
         #adds a way to change ip from entry screen
-        ipChangeFrame = tk.Frame(gameModeFrame, bg="grey")
-        ipChangeFrame.pack(side=tk.LEFT)
+        self.ipChangeFrame = tk.Frame(gameModeFrame, bg="grey")
+        self.ipChangeFrame.pack(side=tk.LEFT)
 
-        ipChangeLabel = tk.Label(ipChangeFrame, text="Change IP:", bg="grey", fg="black")
-        ipChangeLabel.pack(side=tk.LEFT) 
+        self.ipChangeLabel = tk.Label(ipChangeFrame, text="Change IP:", bg="grey", fg="black")
+        self.ipChangeLabel.pack(side=tk.LEFT) 
         self.ipChangeEntry = tk.Entry(ipChangeFrame, width=15) #need self. to get ip from text entry in the changeIP func
         self.ipChangeEntry.pack(side=tk.LEFT)
-        ipChangeSubmit = tk.Button(ipChangeFrame, text="Confirm", command=self.changeIP, bg="grey")
-        ipChangeSubmit.pack(side=tk.LEFT, padx=3, pady=2)
+        self.ipChangeSubmit = tk.Button(ipChangeFrame, text="Confirm", command=self.changeIP, bg="grey")
+        self.ipChangeSubmit.pack(side=tk.LEFT, padx=3, pady=2)
 
 
         # Command Line what has all the f1, f2, f3, etc
-        commandLineFrame = tk.Frame(root, bg="black")
-        commandLineFrame.pack(fill="x", pady=2)
+        self.commandLineFrame = tk.Frame(root, bg="black")
+        self.commandLineFrame.pack(fill="x", pady=2)
 
         # I want it to look somewhat nice, so center this thing
-        commandLineCenterFrame = tk.Frame(commandLineFrame, bg="black")
-        commandLineCenterFrame.pack(padx=5, pady=5)
+        self.commandLineCenterFrame = tk.Frame(commandLineFrame, bg="black")
+        self.commandLineCenterFrame.pack(padx=5, pady=5)
 
         #alright, lets add all the commands for the command line
         #blacking out everything right now since we don't need it for sprint 2
@@ -117,14 +117,14 @@ class PlayerEntryScreen:
         self.addCommandToLine(commandLineCenterFrame, "F12", "Clear\nGame", False)
 
         # lets put some instructions at the bottom and show that we can do stuff...
-        instructionLineFrame = tk.Frame(root, bg="grey", height=50)
-        instructionLineFrame.pack(fill="x", pady=10)
-        instructionLineLabel = tk.Label(instructionLineFrame, text="Press the <ENTER> key to add player", fg="black", bg="grey")
-        instructionLineLabel.pack(padx=5, pady=5)
+        self.instructionLineFrame = tk.Frame(root, bg="grey", height=50)
+        self.instructionLineFrame.pack(fill="x", pady=10)
+        self.instructionLineLabel = tk.Label(instructionLineFrame, text="Press the <ENTER> key to add player", fg="black", bg="grey")
+        self.instructionLineLabel.pack(padx=5, pady=5)
 
         self.root.update_idletasks()
-        width = self.root.winfo_reqwidth()
-        height = self.root.winfo_reqheight()
+        self.width = self.root.winfo_reqwidth()
+        self.height = self.root.winfo_reqheight()
         self.root.geometry(f"{width}x{height}") #makes sure the window size is correct and not wrong... don't worry this code is perfect
 
     def refresh_display(self):
