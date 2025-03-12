@@ -45,9 +45,7 @@ class ActionScreen:
         self.timer_label = tk.Label(self.timer_frame, bg="black")
         self.timer_label.place(relx=0.5, rely=0.5, anchor='center')
         self.timer_label.pack()
-        self.updateImage() # self.frame.destroy() is called in this function
-
-        self.makePlayActionScreen(redPlayers, greenPlayers)
+        self.updateImage() # self.frame.destroy() and self.makePlayActionScreen() are called in this function
 
 
         # ****
@@ -75,6 +73,7 @@ class ActionScreen:
 
         else:
             self.timer_frame.destroy()
+            self.makePlayActionScreen(redPlayers, greenPlayers)
 
 
     def makePlayActionScreen(self, redPlayers, greenPlayers): #call this func to make the rest of play action screen after 30 sec timer
