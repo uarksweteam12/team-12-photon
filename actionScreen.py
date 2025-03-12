@@ -42,9 +42,9 @@ class ActionScreen:
             self.image_paths.append(image_path)
 
         self.index = 0
-        self.timer_frame = tk.Frame(self.top, bg="black")
-        self.timer_frame.pack()
-        self.timer_label = tk.Label(self.timer_frame, bg="black")
+        # self.timer_frame = tk.Frame(self.top, bg="black")
+        # self.timer_frame.pack()
+        self.timer_label = tk.Label(self.top, bg="black")
         self.timer_label.place(relx=0.5, rely=0.7, anchor='center') # positioning for timer_label
         self.timer_label.pack()
         self.updateImage() # self.frame.destroy() and self.makePlayActionScreen() are called in this function
@@ -74,7 +74,7 @@ class ActionScreen:
             self.top.after(1000, self.updateImage)
 
         else:
-            self.timer_frame.destroy()
+            # self.timer_frame.destroy()
             self.makePlayActionScreen(self.redPlayers, self.greenPlayers)
 
 
