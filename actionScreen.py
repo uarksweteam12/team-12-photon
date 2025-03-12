@@ -8,12 +8,12 @@ import time
 
 class ActionScreen:
     def __init__(self, root, redPlayers, greenPlayers):
-        self.root = root
         self.top = Toplevel(root)  # dont rlly know why but I'm not asking
         self.top.title("Play Action Screen")
         self.top.configure(bg="black")
         self.top.transient(root)  
         self.top.grab_set() #I think it makes you not click out of window unless you complete task
+        self.root = root
 
         # 0=score, 1=B (sprint 4 thing...but I'm not doing that rn...)
         self.redScores = {str(i): [tk.IntVar()] for i in range(15)}
@@ -38,7 +38,9 @@ class ActionScreen:
         self.frame.pack()
         self.image_label = tk.Label(self.frame, bg="black")
         self.image_label.pack()
-        self.updateImage() # self.frame.destroy() and self.makePlayActionScreen are called inside this function
+        self.updateImage() # self.frame.destroy() is called in this function
+
+        self.makePlayActionScreen(redPlayers, greenPlayers)
 
 
         # ****
@@ -66,7 +68,6 @@ class ActionScreen:
 
         else:
             self.frame.destroy()
-            self.makePlayActionScreen(redPlayers, greenPlayers)
 
 
     def makePlayActionScreen(self, redPlayers, greenPlayers): #call this func to make the rest of play action screen after 30 sec timer
