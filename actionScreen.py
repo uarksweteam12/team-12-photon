@@ -13,6 +13,7 @@ class ActionScreen:
         self.top.configure(bg="black")
         self.top.transient(root)  
         self.top.grab_set() #I think it makes you not click out of window unless you complete task
+        self.root = root
 
         # 0=score, 1=B (sprint 4 thing...but I'm not doing that rn...)
         self.redScores = {str(i): [tk.IntVar()] for i in range(15)}
