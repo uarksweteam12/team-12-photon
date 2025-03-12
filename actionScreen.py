@@ -25,7 +25,10 @@ class ActionScreen:
         # 30 second timer starts here
 
         self.background = Image.open("countdown_images/background.tif")
-        print('background found')
+        self.background_img = ImageTk.PhotoImage(self.background_img)
+
+        self.background_label = tk.Label(self.root, image=self.background_img)
+        self.background_label.pack()
 
         # access images folder
         self.countdown_images = os.path.join(os.path.dirname(os.path.abspath(__file__)), "countdown_images")
@@ -37,10 +40,10 @@ class ActionScreen:
             self.image_paths.append(image_path)
 
         self.index = 0
-        self.frame = tk.Frame(self.top, bg="black")
-        self.frame.pack()
-        self.image_label = tk.Label(self.frame, bg="black")
-        self.image_label.pack()
+        self.timer_frame = tk.Frame(self.top, bg="black")
+        self.timer_frame.pack()
+        self.timer_label = tk.Label(self.timer_frame, bg="black")
+        self.timer_label.pack()
         self.updateImage() # self.frame.destroy() is called in this function
 
         self.makePlayActionScreen(redPlayers, greenPlayers)
@@ -70,7 +73,7 @@ class ActionScreen:
             self.root.after(1000, self.updateImage)
 
         else:
-            self.frame.destroy()
+            self.timer_frame.destroy()
 
 
     def makePlayActionScreen(self, redPlayers, greenPlayers): #call this func to make the rest of play action screen after 30 sec timer
