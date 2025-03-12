@@ -43,7 +43,7 @@ class ActionScreen:
         self.timer_frame = tk.Frame(self.top, bg="black")
         self.timer_frame.pack()
         self.timer_label = tk.Label(self.timer_frame, bg="black")
-        self.timer_label.place(relx=0.5, rely=0.3, anchor='center')
+        self.timer_label.place(relx=0.5, rely=0.1, anchor='center')
         self.timer_label.pack()
         self.updateImage() # self.frame.destroy() is called in this function
 
