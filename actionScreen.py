@@ -30,7 +30,7 @@ class ActionScreen:
         self.background_img = ImageTk.PhotoImage(self.background)
 
         self.background_label = tk.Label(self.top, image=self.background_img)
-        self.background_label.place(relx=0.5, rely=0.5, anchor='center') # positioning for background_label
+        self.background_label.pack(fill="both") # positioning for background_label
 
         # access images folder
         self.countdown_images = os.path.join(os.path.dirname(os.path.abspath(__file__)), "countdown_images")
@@ -45,7 +45,7 @@ class ActionScreen:
         # self.timer_frame = tk.Frame(self.top, bg="black")
         # self.timer_frame.pack()
         self.timer_label = tk.Label(self.top, bg="black", bd=0, highlightthickness=0)
-        self.timer_label.place(relx=0.5, rely=0.55, anchor='center') # positioning for timer_label
+        self.timer_label.place(relx=0.501, rely=0.581, anchor='center') # positioning for timer_label
         # self.timer_label.pack()
         self.updateImage() # self.frame.destroy() and self.makePlayActionScreen() are called in this function
 
@@ -72,9 +72,9 @@ class ActionScreen:
 
             # schedule the next image update after 1 second
             self.top.after(1000, self.updateImage)
-
         else:
-            # self.timer_frame.destroy()
+            self.timer_label.destroy()
+            self.background_label.destroy()
             self.makePlayActionScreen(self.redPlayers, self.greenPlayers)
 
 
