@@ -136,9 +136,14 @@ class ActionScreen:
         #TODO make it where it reports game action, (game hits, etc) (LATER SPRINT!!!!)
         
         #TODO make a frame for time remaining, don't have to code anything... (SPRINT 3!!!)
+        secondsRemaining = 60
+        def formatTime(seconds):
+            minutes = seconds //60
+            seconds = seconds % 60
+            return f"{minutes:02}:{seconds:02}"
         timeRemainFrame = tk.Frame(self.top, bg="#414141")
         timeRemainFrame.pack(padx=10, pady=10, fill="both")
-        timeRemainText = tk.Label(timeRemainFrame, text="Time Remaining: 6:00", font=("Arial", 14), fg="white", bg="#414141")
+        timeRemainText = tk.Label(timeRemainFrame, text=f"Time Remaining: {formatTime(secondsRemaining)}", font=("Arial", 14), fg="white", bg="#414141")
         timeRemainText.pack(padx=10, pady=10)
 
 
