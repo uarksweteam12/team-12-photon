@@ -7,7 +7,7 @@ import time
 
 
 class ActionScreen:
-    def __init__(self, root, redPlayers, greenPlayers):
+    def __init__(self, root, redPlayers, greenPlayers, debug):
         self.top = Toplevel(root)  # dont rlly know why but I'm not asking
         self.top.title("Play Action Screen")
         self.top.configure(bg="black")
@@ -25,7 +25,16 @@ class ActionScreen:
         self.greenTotalScore = tk.IntVar()
 
         # 30 second timer starts here
+        if(not debug): #if debug=false, act normal
+            self.createCountdown()
+        else: #if debug=true, skip countdown to speed up development (or else we have to wait 30s to text screen)
+            self.makePlayActionScreen(self.redPlayers, self.greenPlayers)
 
+        # This must be at the end of the __init__ function, don't move!
+        self.centerWindow()
+        self.top.wait_window(self.top)
+
+    def createCountdown(self):
         self.background = Image.open("countdown_images/background.tif")
         self.background_img = ImageTk.PhotoImage(self.background)
 
@@ -49,19 +58,7 @@ class ActionScreen:
         # self.timer_label.pack()
         self.updateImage() # self.frame.destroy() and self.makePlayActionScreen() are called in this function
 
-
-        # ****
-        # PUT ALL THE CODE FOR THE PLAY ACTION SCREEN HERE!!!
-        # ****
-
-
-
-        # This must be at the end of the __init__ function, don't move!
-        self.centerWindow()
-        self.top.wait_window(self.top)
-
     def updateImage(self):
-
         if self.index < len(self.image_paths):
             image_path = self.image_paths[self.index]
             img = Image.open(image_path)
@@ -128,13 +125,22 @@ class ActionScreen:
         self.redTotalEntry.pack(side=tk.LEFT)
 
         # lets create the current action frame
-        currentAction = tk.Frame(self.top, bg="black")
+        currentAction = tk.Frame(self.top, bg="#414141")
         currentAction.pack(padx=10, pady=20, fill="both")
+
+        currentActionLabel = tk.Label(currentAction, text="Current Game Action:", font=("Arial", 14), fg="white", bg="#414141")
+        currentActionLabel.pack(padx=10, pady=10, side=tk.TOP)
+
+        currentActionEvents = tk.Frame(currentAction, bg="grey", width=200, height=150).pack(fill="both")
 
         #TODO make it where it reports game action, (game hits, etc) (LATER SPRINT!!!!)
         
-        
         #TODO make a frame for time remaining, don't have to code anything... (SPRINT 3!!!)
+        timeRemainFrame = tk.Frame(self.top, bg="#414141")
+        timeRemainFrame.pack(padx=10, pady=10, fill="both")
+        timeRemainText = tk.Label(timeRemainFrame, text="Time Remaining: 6:00", font=("Arial", 14), fg="white", bg="#414141")
+        timeRemainText.pack(padx=10, pady=10)
+
 
     def makeScoreboard(self, teamFrame, team, teamTF):
         for i in range(15):
