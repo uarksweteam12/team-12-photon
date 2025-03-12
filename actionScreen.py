@@ -66,7 +66,7 @@ class ActionScreen:
             img = Image.open(image_path)
             self.photo = ImageTk.PhotoImage(img)
 
-            self.image_label.config(image=self.photo)  # update existing label
+            self.timer_label.config(image=self.photo)  # update existing label
             self.index += 1
 
             # schedule the next image update after 1 second
