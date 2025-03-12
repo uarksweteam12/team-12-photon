@@ -8,6 +8,7 @@ import time
 
 class ActionScreen:
     def __init__(self, root, redPlayers, greenPlayers):
+        self.root = root
         self.top = Toplevel(root)  # dont rlly know why but I'm not asking
         self.top.title("Play Action Screen")
         self.top.configure(bg="black")
@@ -54,20 +55,14 @@ class ActionScreen:
 
         if self.index < len(self.image_paths):
             image_path = self.image_paths[self.index]
-
-            if os.path.exists(image_path):
-
             img = Image.open(image_path)
             self.photo = ImageTk.PhotoImage(img)
 
-            # check if label exists before updating
-            if hasattr(self, "image_label") and self.image_label.winfo_exists():
-                self.image_label.config(image=self.photo)  # update existing label
-            
+            self.image_label.config(image=self.photo)  # update existing label
             self.index += 1
 
             # schedule the next image update after 1 second
-            self.top.after(1000, self.updateImage)
+            self.root.after(1000, self.updateImage)
 
         else:
             self.frame.destroy()
