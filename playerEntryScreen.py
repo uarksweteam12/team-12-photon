@@ -58,17 +58,17 @@ class PlayerEntryScreen:
 
         # Red Team
         self.redTeam = tk.Frame(self.teamsFrameCenter, bg="red")
-        self.tk.Label(self.redTeam, text="Red Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
+        tk.Label(self.redTeam, text="Red Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
         self.redTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
 
         # instructions for controls, adding players, etc.
         self.instructMiddleFrame = tk.Frame(self.teamsFrameCenter, bg="grey")
-        self.tk.Label(self.instructMiddleFrame, text="Press the <ENTER> key to add player\nEnsure player is selected by using arrow keys").pack(padx=10, pady=5)
+        tk.Label(self.instructMiddleFrame, text="Press the <ENTER> key to add player\nEnsure player is selected by using arrow keys").pack(padx=10, pady=5)
         self.instructMiddleFrame.pack(side=tk.LEFT, fill="x")
 
         # Green Team
         self.greenTeam = tk.Frame(self.teamsFrameCenter, bg="green")
-        self.tk.Label(greenTeam, text="Green Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
+        tk.Label(greenTeam, text="Green Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
         self.greenTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
 
         # lets make 20 players for each team
