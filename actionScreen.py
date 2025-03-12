@@ -13,7 +13,6 @@ class ActionScreen:
         self.top.configure(bg="black")
         self.top.transient(root)  
         self.top.grab_set() #I think it makes you not click out of window unless you complete task
-        self.root = root
 
         # 0=score, 1=B (sprint 4 thing...but I'm not doing that rn...)
         self.redScores = {str(i): [tk.IntVar()] for i in range(15)}
@@ -25,10 +24,10 @@ class ActionScreen:
         # 30 second timer starts here
 
         self.background = Image.open("countdown_images/background.tif")
-        self.background = self.background.resize((600,450))
+        # self.background = self.background.resize((600,450))
         self.background_img = ImageTk.PhotoImage(self.background)
 
-        self.background_label = tk.Label(self.root, image=self.background_img)
+        self.background_label = tk.Label(self.top, image=self.background_img)
         self.background_label.pack()
 
         # access images folder
@@ -71,7 +70,7 @@ class ActionScreen:
             self.index += 1
 
             # schedule the next image update after 1 second
-            self.root.after(1000, self.updateImage)
+            self.top.after(1000, self.updateImage)
 
         else:
             self.timer_frame.destroy()
