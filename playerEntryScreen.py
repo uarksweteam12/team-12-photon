@@ -57,7 +57,7 @@ class PlayerEntryScreen:
         self.teamsFrameCenter.pack(padx=5, pady=5, expand=True)
 
         # Red Team
-        self.redTeam = tk.Frame(teamsFrameCenter, bg="red")
+        self.redTeam = tk.Frame(self.teamsFrameCenter, bg="red")
         self.tk.Label(self.redTeam, text="Red Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
         self.redTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
 
