@@ -40,6 +40,7 @@ class AskWindow:
         self.changeEntry.pack(side=tk.LEFT)
         changeSubmit = tk.Button(changeFrame, text="Confirm", command=self.closeWindow, bg="grey")
         changeSubmit.pack(side=tk.LEFT, padx=3, pady=2)
+        self.changeEntry.focus_set()
 
         #lets center window so ppl see this pop up
         self.centerWindow()
