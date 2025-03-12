@@ -27,11 +27,10 @@ class ActionScreen:
         # 30 second timer starts here
 
         self.background = Image.open("countdown_images/background.tif")
-        # self.background = self.background.resize((600,450))
         self.background_img = ImageTk.PhotoImage(self.background)
 
         self.background_label = tk.Label(self.top, image=self.background_img)
-        self.background_label.place(relx=0.5, rely=0.5, anchor='center')
+        self.background_label.place(relx=0.5, rely=0.5, anchor='center') # positioning for background_label
 
         # access images folder
         self.countdown_images = os.path.join(os.path.dirname(os.path.abspath(__file__)), "countdown_images")
@@ -46,7 +45,7 @@ class ActionScreen:
         self.timer_frame = tk.Frame(self.top, bg="black")
         self.timer_frame.pack()
         self.timer_label = tk.Label(self.timer_frame, bg="black")
-        self.timer_label.place(relx=0.5, rely=0.5, anchor='center')
+        self.timer_label.place(relx=0.5, rely=0.7, anchor='center') # positioning for timer_label
         self.timer_label.pack()
         self.updateImage() # self.frame.destroy() and self.makePlayActionScreen() are called in this function
 
