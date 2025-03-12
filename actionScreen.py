@@ -14,6 +14,9 @@ class ActionScreen:
         self.top.transient(root)  
         self.top.grab_set() #I think it makes you not click out of window unless you complete task
 
+        self.redPlayers = redPlayers
+        self.greenPlayers = greenPlayers
+
         # 0=score, 1=B (sprint 4 thing...but I'm not doing that rn...)
         self.redScores = {str(i): [tk.IntVar()] for i in range(15)}
         self.greenScores = {str(i): [tk.IntVar()] for i in range(15)}
@@ -73,7 +76,7 @@ class ActionScreen:
 
         else:
             self.timer_frame.destroy()
-            self.makePlayActionScreen(redPlayers, greenPlayers)
+            self.makePlayActionScreen(self.redPlayers, self.greenPlayers)
 
 
     def makePlayActionScreen(self, redPlayers, greenPlayers): #call this func to make the rest of play action screen after 30 sec timer
