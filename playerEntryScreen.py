@@ -68,7 +68,7 @@ class PlayerEntryScreen:
 
         # Green Team
         self.greenTeam = tk.Frame(self.teamsFrameCenter, bg="green")
-        tk.Label(greenTeam, text="Green Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
+        tk.Label(self.greenTeam, text="Green Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
         self.greenTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
 
         # lets make 20 players for each team
