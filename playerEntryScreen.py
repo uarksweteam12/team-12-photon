@@ -26,6 +26,8 @@ class PlayerEntryScreen:
         self.currentTeamNum = 0
         self.player_labels = []
 
+        self.frames = [] # keeps track of all current frames
+
         # 0=id, 1=codename, 2=hardwareid
         self.redPlayers = {str(i): [tk.StringVar(), tk.StringVar(), tk.IntVar()] for i in range(15)}
         
@@ -44,30 +46,36 @@ class PlayerEntryScreen:
 
         # title
         self.titleFrame = tk.Frame(root, bg="black")
+        self.frames.append(self.titleFrame)
         self.titleLabel = tk.Label(self.titleFrame, text="Edit Current Game", font=("Arial", 16), fg="blue", bg="black")
         self.titleLabel.pack(pady=0)
         self.titleFrame.pack(pady=0, fill="x")
 
         # teams Frame that both teams go into
         self.teamsFrame = tk.Frame(self.root, bg="black")
+        self.frames.append(self.teamsFrame)
         self.teamsFrame.pack(fill="both", expand=True, side=tk.TOP)
 
         # need to center redTeam, InstructMiddle, and greenTeam frame
         self.teamsFrameCenter = tk.Frame(self.teamsFrame, bg="black")
+        self.frames.append(self.teamsFrameCenter)
         self.teamsFrameCenter.pack(padx=5, pady=5, expand=True)
 
         # Red Team
         self.redTeam = tk.Frame(self.teamsFrameCenter, bg="red")
+        self.frames.append(self.redTeam)
         tk.Label(self.redTeam, text="Red Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
         self.redTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
 
         # instructions for controls, adding players, etc.
         self.instructMiddleFrame = tk.Frame(self.teamsFrameCenter, bg="grey")
+        self.frames.append(self.instructMiddleFrame)
         tk.Label(self.instructMiddleFrame, text="Press the <ENTER> key to add player\nEnsure player is selected by using arrow keys").pack(padx=10, pady=5)
         self.instructMiddleFrame.pack(side=tk.LEFT, fill="x")
 
         # Green Team
         self.greenTeam = tk.Frame(self.teamsFrameCenter, bg="green")
+        self.frames.append(self.greenTeam)
         tk.Label(self.greenTeam, text="Green Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
         self.greenTeam.pack(padx=10, pady=0, side=tk.LEFT, fill="y")
 
@@ -77,12 +85,14 @@ class PlayerEntryScreen:
 
         # game mode frame with button that doesn't work right now
         self.gameModeFrame = tk.Frame(self.root, bg="grey")
+        self.frames.append(self.gameModeFrame)
         self.gameModeFrame.pack(pady=2)
         self.gameModeButton = tk.Button(self.gameModeFrame, text=f"Game Mode: {gameMode}", command=self.changeGameMode, bg="grey")
         self.gameModeButton.pack(padx=3, pady=2, side=tk.LEFT)
 
         #adds a way to change ip from entry screen
         self.ipChangeFrame = tk.Frame(self.gameModeFrame, bg="grey")
+        self.frames.append(self.ipChangeFrame)
         self.ipChangeFrame.pack(side=tk.LEFT)
 
         self.ipChangeLabel = tk.Label(self.ipChangeFrame, text="Change IP:", bg="grey", fg="black")
@@ -95,6 +105,7 @@ class PlayerEntryScreen:
 
         # Command Line what has all the f1, f2, f3, etc
         self.commandLineFrame = tk.Frame(self.root, bg="black")
+        self.frames.append(self.commandLineFrame)
         self.commandLineFrame.pack(fill="x", pady=2)
 
         # I want it to look somewhat nice, so center this thing
@@ -118,6 +129,7 @@ class PlayerEntryScreen:
 
         # lets put some instructions at the bottom and show that we can do stuff...
         self.instructionLineFrame = tk.Frame(self.root, bg="grey", height=50)
+        self.frames.append(self.instructionLineFrame)
         self.instructionLineFrame.pack(fill="x", pady=10)
         self.instructionLineLabel = tk.Label(self.instructionLineFrame, text="Press the <ENTER> key to add player", fg="black", bg="grey")
         self.instructionLineLabel.pack(padx=5, pady=5)
@@ -133,6 +145,10 @@ class PlayerEntryScreen:
                 label.config(text=">")
             else:
                 label.config(text="\u00A0\u00A0")
+
+    def destroy_frames(self):
+        for frame in self.frames:
+            frame.destroy()
 
     def on_key_press(self, event):
         if event.keysym == "Up": # probably a better way to toggle all this stuff, but I'm kinda dumb,
@@ -220,7 +236,7 @@ class PlayerEntryScreen:
                 self.greenPlayers[str(x)][1].set("")
                 self.greenPlayers[str(x)][2].set(-1)
         elif event.keysym == "F5": #<F5> key to switch to play action screen
-            self.titleFrame.destroy()
+            self.destroy_frames()
             actionScreen.ActionScreen(self.root, self.redPlayers, self.greenPlayers)
 
 
