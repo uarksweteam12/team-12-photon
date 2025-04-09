@@ -224,7 +224,6 @@ class PlayerEntryScreen:
         elif event.keysym == "F5": #<F5> key to switch to play action screen
             game = actionScreen.ActionScreen(self.root, self.redPlayers, self.greenPlayers, debugMode)
             gameOnline = True
-            udpClient.startGame() #send 202 code to udp server
 
 
 

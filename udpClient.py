@@ -14,6 +14,7 @@ buffer = 1024
 def startGame():
     msg = "202"
     sock.sendto(msg.encode(), (UDP_IP, UDP_PORT))
+    print("STARTING GAME")
     # send start game signal to UDP server
     global gameOnline, game
     while gameOnline:
@@ -28,6 +29,7 @@ def startGame():
 def endGame():
     msg = "221"
     sock.sendto(msg.encode(), (UDP_IP, UDP_PORT))
+    print("ENDING GAME")
     # send end game signal
 
 def send_equipment_code(hardwareid) -> bool:

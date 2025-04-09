@@ -141,6 +141,11 @@ class ActionScreen:
         timeRemainText = tk.Label(timeRemainFrame, text="Time Remaining: 6:00", font=("Arial", 14), fg="white", bg="#414141")
         timeRemainText.pack(padx=10, pady=10)
 
+        global udpClient
+        udpClient.startGame() #send 202 code to udp server
+        print('trying to start game')
+
+
 
     def makeScoreboard(self, teamFrame, team, teamTF):
         for i in range(15):
