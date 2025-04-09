@@ -16,12 +16,17 @@ def startGame():
     sock.sendto(msg.encode(), (UDP_IP, UDP_PORT))
     print("STARTING GAME")
     # send start game signal to UDP server
-    global gameOnline, game
+    gameOnline = True
     while gameOnline:
         #receivedData, address = serverSock.recvfrom(buffer)
         #receivedData = receivedData.decode('utf-8')
         msgFromServer = sock.recvfrom(buffer)
         msg = "Message from Server {}".format(msgFromServer[0])
+
+        if msg != "221": #need to find another way...
+            pass
+        else:
+            gameOnline = False #ends game loop
         print(f'client received: {msg}')
 
 
