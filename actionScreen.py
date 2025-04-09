@@ -162,6 +162,8 @@ class ActionScreen:
     def closeWindow(self):
         self.result = self.changeEntry.get()
         self.top.destroy()
+        global udpClient
+        udpClient.endGame()
 
     def centerWindow(self): #acually kinda neat, but yes, it centers the window
         self.top.update_idletasks()  

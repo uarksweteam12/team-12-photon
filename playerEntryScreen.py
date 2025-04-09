@@ -14,6 +14,8 @@ import actionScreen
 
 
 gameMode = "Standard Public Mode"
+gameOnline = False
+game = None
 
 class PlayerEntryScreen:
     def __init__(self, root):
@@ -220,7 +222,9 @@ class PlayerEntryScreen:
                 self.greenPlayers[str(x)][1].set("")
                 self.greenPlayers[str(x)][2].set(-1)
         elif event.keysym == "F5": #<F5> key to switch to play action screen
-            actionScreen.ActionScreen(self.root, self.redPlayers, self.greenPlayers, debugMode)
+            game = actionScreen.ActionScreen(self.root, self.redPlayers, self.greenPlayers, debugMode)
+            gameOnline = True
+            udpClient.startGame() #send 202 code to udp server
 
 
 
