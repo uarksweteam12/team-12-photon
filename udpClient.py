@@ -5,6 +5,8 @@ UDP_PORT = 7500
 
 sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 buffer = 1024
+sock.bind(("127.0.0.1", 7501))
+
 
 #serverAddressPort   = ("127.0.0.1", 7500)
 #serverSock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -20,6 +22,7 @@ def startGame():
     while gameOnline:
         #receivedData, address = serverSock.recvfrom(buffer)
         #receivedData = receivedData.decode('utf-8')
+        print("LISTENING...")
         msgFromServer = sock.recvfrom(buffer)
         msg = "Message from Server {}".format(msgFromServer[0])
 
