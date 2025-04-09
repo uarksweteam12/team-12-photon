@@ -28,7 +28,7 @@ def startGame():
 
         if msgFromServer != "221": #need to find another way...
             splitThemUp = msgFromServer[0].decode('utf-8').split(":")
-            sock.sendto(splitThemUp[1].encode(), (UDP_IP, UDP_PORT))
+            sock.sendto(splitThemUp[0].encode(), (UDP_IP, UDP_PORT))
 
         else:
             gameOnline = False #ends game loop
