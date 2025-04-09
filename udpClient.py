@@ -6,9 +6,9 @@ UDP_PORT = 7500
 sock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 buffer = 1024
 
-serverAddressPort   = ("127.0.0.1", 7500)
-serverSock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-serverSock.bind(serverAddressPort)
+#serverAddressPort   = ("127.0.0.1", 7500)
+#serverSock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+#serverSock.bind(serverAddressPort)
 
 
 def startGame():
@@ -17,10 +17,12 @@ def startGame():
     # send start game signal to UDP server
     global gameOnline, game
     while gameOnline:
-        receivedData, address = serverSock.recvfrom(buffer)
-        receivedData = receivedData.decode('utf-8')
-        print(f'client received: {receivedData}')
-        
+        #receivedData, address = serverSock.recvfrom(buffer)
+        #receivedData = receivedData.decode('utf-8')
+        msgFromServer = sock.recvfrom(buffer)
+        msg = "Message from Server {}".format(msgFromServer[0])
+        print(f'client received: {msg}')
+
 
 
 def endGame():
