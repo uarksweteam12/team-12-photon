@@ -27,7 +27,7 @@ def startGame():
         msg = "Message from Server {}".format(msgFromServer[0])
 
         if msgFromServer != "221": #need to find another way...
-            splitThemUp = msgFromServer.split(":")
+            splitThemUp = msgFromServer[0].split(":")
             sock.sendto(splitThemUp[1].encode(), (UDP_IP, UDP_PORT))
 
         else:
