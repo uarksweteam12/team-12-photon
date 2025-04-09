@@ -144,7 +144,7 @@ class ActionScreen:
         timeRemainText.pack(padx=10, pady=10)
 
         global udpClient
-        self.top.after(udpClient.startGame()) #send 202 code to udp server
+        self.top.after(1000, udpClient.startGame()) #send 202 code to udp server
         print('trying to start game')
 
 
