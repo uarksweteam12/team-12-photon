@@ -20,9 +20,9 @@ class ActionScreen:
         self.redPlayers = redPlayers
         self.greenPlayers = greenPlayers
 
-        # 0=score, 1=B (sprint 4 thing...but I'm not doing that rn...)
-        self.redScores = {str(i): [tk.IntVar()] for i in range(15)}
-        self.greenScores = {str(i): [tk.IntVar()] for i in range(15)}
+        # 0=score, 1=hardWareID (sprint 4 thing...but I'm not doing that rn...)
+        self.redScores = {str(i): [tk.IntVar(), tk.IntVar()] for i in range(15)}
+        self.greenScores = {str(i): [tk.IntVar(), tk.IntVar()] for i in range(15)}
 
         self.redTotalScore = tk.IntVar()
         self.greenTotalScore = tk.IntVar()
@@ -152,9 +152,9 @@ class ActionScreen:
     def makeScoreboard(self, teamFrame, team, teamTF):
         for i in range(15):
             if(team[str(i)][1].get() != ""):
-                self.playerScoreSlot(teamFrame, team[str(i)][1].get(), i, teamTF)
+                self.playerScoreSlot(teamFrame, team[str(i)][1].get(), i, teamTF, team[str(i)][2].get())
 
-    def playerScoreSlot(self, teamFrame, playerCodename, playerNum, teamTF): #gotta work on this
+    def playerScoreSlot(self, teamFrame, playerCodename, playerNum, teamTF, playerHardwareID): #gotta work on this
         frame = tk.Frame(teamFrame, bg=teamFrame["bg"]) #creats the player lines in the team...
         frame.pack(pady=2, fill="both")                              #arrow, number, text, text longer
 
@@ -163,8 +163,11 @@ class ActionScreen:
 
         if(teamTF): 
             tk.Entry(frame, width=5, state=tk.DISABLED, textvariable=self.redScores[str(playerNum)][0]).pack(side=tk.RIGHT, padx=2)
+            self.redScores[str(playerNum)][1].set(playerHardwareID)
         else:
             tk.Entry(frame, width=5, state=tk.DISABLED, textvariable=self.greenScores[str(playerNum)][0]).pack(side=tk.RIGHT, padx=2)
+            self.greenScores[str(playerNum)][1].set(playerHardwareID)
+
 
     def closeWindow(self):
         self.result = self.changeEntry.get()
