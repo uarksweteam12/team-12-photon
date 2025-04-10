@@ -55,7 +55,6 @@ def poll_udp_socket():
     _actionScreen.top.after(100, poll_udp_socket)
 
 def updateUI(player1, player2):
-    print('in update UI')
     if _actionScreen:
         if player2 == "53": # red base
             shooterID, redShooter = findPlayerByHardwareID(player1)
@@ -80,13 +79,11 @@ def updateUI(player1, player2):
 
             #find which team
             if redShooter: #player who shot in redPlayers
-                print('shooter is red player')
                 if redHit: #friendly fire
                     updateScore(shooterID, hitID, False, -10)
                 else: # red hit green
                     updateScore(shooterID, hitID, False, 10)
             else: #greenPlayer shot redPlayer
-                print('shooter is green')
                 if not redHit: #friendly fire
                     updateScore(shooterID, hitID, True, -10)
                 else: # green hit red
