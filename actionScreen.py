@@ -4,6 +4,9 @@ from pathlib import Path
 from PIL import Image, ImageTk
 import os
 import time
+import threading
+import udpClient
+
 
 
 class ActionScreen:
@@ -29,6 +32,8 @@ class ActionScreen:
             self.createCountdown()
         else: #if debug=true, skip countdown to speed up development (or else we have to wait 30s to text screen)
             self.makePlayActionScreen(self.redPlayers, self.greenPlayers)
+
+        udpClient.setActionScreen(self)
 
         # This must be at the end of the __init__ function, don't move!
         self.centerWindow()
@@ -141,6 +146,8 @@ class ActionScreen:
         timeRemainText = tk.Label(timeRemainFrame, text="Time Remaining: 6:00", font=("Arial", 14), fg="white", bg="#414141")
         timeRemainText.pack(padx=10, pady=10)
 
+        self.top.after(1000, udpClient.startGame)
+
 
     def makeScoreboard(self, teamFrame, team, teamTF):
         for i in range(15):
@@ -162,6 +169,8 @@ class ActionScreen:
     def closeWindow(self):
         self.result = self.changeEntry.get()
         self.top.destroy()
+        global udpClient
+        udpClient.endGame()
 
     def centerWindow(self): #acually kinda neat, but yes, it centers the window
         self.top.update_idletasks()  
