@@ -111,7 +111,7 @@ def findPlayerByHardwareID(hwid):
     found = False
 
     for id, data in _actionScreen.redScores.items():
-        if data[1].get() == hwid:
+        if str(data[1].get()) == str(hwid):
             rtnID = id
             red = True
             found = True
@@ -119,7 +119,7 @@ def findPlayerByHardwareID(hwid):
 
     if not found:
         for id, data in _actionScreen.greenScores.items():
-            if data[1].get() == hwid:
+            if str(data[1].get()) == str(hwid):
                 rtnID = id
                 break
     
