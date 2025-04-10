@@ -146,8 +146,6 @@ class ActionScreen:
 
         global udpClient
         threading.Thread(target=udpClient.startGame, daemon=True).start()
-        print('trying to start game')
-
 
 
     def makeScoreboard(self, teamFrame, team, teamTF):
