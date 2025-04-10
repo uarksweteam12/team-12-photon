@@ -6,6 +6,8 @@ import os
 import time
 import threading
 import udpClient
+import random
+import pygame # audio playback
 
 
 
@@ -16,6 +18,15 @@ class ActionScreen:
         self.top.configure(bg="black")
         self.top.transient(root)  
         self.top.grab_set() #I think it makes you not click out of window unless you complete task
+
+        # Set pygame mixer for audio playback
+        pygame.mixer.init()
+
+        # Set the folder path
+        self.tracks = os.path.join(os.path.dirname(os.path.abspath(__file__)), "photon_tracks")
+
+        # Keep track if music playing
+        self.music_playing = False
 
         self.redPlayers = redPlayers
         self.greenPlayers = greenPlayers
@@ -38,6 +49,54 @@ class ActionScreen:
         # This must be at the end of the __init__ function, don't move!
         self.centerWindow()
         self.top.wait_window(self.top)
+
+    def play_random_track(self)
+        """Select and play random track from photon_tracks"""
+        if not os.path.exists(self.tracks):
+            print(f"Error: Tracks folder not found at {self.tracks}")
+            return
+        
+        mp3_files = [f for f in os.listdir(self.tracks) if f.endswith ('.mp3')]
+
+        if not mp3_files
+            print(f"No mp3 files found at {self.tracks}")
+            return
+        
+        # Selec a random track
+        random_track = random.choice(mp3_files)
+        track_path = os.path.join(self.tracks, random_track)
+
+        # Play the track
+        try:
+            pygame.mixer.music.load(track_path)
+            pygame.mixer.music.play()
+            self.music_playing = True
+            print (f"Now Playing: {random_track}")
+
+            # Set up a callback to play another random track when one finishes
+            self.check_music_ended()
+        except Exception as e:
+            print(f"Error playing audio: {e}")
+    
+    def check_music_ended(self):
+        """Check if the current track has ended and play another if it has"""
+        if self.music_playing and not pygame.mixer.music.get_busy():
+            self.play_random_track()
+        
+        # Check again 1 sec intervals
+        if self.music_playing:
+            self.top.after(1000, self.check_music_ended)
+    
+    def stop_music(self):
+        """Stop the currently playing music"""
+        if self.music_playing:
+            pygame.mixer.music.stop()
+            self.music_playing = False
+
+    def on_close(self):
+        """Handle actionScreen Closing"""
+        self.stop_music()
+        self.closeWindow()
 
     def createCountdown(self):
         self.background = Image.open("countdown_images/background.tif")
