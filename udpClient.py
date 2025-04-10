@@ -44,6 +44,7 @@ def poll_udp_socket():
             sock.sendto(splitThemUp[0].encode(), (UDP_IP, UDP_PORT))
 
             if _actionScreen is not None:
+                print("test")
                 _actionScreen.top.after(10, updateUI(splitThemUp[0], splitThemUp[1]))
 
     except BlockingIOError:
@@ -54,6 +55,7 @@ def poll_udp_socket():
     _actionScreen.top.after(100, poll_udp_socket)
 
 def updateUI(player1, player2):
+    print('in update UI')
     if _actionScreen:
         if player2 == "53": # red base
             pass
