@@ -45,7 +45,7 @@ def poll_udp_socket():
 
             if _actionScreen is not None:
                 print("test")
-                _actionScreen.top.after(10, updateUI(splitThemUp[0], splitThemUp[1]))
+                _actionScreen.top.after(10, lambda: updateUI(splitThemUp[0], splitThemUp[1]))
 
     except BlockingIOError:
         # No data to receive, continue polling
