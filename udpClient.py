@@ -35,7 +35,7 @@ def startGame():
 
         if data != "221": #need to find another way...
             sock.sendto(splitThemUp[0].encode(), (UDP_IP, UDP_PORT))
-            _actionScreen.root.after(0, lambda: _actionScreen.redScores[str(0)][0].set(300))
+            #_actionScreen.root.after(0, lambda: _actionScreen.redScores[str(0)][0].set(300))
         else:
             gameOnline = False #ends game loop
         print(f'client received: {msg}')

@@ -147,8 +147,7 @@ class ActionScreen:
         timeRemainText = tk.Label(timeRemainFrame, text="Time Remaining: 6:00", font=("Arial", 14), fg="white", bg="#414141")
         timeRemainText.pack(padx=10, pady=10)
 
-        global udpClient
-        threading.Thread(target=udpClient.startGame, daemon=True).start()
+        self.top.after(1000, udpClient.startGame)
 
 
     def makeScoreboard(self, teamFrame, team, teamTF):
