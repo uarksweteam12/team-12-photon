@@ -4,6 +4,7 @@ from pathlib import Path
 from PIL import Image, ImageTk
 import os
 import time
+import threading
 import udpClient
 
 
@@ -144,7 +145,7 @@ class ActionScreen:
         timeRemainText.pack(padx=10, pady=10)
 
         global udpClient
-        self.top.after(1000, udpClient.startGame()) #send 202 code to udp server
+        threading.Thread(target=udpClient.startGame, daemon=True).start()
         print('trying to start game')
 
 

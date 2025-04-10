@@ -25,11 +25,11 @@ def startGame():
         print("LISTENING...")
         msgFromServer = sock.recvfrom(buffer)
         msg = "Message from Server {}".format(msgFromServer[0])
+        data = msgFromServer.decode('utf-8')
+        splitThemUp = data.split(":")
 
-        if msgFromServer != "221": #need to find another way...
-            splitThemUp = msgFromServer[0].decode('utf-8').split(":")
+        if data != "221": #need to find another way...
             sock.sendto(splitThemUp[0].encode(), (UDP_IP, UDP_PORT))
-
         else:
             gameOnline = False #ends game loop
         print(f'client received: {msg}')
