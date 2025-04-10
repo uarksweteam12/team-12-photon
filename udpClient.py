@@ -34,7 +34,7 @@ def startGame():
 
             # Trigger UI update
             if _actionScreen is not None:
-                _actionScreen.top.after(0, lambda: updateUI())  # Use after to call the updateUI method
+                _actionScreen.top.after(10, lambda: updateUI())  # Use after to call the updateUI method
 
         else:
             gameOnline = False
