@@ -13,6 +13,7 @@ import askWindow
 import actionScreen
 
 gameMode = "Standard Public Mode"
+game = None
 
 class PlayerEntryScreen:
     def __init__(self, root):
