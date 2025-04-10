@@ -44,7 +44,7 @@ def poll_udp_socket():
             sock.sendto(splitThemUp[0].encode(), (UDP_IP, UDP_PORT))
 
             if _actionScreen is not None:
-                _actionScreen.top.after(10, updateUI)
+                _actionScreen.top.after(10, updateUI(splitThemUp[0], splitThemUp[1]))
 
     except BlockingIOError:
         # No data to receive, continue polling
@@ -53,7 +53,7 @@ def poll_udp_socket():
     # Schedule next check
     _actionScreen.top.after(100, poll_udp_socket)
 
-def updateUI():
+def updateUI(player1, player2):
     if _actionScreen:
         # Update the red team's player 0 score as an example
         _actionScreen.redScores[str(0)][0].set(300)
