@@ -12,6 +12,11 @@ sock.bind(("127.0.0.1", 7501))
 #serverSock = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 #serverSock.bind(serverAddressPort)
 
+_actionScreen = None
+
+def setActionScreen(screenInstance):
+    global _actionScreen
+    _actionScreen = screenInstance
 
 def startGame():
     msg = "202"
@@ -30,6 +35,7 @@ def startGame():
 
         if data != "221": #need to find another way...
             sock.sendto(splitThemUp[0].encode(), (UDP_IP, UDP_PORT))
+            _actionScreen.redScores[str(0)].set(300)
         else:
             gameOnline = False #ends game loop
         print(f'client received: {msg}')

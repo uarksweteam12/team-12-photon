@@ -33,6 +33,8 @@ class ActionScreen:
         else: #if debug=true, skip countdown to speed up development (or else we have to wait 30s to text screen)
             self.makePlayActionScreen(self.redPlayers, self.greenPlayers)
 
+        udpClient.setActionScreen(self)
+
         # This must be at the end of the __init__ function, don't move!
         self.centerWindow()
         self.top.wait_window(self.top)
