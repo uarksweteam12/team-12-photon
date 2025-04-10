@@ -55,9 +55,55 @@ def poll_udp_socket():
 
 def updateUI(player1, player2):
     if _actionScreen:
-        # Update the red team's player 0 score as an example
+        if player2 == "53": # red base
+            pass
+        elif player2 == "43": #green base
+            pass
+        else: #player hit player
+            playerID = None
+            red = False
+            found = False
+            for playerId, playerData in _actionScreen.redPlayers.items():
+                if playerData[2].get() == player1:  # Check if the hardwareId matches
+                    playerID = playerId  # Found the player in the red team
+                    found = True
+                    red = True
+                    print(f'red id: {playerID}')
+                    break
+            
+            if not found:
+                for playerId, playerData in _actionScreen.greenPlayers.items():
+                    if playerData[2].get() == player1:  # Check if the hardwareId matches
+                        playerID = playerId  # Found the player in the red team
+                        found = True
+                        print(f'green id: {playerID}')
+                        break
+
+            #find which team
+            if red: #player who shot in redPlayers
+                print('shooter is red player')
+                updateScore(player1, player2, False, 10)
+            else: #greenPlayer shot redPlayer
+                print('shooter is green')
+                updateScore(player1, player2, True, 10)
+
+
         _actionScreen.redScores[str(0)][0].set(300)
         _actionScreen.top.update_idletasks()
+
+def findPlayerByHardwareId(self, hardwareId):
+    # Check redPlayers first
+    for playerId, playerData in self.redPlayers.items():
+        if playerData[2].get() == hardwareId:  # Check if the hardwareId matches
+            return "Red Team", playerId  # Found the player in the red team
+    
+    # Check greenPlayers
+    for playerId, playerData in self.greenPlayers.items():
+        if playerData[2].get() == hardwareId:  # Check if the hardwareId matches
+            return "Green Team", playerId  # Found the player in the green team
+
+def updateScore(player1, player2, teamBool, points): #teamBool = False, red : teamBool = True, green
+    pass
 
 def endGame():
     global _gameOnline
