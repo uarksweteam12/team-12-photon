@@ -58,9 +58,17 @@ def updateUI(player1, player2):
     print('in update UI')
     if _actionScreen:
         if player2 == "53": # red base
-            pass
+            shooterID, redShooter = findPlayerByHardwareID(player1)
+
+            if not redShooter:
+                updateScore(shooterID, player2, False, 100)
+                # do B here
         elif player2 == "43": #green base
-            pass
+            shooterID, redShooter = findPlayerByHardwareID(player1)
+
+            if redShooter:
+                updateScore(shooterID, player2, False, 100)
+                # do B here
         else: #player hit player
             shooterID = None
             hitID = None
@@ -85,7 +93,13 @@ def updateUI(player1, player2):
                     updateScore(shooterID, hitID, True, 10)
 
 def updateScore(shooter, hit, teamBool, points): #teamBool = False, red : teamBool = True, green
-    if not teamBool: #shooter is red player
+    if hit == "53": #green hit red base
+        _actionScreen.greenScores[str(shooter)][0].set(_actionScreen.greenScores[str(shooter)][0].get() + points)
+        _actionScreen.greenTotalScore.set(_actionScreen.greenTotalScore.get() + points)
+    elif hit == "43": #red hit green base
+        _actionScreen.redScores[str(shooter)][0].set(_actionScreen.redScores[str(shooter)][0].get() + points)
+        _actionScreen.redTotalScore.set(_actionScreen.redTotalScore.get() + points)
+    elif not teamBool: #shooter is red player
         if points < 0: # friendly fire, hit is red player, take points away from both players
             _actionScreen.redScores[str(shooter)][0].set(_actionScreen.redScores[str(shooter)][0].get() + points)
             _actionScreen.redScores[str(hit)][0].set(_actionScreen.redScores[str(hit)][0].get() + points)

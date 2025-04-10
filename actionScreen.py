@@ -109,25 +109,35 @@ class ActionScreen:
         self.makeScoreboard(redTeam, redPlayers, True)
         self.makeScoreboard(greenTeam, greenPlayers, False)
 
-        # lets add total for red team at the bottom
+        totalScoreStyle = {
+            "width": 8,
+            "state": tk.DISABLED,
+            "font": ("Arial", 14, "bold"),
+            "justify": "center",
+            "disabledbackground": "white",
+            "disabledforeground": "black",
+            "relief": tk.FLAT,
+            "highlightthickness": 0,
+            "bd": 0
+        }
+
+        # Red team total
         redTotalFrame = tk.Frame(redTeam, bg="white")
         redTotalFrame.pack(pady=5, padx=5, side=tk.BOTTOM)
 
-        #what the redTotalFrame houses
-        redTotalLabel = tk.Label(redTotalFrame, text="Team Total:", bg="white", fg="black")
-        redTotalLabel.pack(side=tk.LEFT) 
-        self.redTotalEntry = tk.Entry(redTotalFrame, width=15, state=tk.DISABLED, textvariable=self.redTotalScore) 
+        redTotalLabel = tk.Label(redTotalFrame, text="Team Total:", bg="white", fg="black", font=("Arial", 12))
+        redTotalLabel.pack(side=tk.LEFT)
+        self.redTotalEntry = tk.Entry(redTotalFrame, textvariable=self.redTotalScore, **totalScoreStyle)
         self.redTotalEntry.pack(side=tk.LEFT)
 
-        # lets add total for green team at the bottom
+        # Green team total
         greenTotalFrame = tk.Frame(greenTeam, bg="white")
         greenTotalFrame.pack(pady=5, padx=5, side=tk.BOTTOM)
 
-        #what the greenTotalFrame houses
-        greenTotalLabel = tk.Label(greenTotalFrame, text="Team Total:", bg="white", fg="black")
-        greenTotalLabel.pack(side=tk.LEFT) 
-        self.redTotalEntry = tk.Entry(greenTotalFrame, width=15, state=tk.DISABLED, textvariable=self.greenTotalScore) 
-        self.redTotalEntry.pack(side=tk.LEFT)
+        greenTotalLabel = tk.Label(greenTotalFrame, text="Team Total:", bg="white", fg="black", font=("Arial", 12))
+        greenTotalLabel.pack(side=tk.LEFT)
+        self.greenTotalEntry = tk.Entry(greenTotalFrame, textvariable=self.greenTotalScore, **totalScoreStyle)
+        self.greenTotalEntry.pack(side=tk.LEFT)
 
         # lets create the current action frame
         currentAction = tk.Frame(self.top, bg="#414141")
@@ -154,19 +164,32 @@ class ActionScreen:
             if(team[str(i)][1].get() != ""):
                 self.playerScoreSlot(teamFrame, team[str(i)][1].get(), i, teamTF, team[str(i)][2].get())
 
-    def playerScoreSlot(self, teamFrame, playerCodename, playerNum, teamTF, playerHardwareID): #gotta work on this
-        frame = tk.Frame(teamFrame, bg=teamFrame["bg"]) #creats the player lines in the team...
-        frame.pack(pady=2, fill="both")                              #arrow, number, text, text longer
+    def playerScoreSlot(self, teamFrame, playerCodename, playerNum, teamTF, playerHardwareID):
+        frame = tk.Frame(teamFrame, bg=teamFrame["bg"])
+        frame.pack(pady=2, fill="both")
 
-        name = tk.Label(frame, text=playerCodename, bg=teamFrame["bg"], fg="white")
+        name = tk.Label(frame, text=playerCodename, bg=teamFrame["bg"], fg="white", font=("Arial", 12))
         name.pack(side=tk.LEFT, padx=2)
 
-        if(teamTF): 
-            tk.Entry(frame, width=5, state=tk.DISABLED, textvariable=self.redScores[str(playerNum)][0]).pack(side=tk.RIGHT, padx=2)
+        score_style = {
+            "width": 5,
+            "state": tk.DISABLED,
+            "font": ("Arial", 14, "bold"),
+            "justify": "center",
+            "disabledbackground": teamFrame["bg"],
+            "disabledforeground": "white",
+            "relief": tk.FLAT,
+            "highlightthickness": 0,
+            "bd": 0
+        }
+
+        if teamTF:  # red team
+            tk.Entry(frame, textvariable=self.redScores[str(playerNum)][0], **score_style).pack(side=tk.RIGHT, padx=2)
             self.redScores[str(playerNum)][1].set(playerHardwareID)
-        else:
-            tk.Entry(frame, width=5, state=tk.DISABLED, textvariable=self.greenScores[str(playerNum)][0]).pack(side=tk.RIGHT, padx=2)
+        else:  # green team
+            tk.Entry(frame, textvariable=self.greenScores[str(playerNum)][0], **score_style).pack(side=tk.RIGHT, padx=2)
             self.greenScores[str(playerNum)][1].set(playerHardwareID)
+
 
 
     def closeWindow(self):
