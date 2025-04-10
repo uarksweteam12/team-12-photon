@@ -25,7 +25,7 @@ def startGame():
         print("LISTENING...")
         msgFromServer = sock.recvfrom(buffer)
         msg = "Message from Server {}".format(msgFromServer[0])
-        data = msgFromServer.decode('utf-8')
+        data = msgFromServer[0].decode('utf-8')
         splitThemUp = data.split(":")
 
         if data != "221": #need to find another way...
