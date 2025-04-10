@@ -22,29 +22,30 @@ def startGame():
     msg = "202"
     sock.sendto(msg.encode(), (UDP_IP, UDP_PORT))
     print("STARTING GAME")
-    # send start game signal to UDP server
     gameOnline = True
     while gameOnline:
-        #receivedData, address = serverSock.recvfrom(buffer)
-        #receivedData = receivedData.decode('utf-8')
         print("LISTENING...")
         msgFromServer = sock.recvfrom(buffer)
-        msg = "Message from Server {}".format(msgFromServer[0])
         data = msgFromServer[0].decode('utf-8')
         splitThemUp = data.split(":")
-
-        if data != "221": #need to find another way...
+        
+        if data != "221":
             sock.sendto(splitThemUp[0].encode(), (UDP_IP, UDP_PORT))
-            _actionScreen.top.after(0, lambda: (
-                _actionScreen.redScores[str(0)][0].set(300),  # Update the score for player 0
-                _actionScreen.top.update_idletasks(),  # Ensure UI updates
-                _actionScreen.top.update()  # Force a full window refresh
-            ))
+
+            # Trigger UI update
+            if _actionScreen is not None:
+                _actionScreen.top.after(0, lambda: updateUI())  # Use after to call the updateUI method
+
         else:
-            gameOnline = False #ends game loop
-        print(f'client received: {msg}')
+            gameOnline = False
+        print(f'client received: {data}')
 
-
+def updateUI():
+    # Make sure this function updates the relevant UI components.
+    if _actionScreen:
+        _actionScreen.redScores[str(0)][0].set(300)  # Example: Update player 0 score
+        _actionScreen.top.update_idletasks()  # Ensure UI updates properly
+        _actionScreen.top.update()  # Force a full window refresh
 
 def endGame():
     msg = "221"
