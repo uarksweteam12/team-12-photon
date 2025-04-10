@@ -11,7 +11,6 @@ import udpClient
 
 class ActionScreen:
     def __init__(self, root, redPlayers, greenPlayers, debug):
-        self.root = root
         self.top = Toplevel(root)  # dont rlly know why but I'm not asking
         self.top.title("Play Action Screen")
         self.top.configure(bg="black")
