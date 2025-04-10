@@ -1,4 +1,5 @@
 import tkinter as tk
+import time
 from tkinter import Toplevel
 from pathlib import Path
 from PIL import Image, ImageTk
@@ -74,6 +75,15 @@ class ActionScreen:
             self.background_label.destroy()
             self.makePlayActionScreen(self.redPlayers, self.greenPlayers)
 
+    def countdownTimer(self, timeRemainText):
+        total_seconds = 6 * 60  # Convert 6 minutes to seconds
+        while total_seconds >= 0:
+            mins, secs = divmod(total_seconds, 60)
+            timer = '{:02d}:{:02d}'.format(mins, secs)
+            time.sleep(1)
+            total_seconds -= 1
+            timeRemainText.config(text=f"Time Remaining: {timer}")
+
 
     def makePlayActionScreen(self, redPlayers, greenPlayers): #call this func to make the rest of play action screen after 30 sec timer
         #title that tells you what to do
@@ -140,6 +150,7 @@ class ActionScreen:
         timeRemainFrame.pack(padx=10, pady=10, fill="both")
         timeRemainText = tk.Label(timeRemainFrame, text="Time Remaining: 6:00", font=("Arial", 14), fg="white", bg="#414141")
         timeRemainText.pack(padx=10, pady=10)
+        self.countdownTimer(timeRemainText)
 
 
     def makeScoreboard(self, teamFrame, team, teamTF):
@@ -158,7 +169,7 @@ class ActionScreen:
             tk.Entry(frame, width=5, state=tk.DISABLED, textvariable=self.redScores[str(playerNum)][0]).pack(side=tk.RIGHT, padx=2)
         else:
             tk.Entry(frame, width=5, state=tk.DISABLED, textvariable=self.greenScores[str(playerNum)][0]).pack(side=tk.RIGHT, padx=2)
-
+    
     def closeWindow(self):
         self.result = self.changeEntry.get()
         self.top.destroy()
