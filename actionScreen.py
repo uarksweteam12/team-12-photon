@@ -31,13 +31,16 @@ class ActionScreen:
         self.redPlayers = redPlayers
         self.greenPlayers = greenPlayers
 
-        # 0=score, 1=B (sprint 4 thing...but I'm not doing that rn...)
-        self.redScores = {str(i): [tk.IntVar()] for i in range(15)}
-        self.greenScores = {str(i): [tk.IntVar()] for i in range(15)}
+        # 0=score, 1=hardWareID (sprint 4 thing...but I'm not doing that rn...)
+        self.redScores = {str(i): [tk.IntVar(), tk.IntVar()] for i in range(15)}
+        self.greenScores = {str(i): [tk.IntVar(), tk.IntVar()] for i in range(15)}
 
         self.redTotalScore = tk.IntVar()
         self.greenTotalScore = tk.IntVar()
 
+        # For countdownTimer
+        self.remaining_seconds = 6 * 60
+        
         # 30 second timer starts here
         if(not debug): #if debug=false, act normal
             self.createCountdown()
@@ -138,6 +141,13 @@ class ActionScreen:
             self.background_label.destroy()
             self.makePlayActionScreen(self.redPlayers, self.greenPlayers)
 
+    def countdownTimer(self):
+        if self.remaining_seconds >= 0:
+            minutes = self.remaining_seconds // 60
+            seconds = self.remaining_seconds % 60
+            self.timeRemainText.config(text=f"Time Remaining: {minutes}:{seconds:02}")
+            self.remaining_seconds -= 1
+            self.top.after(1000, self.countdownTimer)
 
     def makePlayActionScreen(self, redPlayers, greenPlayers): #call this func to make the rest of play action screen after 30 sec timer
         #title that tells you what to do
@@ -168,25 +178,35 @@ class ActionScreen:
         self.makeScoreboard(redTeam, redPlayers, True)
         self.makeScoreboard(greenTeam, greenPlayers, False)
 
-        # lets add total for red team at the bottom
+        totalScoreStyle = {
+            "width": 8,
+            "state": tk.DISABLED,
+            "font": ("Arial", 14, "bold"),
+            "justify": "center",
+            "disabledbackground": "white",
+            "disabledforeground": "black",
+            "relief": tk.FLAT,
+            "highlightthickness": 0,
+            "bd": 0
+        }
+
+        # Red team total
         redTotalFrame = tk.Frame(redTeam, bg="white")
         redTotalFrame.pack(pady=5, padx=5, side=tk.BOTTOM)
 
-        #what the redTotalFrame houses
-        redTotalLabel = tk.Label(redTotalFrame, text="Team Total:", bg="white", fg="black")
-        redTotalLabel.pack(side=tk.LEFT) 
-        self.redTotalEntry = tk.Entry(redTotalFrame, width=15, state=tk.DISABLED, textvariable=self.redTotalScore) 
+        redTotalLabel = tk.Label(redTotalFrame, text="Team Total:", bg="white", fg="black", font=("Arial", 12))
+        redTotalLabel.pack(side=tk.LEFT)
+        self.redTotalEntry = tk.Entry(redTotalFrame, textvariable=self.redTotalScore, **totalScoreStyle)
         self.redTotalEntry.pack(side=tk.LEFT)
 
-        # lets add total for green team at the bottom
+        # Green team total
         greenTotalFrame = tk.Frame(greenTeam, bg="white")
         greenTotalFrame.pack(pady=5, padx=5, side=tk.BOTTOM)
 
-        #what the greenTotalFrame houses
-        greenTotalLabel = tk.Label(greenTotalFrame, text="Team Total:", bg="white", fg="black")
-        greenTotalLabel.pack(side=tk.LEFT) 
-        self.redTotalEntry = tk.Entry(greenTotalFrame, width=15, state=tk.DISABLED, textvariable=self.greenTotalScore) 
-        self.redTotalEntry.pack(side=tk.LEFT)
+        greenTotalLabel = tk.Label(greenTotalFrame, text="Team Total:", bg="white", fg="black", font=("Arial", 12))
+        greenTotalLabel.pack(side=tk.LEFT)
+        self.greenTotalEntry = tk.Entry(greenTotalFrame, textvariable=self.greenTotalScore, **totalScoreStyle)
+        self.greenTotalEntry.pack(side=tk.LEFT)
 
         # lets create the current action frame
         currentAction = tk.Frame(self.top, bg="#414141")
@@ -200,30 +220,47 @@ class ActionScreen:
         #TODO make it where it reports game action, (game hits, etc) (LATER SPRINT!!!!)
         
         #TODO make a frame for time remaining, don't have to code anything... (SPRINT 3!!!)
-        timeRemainFrame = tk.Frame(self.top, bg="#414141")
-        timeRemainFrame.pack(padx=10, pady=10, fill="both")
-        timeRemainText = tk.Label(timeRemainFrame, text="Time Remaining: 6:00", font=("Arial", 14), fg="white", bg="#414141")
-        timeRemainText.pack(padx=10, pady=10)
+        self.timeRemainFrame = tk.Frame(self.top, bg="#414141")
+        self.timeRemainFrame.pack(padx=10, pady=10, fill="both")
+        self.timeRemainText = tk.Label(self.timeRemainFrame, text="Time Remaining: 6:00", font=("Arial", 14), fg="white", bg="#414141")
+        self.timeRemainText.pack(padx=10, pady=10)
 
+        self.countdownTimer()
         self.top.after(1000, udpClient.startGame)
 
 
     def makeScoreboard(self, teamFrame, team, teamTF):
         for i in range(15):
             if(team[str(i)][1].get() != ""):
-                self.playerScoreSlot(teamFrame, team[str(i)][1].get(), i, teamTF)
+                self.playerScoreSlot(teamFrame, team[str(i)][1].get(), i, teamTF, team[str(i)][2].get())
 
-    def playerScoreSlot(self, teamFrame, playerCodename, playerNum, teamTF): #gotta work on this
-        frame = tk.Frame(teamFrame, bg=teamFrame["bg"]) #creats the player lines in the team...
-        frame.pack(pady=2, fill="both")                              #arrow, number, text, text longer
+    def playerScoreSlot(self, teamFrame, playerCodename, playerNum, teamTF, playerHardwareID):
+        frame = tk.Frame(teamFrame, bg=teamFrame["bg"])
+        frame.pack(pady=2, fill="both")
 
-        name = tk.Label(frame, text=playerCodename, bg=teamFrame["bg"], fg="white")
+        name = tk.Label(frame, text=playerCodename, bg=teamFrame["bg"], fg="white", font=("Arial", 12))
         name.pack(side=tk.LEFT, padx=2)
 
-        if(teamTF): 
-            tk.Entry(frame, width=5, state=tk.DISABLED, textvariable=self.redScores[str(playerNum)][0]).pack(side=tk.RIGHT, padx=2)
-        else:
-            tk.Entry(frame, width=5, state=tk.DISABLED, textvariable=self.greenScores[str(playerNum)][0]).pack(side=tk.RIGHT, padx=2)
+        score_style = {
+            "width": 5,
+            "state": tk.DISABLED,
+            "font": ("Arial", 14, "bold"),
+            "justify": "center",
+            "disabledbackground": teamFrame["bg"],
+            "disabledforeground": "white",
+            "relief": tk.FLAT,
+            "highlightthickness": 0,
+            "bd": 0
+        }
+
+        if teamTF:  # red team
+            tk.Entry(frame, textvariable=self.redScores[str(playerNum)][0], **score_style).pack(side=tk.RIGHT, padx=2)
+            self.redScores[str(playerNum)][1].set(playerHardwareID)
+        else:  # green team
+            tk.Entry(frame, textvariable=self.greenScores[str(playerNum)][0], **score_style).pack(side=tk.RIGHT, padx=2)
+            self.greenScores[str(playerNum)][1].set(playerHardwareID)
+
+
 
     def closeWindow(self):
         self.result = self.changeEntry.get()
