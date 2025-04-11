@@ -226,6 +226,7 @@ class ActionScreen:
         self.timeRemainText.pack(padx=10, pady=10)
 
         self.countdownTimer()
+        self.play_random_track()
         self.top.after(1000, udpClient.startGame)
 
 
