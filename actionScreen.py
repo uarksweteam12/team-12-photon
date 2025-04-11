@@ -40,6 +40,9 @@ class ActionScreen:
         self.centerWindow()
         self.top.wait_window(self.top)
 
+        # For countdownTimer
+        self.remaining_seconds = 6 * 60
+
     def createCountdown(self):
         self.background = Image.open("countdown_images/background.tif")
         self.background_img = ImageTk.PhotoImage(self.background)
