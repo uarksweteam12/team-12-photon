@@ -27,6 +27,9 @@ class ActionScreen:
         self.redTotalScore = tk.IntVar()
         self.greenTotalScore = tk.IntVar()
 
+        # For countdownTimer
+        self.remaining_seconds = 6 * 60
+        
         # 30 second timer starts here
         if(not debug): #if debug=false, act normal
             self.createCountdown()
@@ -39,8 +42,6 @@ class ActionScreen:
         self.centerWindow()
         self.top.wait_window(self.top)
 
-        # For countdownTimer
-        self.remaining_seconds = 6 * 60
 
     def createCountdown(self):
         self.background = Image.open("countdown_images/background.tif")
