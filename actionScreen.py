@@ -53,7 +53,7 @@ class ActionScreen:
         self.centerWindow()
         self.top.wait_window(self.top)
 
-    def play_random_track(self)
+    def play_random_track(self):
         """Select and play random track from photon_tracks"""
         if not os.path.exists(self.tracks):
             print(f"Error: Tracks folder not found at {self.tracks}")
@@ -61,7 +61,7 @@ class ActionScreen:
         
         mp3_files = [f for f in os.listdir(self.tracks) if f.endswith ('.mp3')]
 
-        if not mp3_files
+        if not mp3_files:
             print(f"No mp3 files found at {self.tracks}")
             return
         
@@ -226,6 +226,7 @@ class ActionScreen:
         self.timeRemainText.pack(padx=10, pady=10)
 
         self.countdownTimer()
+        self.play_random_track()
         self.top.after(1000, udpClient.startGame)
 
 
