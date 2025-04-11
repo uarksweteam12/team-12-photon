@@ -80,15 +80,13 @@ class ActionScreen:
             self.background_label.destroy()
             self.makePlayActionScreen(self.redPlayers, self.greenPlayers)
 
-    def countdownTimer(self, timeRemainText):
-        total_seconds = 6 * 60  # Convert 6 minutes to seconds
-        while total_seconds >= 0:
-            mins, secs = divmod(total_seconds, 60)
-            timer = '{:02d}:{:02d}'.format(mins, secs)
-            time.sleep(1)
-            total_seconds -= 1
-            timeRemainText.config(text=f"Time Remaining: {timer}")
-
+    def countdownTimer(self):
+        if self.remaining_seconds >= 0:
+            minutes = self.remaining_seconds // 60
+            seconds = self.remaining_seconds % 60
+            self.timeRemainText.config(text=f"Time Remaining: {minutes}:{seconds:02}")
+            self.remaining_seconds -= 1
+            self.top.after(1000, self.updateTimer)
 
     def makePlayActionScreen(self, redPlayers, greenPlayers): #call this func to make the rest of play action screen after 30 sec timer
         #title that tells you what to do
@@ -161,12 +159,12 @@ class ActionScreen:
         #TODO make it where it reports game action, (game hits, etc) (LATER SPRINT!!!!)
         
         #TODO make a frame for time remaining, don't have to code anything... (SPRINT 3!!!)
-        timeRemainFrame = tk.Frame(self.top, bg="#414141")
-        timeRemainFrame.pack(padx=10, pady=10, fill="both")
-        timeRemainText = tk.Label(timeRemainFrame, text="Time Remaining: 6:00", font=("Arial", 14), fg="white", bg="#414141")
-        timeRemainText.pack(padx=10, pady=10)
-        self.countdownTimer(timeRemainText)
+        self.timeRemainFrame = tk.Frame(self.top, bg="#414141")
+        self.timeRemainFrame.pack(padx=10, pady=10, fill="both")
+        self.timeRemainText = tk.Label(self.timeRemainFrame, text="Time Remaining: 6:00", font=("Arial", 14), fg="white", bg="#414141")
+        self.timeRemainText.pack(padx=10, pady=10)
 
+        self.updateTimer()
         self.top.after(1000, udpClient.startGame)
 
 
