@@ -164,7 +164,7 @@ class ActionScreen:
         self.timeRemainText = tk.Label(self.timeRemainFrame, text="Time Remaining: 6:00", font=("Arial", 14), fg="white", bg="#414141")
         self.timeRemainText.pack(padx=10, pady=10)
 
-        self.updateTimer()
+        self.countdownTimer()
         self.top.after(1000, udpClient.startGame)
 
 
