@@ -13,8 +13,12 @@ chmod +x setup.sh
 ```sh
 pip install psycopg2-binary
 ```
+3. Now to to allow music playback in the software, please run this command in your terminal:
+```sh
+pip install pygame
+```
 
-3. Now to run the software, please run this command in your terminal:
+4. Now to run the software, please run this command in your terminal:
 ```sh
 python3 main.py
 ```
