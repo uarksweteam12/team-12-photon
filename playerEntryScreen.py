@@ -12,8 +12,8 @@ import ipaddress
 import askWindow
 import actionScreen
 
-
 gameMode = "Standard Public Mode"
+game = None
 
 class PlayerEntryScreen:
     def __init__(self, root):
@@ -139,9 +139,9 @@ class PlayerEntryScreen:
             if self.currentPlayerNum != 0:  #if you know a better way, feel free to simplify this code
                 self.currentPlayerNum = self.currentPlayerNum - 1
             else:
-                self.currentPlayerNum = 19
+                self.currentPlayerNum = 14
         elif event.keysym == "Down":
-            if self.currentPlayerNum != 19:
+            if self.currentPlayerNum != 14:
                 self.currentPlayerNum = self.currentPlayerNum + 1
             else:
                 self.currentPlayerNum = 0
