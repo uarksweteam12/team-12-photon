@@ -1,5 +1,4 @@
 import tkinter as tk
-import time
 from tkinter import Toplevel
 from pathlib import Path
 from PIL import Image, ImageTk
@@ -89,7 +88,7 @@ class ActionScreen:
             seconds = self.remaining_seconds % 60
             self.timeRemainText.config(text=f"Time Remaining: {minutes}:{seconds:02}")
             self.remaining_seconds -= 1
-            self.top.after(1000, self.updateTimer)
+            self.top.after(1000, self.countdownTimer)
 
     def makePlayActionScreen(self, redPlayers, greenPlayers): #call this func to make the rest of play action screen after 30 sec timer
         #title that tells you what to do
