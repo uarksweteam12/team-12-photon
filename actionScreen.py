@@ -246,6 +246,23 @@ class ActionScreen:
         frame = tk.Frame(teamFrame, bg=teamFrame["bg"])
         frame.pack(pady=2, fill="both")
 
+        base_style = {
+            "width": 5,
+            "state": tk.DISABLED,
+            "font": ("Arial", 18, "bold"),
+            "justify": "center",
+            "disabledbackground": teamFrame["bg"],
+            "disabledforeground": "yellow",
+            "relief": tk.FLAT,
+            "highlightthickness": 0,
+            "bd": 0
+        }
+
+        if teamTF:  # red team
+            tk.Entry(frame, textvariable=self.redScores[str(playerNum)][2], **base_style).pack(side=tk.RIGHT, padx=2)
+        else:  # green team
+            tk.Entry(frame, textvariable=self.greenScores[str(playerNum)][2], **base_style).pack(side=tk.RIGHT, padx=2)
+
         name = tk.Label(frame, text=playerCodename, bg=teamFrame["bg"], fg="white", font=("Arial", 12))
         name.pack(side=tk.LEFT, padx=2)
 
@@ -256,18 +273,6 @@ class ActionScreen:
             "justify": "center",
             "disabledbackground": teamFrame["bg"],
             "disabledforeground": "white",
-            "relief": tk.FLAT,
-            "highlightthickness": 0,
-            "bd": 0
-        }
-
-        base_style = {
-            "width": 5,
-            "state": tk.DISABLED,
-            "font": ("Arial", 18, "bold"),
-            "justify": "center",
-            "disabledbackground": teamFrame["bg"],
-            "disabledforeground": "yellow",
             "relief": tk.FLAT,
             "highlightthickness": 0,
             "bd": 0
