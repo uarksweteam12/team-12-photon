@@ -10,6 +10,9 @@ sock.setblocking(False)  # Make socket non-blocking
 
 _actionScreen = None
 _gameOnline = False  # internal flag to stop polling when game ends
+_lastRedBase = -1
+_lastGreenBase = -1
+
 
 def setActionScreen(screenInstance):
     global _actionScreen
@@ -92,9 +95,15 @@ def updateUI(player1, player2):
 def updateScore(shooter, hit, teamBool, points): #teamBool = False, red : teamBool = True, green
     if hit == "53": #green hit red base
         _actionScreen.greenScores[str(shooter)][0].set(_actionScreen.greenScores[str(shooter)][0].get() + points)
+        _actionScreen.greenScores[str(_lastGreenBase)][2].set("")
+        _actionScreen.greenScores[str(shooter)][2].set("B")
+        _lastGreenBase = shooter
         _actionScreen.greenTotalScore.set(_actionScreen.greenTotalScore.get() + points)
     elif hit == "43": #red hit green base
         _actionScreen.redScores[str(shooter)][0].set(_actionScreen.redScores[str(shooter)][0].get() + points)
+        _actionScreen.redScores[str(_lastRedBase)][2].set("")
+        _actionScreen.redScores[str(shooter)][2].set("B")
+        _lastRedBase = shooter
         _actionScreen.redTotalScore.set(_actionScreen.redTotalScore.get() + points)
     elif not teamBool: #shooter is red player
         if points < 0: # friendly fire, hit is red player, take points away from both players
@@ -115,6 +124,7 @@ def updateScore(shooter, hit, teamBool, points): #teamBool = False, red : teamBo
     
     #_actionScreen.redScores[str(0)][0].set(300)
     _actionScreen.top.update_idletasks()
+
 
 def findPlayerByHardwareID(hwid):
     rtnID = None
@@ -140,6 +150,8 @@ def endGame():
     global _gameOnline
     _gameOnline = False
     msg = "221"
+    sock.sendto(msg.encode(), (UDP_IP, UDP_PORT))
+    sock.sendto(msg.encode(), (UDP_IP, UDP_PORT))
     sock.sendto(msg.encode(), (UDP_IP, UDP_PORT))
     print("ENDING GAME")
 

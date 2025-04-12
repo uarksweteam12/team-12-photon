@@ -32,8 +32,8 @@ class ActionScreen:
         self.greenPlayers = greenPlayers
 
         # 0=score, 1=hardWareID (sprint 4 thing...but I'm not doing that rn...)
-        self.redScores = {str(i): [tk.IntVar(), tk.IntVar()] for i in range(15)}
-        self.greenScores = {str(i): [tk.IntVar(), tk.IntVar()] for i in range(15)}
+        self.redScores = {str(i): [tk.IntVar(), tk.IntVar(), tk.StringVar()] for i in range(15)}
+        self.greenScores = {str(i): [tk.IntVar(), tk.IntVar(), tk.StringVar()] for i in range(15)}
 
         self.redTotalScore = tk.IntVar()
         self.greenTotalScore = tk.IntVar()
@@ -153,6 +153,9 @@ class ActionScreen:
             self.timeRemainText.config(text=f"Time Remaining: {minutes}:{seconds:02}")
             self.remaining_seconds -= 1
             self.top.after(1000, self.countdownTimer)
+        else: #end the game
+            udpClient.endGame()
+            self.timeRemainText.config(text="Game Has Ended\nClose Window to Return to Entry Screen")
 
     def makePlayActionScreen(self, redPlayers, greenPlayers): #call this func to make the rest of play action screen after 30 sec timer
         #title that tells you what to do
@@ -258,10 +261,24 @@ class ActionScreen:
             "bd": 0
         }
 
+        base_style = {
+            "width": 5,
+            "state": tk.DISABLED,
+            "font": ("Arial", 18, "bold"),
+            "justify": "center",
+            "disabledbackground": teamFrame["bg"],
+            "disabledforeground": "yellow",
+            "relief": tk.FLAT,
+            "highlightthickness": 0,
+            "bd": 0
+        }
+
         if teamTF:  # red team
+            tk.Entry(frame, textvariable=self.redScores[str(playerNum)][2], **base_style).pack(side=tk.RIGHT, padx=2)
             tk.Entry(frame, textvariable=self.redScores[str(playerNum)][0], **score_style).pack(side=tk.RIGHT, padx=2)
             self.redScores[str(playerNum)][1].set(playerHardwareID)
         else:  # green team
+            tk.Entry(frame, textvariable=self.greenScores[str(playerNum)][2], **base_style).pack(side=tk.RIGHT, padx=2)
             tk.Entry(frame, textvariable=self.greenScores[str(playerNum)][0], **score_style).pack(side=tk.RIGHT, padx=2)
             self.greenScores[str(playerNum)][1].set(playerHardwareID)
 
