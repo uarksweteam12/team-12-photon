@@ -134,6 +134,11 @@ class ActionScreen:
             self.timer_label.config(image=self.photo)  # update existing label
             self.index += 1
 
+            print(self.index)
+            if self.index == 17:
+                self.play_random_track()
+
+
             # schedule the next image update after 1 second
             self.top.after(1000, self.updateImage)
         else:
@@ -226,7 +231,6 @@ class ActionScreen:
         self.timeRemainText.pack(padx=10, pady=10)
 
         self.countdownTimer()
-        self.play_random_track()
         self.top.after(1000, udpClient.startGame)
 
 
