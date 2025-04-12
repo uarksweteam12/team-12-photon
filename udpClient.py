@@ -12,6 +12,7 @@ _actionScreen = None
 _gameOnline = False  # internal flag to stop polling when game ends
 _lastRedBase = -1
 _lastGreenBase = -1
+_recentAction = []
 
 
 def setActionScreen(screenInstance):
@@ -92,8 +93,43 @@ def updateUI(player1, player2):
                 else: # green hit red
                     updateScore(shooterID, hitID, True, 10)
 
+def determineAction(shooter, hit, teamBool, points):
+    if hit == "53": #green hit red base
+        msg = f'{_actionScreen.greenPlayers[str(shooter)][1].get()} hit Red Base'
+    elif hit == "43": #red hit green base
+        msg = f'{_actionScreen.redPlayers[str(shooter)][1].get()} hit Green Base'
+    elif not teamBool: #shooter is red player
+        if points < 0: # friendly fire, hit is red player, take points away from both players
+            msg = f'{_actionScreen.redPlayers[str(shooter)][1].get()} friendly fire on {_actionScreen.redPlayers[str(hit)][1].get()}'
+        else: # red hit green player
+            msg = f'{_actionScreen.redPlayers[str(shooter)][1].get()} hit {_actionScreen.greenPlayers[str(hit)][1].get()}'
+    else:
+        if points < 0: # friendly fire, hit is red player, take points away from both players
+            msg = f'{_actionScreen.greenPlayers[str(shooter)][1].get()} friendly fire on {_actionScreen.greenPlayers[str(hit)][1].get()}'
+        else: # red hit green player
+            msg = f'{_actionScreen.greenPlayers[str(shooter)][1].get()} hit {_actionScreen.redPlayers[str(hit)][1].get()}'
+
+    logAction(msg)
+    
+def logAction(msg):
+    global _recentAction
+
+    if len(_recentAction) >= 5:
+        _recentAction.pop(0)
+    _recentAction.append(msg)
+
+    for i in range(5):
+        if i < len(_recentAction):
+            _actionScreen.eventsLabels[i].config(text=_recentAction[i])
+        else:
+            _actionScreen.eventsLabels[i].config(text="")
+
+
+
 def updateScore(shooter, hit, teamBool, points): #teamBool = False, red : teamBool = True, green
     global _lastGreenBase, _lastRedBase
+
+    determineAction(shooter, hit, teamBool, points)
     
     if hit == "53": #green hit red base
         _actionScreen.greenScores[str(shooter)][0].set(_actionScreen.greenScores[str(shooter)][0].get() + points)

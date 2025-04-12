@@ -226,6 +226,10 @@ class ActionScreen:
         currentActionEvents = tk.Frame(currentAction, bg="grey", width=200, height=150).pack(fill="both")
 
         #TODO make it where it reports game action, (game hits, etc) (LATER SPRINT!!!!)
+        self.eventsLabels = []
+        for i in range(5):
+            label = tk.Label(currentActionEvents, bg="grey", text='', font=("Arial", 12), anchor="w").pack(fill="x", padx=2, pady=2)
+            self.eventsLabels.append(label)
         
         #TODO make a frame for time remaining, don't have to code anything... (SPRINT 3!!!)
         self.timeRemainFrame = tk.Frame(self.top, bg="#414141")
