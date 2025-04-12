@@ -83,8 +83,8 @@ class ActionScreen:
     
     def check_music_ended(self):
         """Check if the current track has ended and play another if it has"""
-        if self.music_playing and not pygame.mixer.music.get_busy():
-            self.play_random_track()
+        #if self.music_playing and not pygame.mixer.music.get_busy():
+        #    self.play_random_track()
         
         # Check again 1 sec intervals
         if self.music_playing:
@@ -137,7 +137,6 @@ class ActionScreen:
             print(self.index)
             if self.index == 14:
                 self.play_random_track()
-
 
             # schedule the next image update after 1 second
             self.top.after(1000, self.updateImage)
