@@ -95,13 +95,15 @@ def updateUI(player1, player2):
 def updateScore(shooter, hit, teamBool, points): #teamBool = False, red : teamBool = True, green
     if hit == "53": #green hit red base
         _actionScreen.greenScores[str(shooter)][0].set(_actionScreen.greenScores[str(shooter)][0].get() + points)
-        _actionScreen.greenScores[str(_lastGreenBase)][2].set("")
+        if not _lastGreenBase == -1:
+            _actionScreen.greenScores[str(_lastGreenBase)][2].set("")
         _actionScreen.greenScores[str(shooter)][2].set("B")
         _lastGreenBase = shooter
         _actionScreen.greenTotalScore.set(_actionScreen.greenTotalScore.get() + points)
     elif hit == "43": #red hit green base
         _actionScreen.redScores[str(shooter)][0].set(_actionScreen.redScores[str(shooter)][0].get() + points)
-        _actionScreen.redScores[str(_lastRedBase)][2].set("")
+        if not _lastRedBase == -1:
+            _actionScreen.redScores[str(_lastRedBase)][2].set("")
         _actionScreen.redScores[str(shooter)][2].set("B")
         _lastRedBase = shooter
         _actionScreen.redTotalScore.set(_actionScreen.redTotalScore.get() + points)
