@@ -228,7 +228,8 @@ class ActionScreen:
         #TODO make it where it reports game action, (game hits, etc) (LATER SPRINT!!!!)
         self.eventsLabels = []
         for i in range(5):
-            label = tk.Label(currentActionEvents, bg="grey", text='', font=("Arial", 12), anchor="w").pack(fill="x", padx=2, pady=2)
+            label = tk.Label(currentActionEvents, bg="grey", text='', font=("Arial", 12), anchor="w")
+            label.pack(fill="x", padx=2, pady=2)
             self.eventsLabels.append(label)
         
         #TODO make a frame for time remaining, don't have to code anything... (SPRINT 3!!!)
