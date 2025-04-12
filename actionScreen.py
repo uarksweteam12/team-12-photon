@@ -32,8 +32,8 @@ class ActionScreen:
         self.greenPlayers = greenPlayers
 
         # 0=score, 1=hardWareID (sprint 4 thing...but I'm not doing that rn...)
-        self.redScores = {str(i): [tk.IntVar(), tk.IntVar()] for i in range(15)}
-        self.greenScores = {str(i): [tk.IntVar(), tk.IntVar()] for i in range(15)}
+        self.redScores = {str(i): [tk.IntVar(), tk.IntVar(), tk.StringVar()] for i in range(15)}
+        self.greenScores = {str(i): [tk.IntVar(), tk.IntVar(), tk.StringVar()] for i in range(15)}
 
         self.redTotalScore = tk.IntVar()
         self.greenTotalScore = tk.IntVar()
@@ -83,8 +83,8 @@ class ActionScreen:
     
     def check_music_ended(self):
         """Check if the current track has ended and play another if it has"""
-        if self.music_playing and not pygame.mixer.music.get_busy():
-            self.play_random_track()
+        #if self.music_playing and not pygame.mixer.music.get_busy():
+        #    self.play_random_track()
         
         # Check again 1 sec intervals
         if self.music_playing:
@@ -134,6 +134,10 @@ class ActionScreen:
             self.timer_label.config(image=self.photo)  # update existing label
             self.index += 1
 
+            print(self.index)
+            if self.index == 14:
+                self.play_random_track()
+
             # schedule the next image update after 1 second
             self.top.after(1000, self.updateImage)
         else:
@@ -148,6 +152,9 @@ class ActionScreen:
             self.timeRemainText.config(text=f"Time Remaining: {minutes}:{seconds:02}")
             self.remaining_seconds -= 1
             self.top.after(1000, self.countdownTimer)
+        else: #end the game
+            udpClient.endGame()
+            self.timeRemainText.config(text="Game Has Ended\nClose Window to Return to Entry Screen")
 
     def makePlayActionScreen(self, redPlayers, greenPlayers): #call this func to make the rest of play action screen after 30 sec timer
         #title that tells you what to do
@@ -215,9 +222,15 @@ class ActionScreen:
         currentActionLabel = tk.Label(currentAction, text="Current Game Action:", font=("Arial", 14), fg="white", bg="#414141")
         currentActionLabel.pack(padx=10, pady=10, side=tk.TOP)
 
-        currentActionEvents = tk.Frame(currentAction, bg="grey", width=200, height=150).pack(fill="both")
+        currentActionEvents = tk.Frame(currentAction, bg="grey", width=200, height=150)
+        currentActionEvents.pack(fill="both")
 
         #TODO make it where it reports game action, (game hits, etc) (LATER SPRINT!!!!)
+        self.eventsLabels = []
+        for i in range(5):
+            label = tk.Label(currentActionEvents, bg="grey", text='...', font=("Arial", 12), anchor="w")
+            label.pack(fill="x", padx=2, pady=2)
+            self.eventsLabels.append(label)
         
         #TODO make a frame for time remaining, don't have to code anything... (SPRINT 3!!!)
         self.timeRemainFrame = tk.Frame(self.top, bg="#414141")
@@ -226,7 +239,6 @@ class ActionScreen:
         self.timeRemainText.pack(padx=10, pady=10)
 
         self.countdownTimer()
-        self.play_random_track()
         self.top.after(1000, udpClient.startGame)
 
 
@@ -238,6 +250,23 @@ class ActionScreen:
     def playerScoreSlot(self, teamFrame, playerCodename, playerNum, teamTF, playerHardwareID):
         frame = tk.Frame(teamFrame, bg=teamFrame["bg"])
         frame.pack(pady=2, fill="both")
+
+        base_style = {
+            "width": 5,
+            "state": tk.DISABLED,
+            "font": ("Arial", 18, "bold"),
+            "justify": "center",
+            "disabledbackground": teamFrame["bg"],
+            "disabledforeground": "yellow",
+            "relief": tk.FLAT,
+            "highlightthickness": 0,
+            "bd": 0
+        }
+
+        if teamTF:  # red team
+            tk.Entry(frame, textvariable=self.redScores[str(playerNum)][2], **base_style).pack(side=tk.LEFT, padx=2)
+        else:  # green team
+            tk.Entry(frame, textvariable=self.greenScores[str(playerNum)][2], **base_style).pack(side=tk.LEFT, padx=2)
 
         name = tk.Label(frame, text=playerCodename, bg=teamFrame["bg"], fg="white", font=("Arial", 12))
         name.pack(side=tk.LEFT, padx=2)
