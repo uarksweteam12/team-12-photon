@@ -228,7 +228,7 @@ class ActionScreen:
         #TODO make it where it reports game action, (game hits, etc) (LATER SPRINT!!!!)
         self.eventsLabels = []
         for i in range(5):
-            label = tk.Label(currentActionEvents, bg="grey", text='', font=("Arial", 12), anchor="w")
+            label = tk.Label(currentActionEvents, bg="grey", text='...', font=("Arial", 12), anchor="w")
             label.pack(fill="x", padx=2, pady=2)
             self.eventsLabels.append(label)
         
