@@ -223,7 +223,8 @@ class ActionScreen:
         currentActionLabel = tk.Label(currentAction, text="Current Game Action:", font=("Arial", 14), fg="white", bg="#414141")
         currentActionLabel.pack(padx=10, pady=10, side=tk.TOP)
 
-        currentActionEvents = tk.Frame(currentAction, bg="grey", width=200, height=150).pack(fill="both")
+        currentActionEvents = tk.Frame(currentAction, bg="grey", width=200, height=150)
+        currentActionEvents.pack(fill="both")
 
         #TODO make it where it reports game action, (game hits, etc) (LATER SPRINT!!!!)
         self.eventsLabels = []
