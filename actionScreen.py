@@ -279,11 +279,9 @@ class ActionScreen:
         }
 
         if teamTF:  # red team
-            tk.Entry(frame, textvariable=self.redScores[str(playerNum)][2], **base_style).pack(side=tk.RIGHT, padx=2)
             tk.Entry(frame, textvariable=self.redScores[str(playerNum)][0], **score_style).pack(side=tk.RIGHT, padx=2)
             self.redScores[str(playerNum)][1].set(playerHardwareID)
         else:  # green team
-            tk.Entry(frame, textvariable=self.greenScores[str(playerNum)][2], **base_style).pack(side=tk.RIGHT, padx=2)
             tk.Entry(frame, textvariable=self.greenScores[str(playerNum)][0], **score_style).pack(side=tk.RIGHT, padx=2)
             self.greenScores[str(playerNum)][1].set(playerHardwareID)
 
