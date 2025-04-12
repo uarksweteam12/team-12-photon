@@ -135,7 +135,7 @@ class ActionScreen:
             self.index += 1
 
             print(self.index)
-            if self.index == 17:
+            if self.index == 14:
                 self.play_random_track()
 
 
