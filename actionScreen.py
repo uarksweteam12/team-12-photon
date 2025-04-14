@@ -31,7 +31,7 @@ class ActionScreen:
         self.redPlayers = redPlayers
         self.greenPlayers = greenPlayers
 
-        # 0=score, 1=hardWareID (sprint 4 thing...but I'm not doing that rn...)
+        # 0=score, 1=hardWareID (sprint 4 thing...but I'm not doing that rn...), 2=special labels like "B"
         self.redScores = {str(i): [tk.IntVar(), tk.IntVar(), tk.StringVar()] for i in range(15)}
         self.greenScores = {str(i): [tk.IntVar(), tk.IntVar(), tk.StringVar()] for i in range(15)}
 
@@ -40,6 +40,10 @@ class ActionScreen:
 
         # For countdownTimer
         self.remaining_seconds = 6 * 60
+        
+        # References to team frames for reordering
+        self.redTeamPlayersFrame = None
+        self.greenTeamPlayersFrame = None
         
         # 30 second timer starts here
         if(not debug): #if debug=false, act normal
@@ -175,15 +179,23 @@ class ActionScreen:
         redTeam = tk.Frame(teamsFrameCenter, bg="red")
         tk.Label(redTeam, text="Red Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
         redTeam.pack(padx=50, pady=0, side=tk.LEFT, fill="y")
+        
+        # Create a separate frame for player scores that can be reordered
+        self.redTeamPlayersFrame = tk.Frame(redTeam, bg="red")
+        self.redTeamPlayersFrame.pack(fill="both", expand=True)
 
         # Green Team
         greenTeam = tk.Frame(teamsFrameCenter, bg="green")
         tk.Label(greenTeam, text="Green Team", font=("Arial", 12, "bold")).pack(padx=10, pady=5)
         greenTeam.pack(padx=50, pady=0, side=tk.LEFT, fill="y")
+        
+        # Create a separate frame for player scores that can be reordered
+        self.greenTeamPlayersFrame = tk.Frame(greenTeam, bg="green")
+        self.greenTeamPlayersFrame.pack(fill="both", expand=True)
 
         # lets make the teams appear on screen
-        self.makeScoreboard(redTeam, redPlayers, True)
-        self.makeScoreboard(greenTeam, greenPlayers, False)
+        self.makeScoreboard(self.redTeamPlayersFrame, redPlayers, True)
+        self.makeScoreboard(self.greenTeamPlayersFrame, greenPlayers, False)
 
         totalScoreStyle = {
             "width": 8,
@@ -243,9 +255,15 @@ class ActionScreen:
 
 
     def makeScoreboard(self, teamFrame, team, teamTF):
+        # Create a list of player IDs sorted by initial score (all 0 at start)
+        active_players = []
         for i in range(15):
-            if(team[str(i)][1].get() != ""):
-                self.playerScoreSlot(teamFrame, team[str(i)][1].get(), i, teamTF, team[str(i)][2].get())
+            if team[str(i)][1].get() != "":
+                active_players.append(i)
+        
+        # Display players in their current order
+        for i in active_players:
+            self.playerScoreSlot(teamFrame, team[str(i)][1].get(), i, teamTF, team[str(i)][2].get())
 
     def playerScoreSlot(self, teamFrame, playerCodename, playerNum, teamTF, playerHardwareID):
         frame = tk.Frame(teamFrame, bg=teamFrame["bg"])
@@ -291,7 +309,6 @@ class ActionScreen:
             self.greenScores[str(playerNum)][1].set(playerHardwareID)
 
 
-
     def closeWindow(self):
         self.result = self.changeEntry.get()
         self.top.destroy()
@@ -308,4 +325,60 @@ class ActionScreen:
         y = (screen_height // 2) - (height // 2)
         self.top.geometry(f"+{x}+{y}")
 
+    def initializeTeamFrames(self):
+        if self.redTeamPlayersFrame is None or not self.redTeamPlayersFrame.winfo_exists():
+            # Create a new frame for red team players
+            if hasattr(self, 'redTeam') and self.redTeam.winfo_exists():
+                self.redTeamPlayersFrame = tk.Frame(self.redTeam, bg="red")
+                self.redTeamPlayersFrame.pack(fill="both", expand=True)
+        
+        if self.greenTeamPlayersFrame is None or not self.greenTeamPlayersFrame.winfo_exists():
+            # Create a new frame for green team players
+            if hasattr(self, 'greenTeam') and self.greenTeam.winfo_exists():
+                self.greenTeamPlayersFrame = tk.Frame(self.greenTeam, bg="green")
+                self.greenTeamPlayersFrame.pack(fill="both", expand=True)
 
+    def sortPlayersByInitialScore(self):
+        # Initial sort for red team
+        player_scores = []
+        for player_id, data in self.redScores.items():
+            if player_id in self.redPlayers and self.redPlayers[player_id][1].get() != "":
+                player_scores.append((player_id, data[0].get()))
+        
+        # Sort in descending order by score (all will be 0 at start, but provides initial order)
+        player_scores.sort(key=lambda x: x[1], reverse=True)
+        
+        # Clear and rebuild red team
+        if self.redTeamPlayersFrame and self.redTeamPlayersFrame.winfo_exists():
+            for widget in self.redTeamPlayersFrame.winfo_children():
+                widget.destroy()
+            
+            for player_id, _ in player_scores:
+                self.playerScoreSlot(
+                    self.redTeamPlayersFrame, 
+                    self.redPlayers[player_id][1].get(), 
+                    int(player_id), 
+                    True,
+                    self.redPlayers[player_id][2].get()
+                )
+        
+        # Do the same for green team
+        player_scores = []
+        for player_id, data in self.greenScores.items():
+            if player_id in self.greenPlayers and self.greenPlayers[player_id][1].get() != "":
+                player_scores.append((player_id, data[0].get()))
+        
+        player_scores.sort(key=lambda x: x[1], reverse=True)
+        
+        if self.greenTeamPlayersFrame and self.greenTeamPlayersFrame.winfo_exists():
+            for widget in self.greenTeamPlayersFrame.winfo_children():
+                widget.destroy()
+            
+            for player_id, _ in player_scores:
+                self.playerScoreSlot(
+                    self.greenTeamPlayersFrame, 
+                    self.greenPlayers[player_id][1].get(), 
+                    int(player_id), 
+                    False,
+                    self.greenPlayers[player_id][2].get()
+                )
