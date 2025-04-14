@@ -39,6 +39,7 @@ def flashWinningTeam():
         newColor = "yellow" if currentColor == "white" else "white"
         print(f"Flashing {frame} to {newColor}")
         frame.config(bg=newColor)
+        _actionScreen.top.update()
         _actionScreen.top.after(300, lambda: flash(frame, count + 1))
 
     if winningTeam == "green":
