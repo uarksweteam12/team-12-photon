@@ -1,4 +1,6 @@
 import socket
+import tkinter as tk
+
 
 UDP_IP = "127.0.0.1" 
 UDP_PORT = 7500
@@ -28,6 +30,43 @@ def startGame():
     if _actionScreen:
         _actionScreen.top.after(100, poll_udp_socket)
 
+def setFrameColor(frame, color):
+    frame.config(bg=color)
+    for child in frame.winfo_children():
+        if isinstance(child, tk.Label):
+            child.config(bg=color)
+        elif isinstance(child, tk.Entry):
+            # Update both normal and disabled backgrounds
+            child.config(bg=color, disabledbackground=color)
+
+def flash(frame, team, count=0):
+    # Stop flashing after 10 iterations
+    if count >= 10:
+        setFrameColor(frame, "white")
+        return
+
+    # Alternate the color of the frame between yellow and white
+    currentColor = frame.cget("bg")
+    newColor = "yellow" if currentColor == "white" else "white"
+    print(f"Flashing {frame} to {newColor}")
+    setFrameColor(frame, newColor)
+    _actionScreen.top.update()
+
+    # Check team condition to continue flashing
+    if team == "green":
+        if _actionScreen.redTotalScore.get() < _actionScreen.greenTotalScore.get():
+            _actionScreen.top.after(300, lambda: flash(frame, team, count + 1))
+        else:
+            setFrameColor(frame, "white")  # Stop flashing if team changed
+    else:
+        if _actionScreen.greenTotalScore.get() < _actionScreen.redTotalScore.get():
+            _actionScreen.top.after(300, lambda: flash(frame, team, count + 1))
+        else:
+            setFrameColor(frame, "white")  # Stop flashing if team changed
+
+
+
+
 def poll_udp_socket():
     global _gameOnline
 
@@ -41,14 +80,15 @@ def poll_udp_socket():
 
         print(f"Client received: {data}")
 
-        if data == "221":
+        if data == "221":  #why did I do this????
             endGame()
             return  # Stop polling
         else:
-            sock.sendto(splitThemUp[0].encode(), (UDP_IP, UDP_PORT))
+            sock.sendto(splitThemUp[1].encode(), (UDP_IP, UDP_PORT)) #should send hit player now...
 
             if _actionScreen is not None:
-                print("test")
+                flash(_actionScreen.greenTotalFrame, "green")  
+                flash(_actionScreen.redTotalFrame, "red") 
                 _actionScreen.top.after(10, lambda: updateUI(splitThemUp[0], splitThemUp[1]))
 
     except BlockingIOError:

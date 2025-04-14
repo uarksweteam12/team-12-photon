@@ -198,21 +198,21 @@ class ActionScreen:
         }
 
         # Red team total
-        redTotalFrame = tk.Frame(redTeam, bg="white")
-        redTotalFrame.pack(pady=5, padx=5, side=tk.BOTTOM)
+        self.redTotalFrame = tk.Frame(redTeam, bg="white")
+        self.redTotalFrame.pack(pady=5, padx=5, side=tk.BOTTOM)
 
-        redTotalLabel = tk.Label(redTotalFrame, text="Team Total:", bg="white", fg="black", font=("Arial", 12))
+        redTotalLabel = tk.Label(self.redTotalFrame, text="Team Total:", bg="white", fg="black", font=("Arial", 12))
         redTotalLabel.pack(side=tk.LEFT)
-        self.redTotalEntry = tk.Entry(redTotalFrame, textvariable=self.redTotalScore, **totalScoreStyle)
+        self.redTotalEntry = tk.Entry(self.redTotalFrame, textvariable=self.redTotalScore, **totalScoreStyle)
         self.redTotalEntry.pack(side=tk.LEFT)
 
         # Green team total
-        greenTotalFrame = tk.Frame(greenTeam, bg="white")
-        greenTotalFrame.pack(pady=5, padx=5, side=tk.BOTTOM)
+        self.greenTotalFrame = tk.Frame(greenTeam, bg="white")
+        self.greenTotalFrame.pack(pady=5, padx=5, side=tk.BOTTOM)
 
-        greenTotalLabel = tk.Label(greenTotalFrame, text="Team Total:", bg="white", fg="black", font=("Arial", 12))
+        greenTotalLabel = tk.Label(self.greenTotalFrame, text="Team Total:", bg="white", fg="black", font=("Arial", 12))
         greenTotalLabel.pack(side=tk.LEFT)
-        self.greenTotalEntry = tk.Entry(greenTotalFrame, textvariable=self.greenTotalScore, **totalScoreStyle)
+        self.greenTotalEntry = tk.Entry(self.greenTotalFrame, textvariable=self.greenTotalScore, **totalScoreStyle)
         self.greenTotalEntry.pack(side=tk.LEFT)
 
         # lets create the current action frame
