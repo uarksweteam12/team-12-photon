@@ -30,6 +30,15 @@ def startGame():
     if _actionScreen:
         _actionScreen.top.after(100, poll_udp_socket)
 
+def setFrameColor(frame, color):
+    frame.config(bg=color)
+    for child in frame.winfo_children():
+        if isinstance(child, tk.Label):
+            child.config(bg=color)
+        elif isinstance(child, tk.Entry):
+            # Update both normal and disabled backgrounds
+            child.config(bg=color, disabledbackground=color)
+
 def flash(frame, team, count=0):
     if count >= 10:
         setFrameColor(frame, "white")
@@ -51,15 +60,6 @@ def flash(frame, team, count=0):
             _actionScreen.top.after(300, lambda: flash(frame, team, count + 1))
         else:
             setFrameColor(frame, "white")  # team changed, stop flashing
-
-    def setFrameColor(frame, color):
-        frame.config(bg=color)
-        for child in frame.winfo_children():
-            if isinstance(child, tk.Label):
-                child.config(bg=color)
-            elif isinstance(child, tk.Entry):
-                # Update both normal and disabled backgrounds
-                child.config(bg=color, disabledbackground=color)
 
     # Removed the `if winningTeam == "green":` block, as it is handled by dynamic conditions
     flash(_actionScreen.greenTotalFrame, "green")  # Flash based on current winning conditions
