@@ -1,4 +1,6 @@
 import socket
+import tkinter as tk
+
 
 UDP_IP = "127.0.0.1" 
 UDP_PORT = 7500
