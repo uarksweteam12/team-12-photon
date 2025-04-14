@@ -40,30 +40,30 @@ def setFrameColor(frame, color):
             child.config(bg=color, disabledbackground=color)
 
 def flash(frame, team, count=0):
+    # Stop flashing after 10 iterations
     if count >= 10:
         setFrameColor(frame, "white")
         return
 
+    # Alternate the color of the frame between yellow and white
     currentColor = frame.cget("bg")
     newColor = "yellow" if currentColor == "white" else "white"
     print(f"Flashing {frame} to {newColor}")
     setFrameColor(frame, newColor)
     _actionScreen.top.update()
 
+    # Check team condition to continue flashing
     if team == "green":
         if _actionScreen.redTotalScore.get() < _actionScreen.greenTotalScore.get():
             _actionScreen.top.after(300, lambda: flash(frame, team, count + 1))
         else:
-            setFrameColor(frame, "white")  # team changed, stop flashing
+            setFrameColor(frame, "white")  # Stop flashing if team changed
     else:
         if _actionScreen.greenTotalScore.get() < _actionScreen.redTotalScore.get():
             _actionScreen.top.after(300, lambda: flash(frame, team, count + 1))
         else:
-            setFrameColor(frame, "white")  # team changed, stop flashing
+            setFrameColor(frame, "white")  # Stop flashing if team changed
 
-    # Removed the `if winningTeam == "green":` block, as it is handled by dynamic conditions
-    flash(_actionScreen.greenTotalFrame, "green")  # Flash based on current winning conditions
-    setFrameColor(_actionScreen.redTotalFrame, "white")  # Reset the other team's frame to white
 
 
 
