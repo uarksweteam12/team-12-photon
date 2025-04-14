@@ -1,5 +1,6 @@
 import socket
 import tkinter as tk
+import time
 
 
 UDP_IP = "127.0.0.1" 
