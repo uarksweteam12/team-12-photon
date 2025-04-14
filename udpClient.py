@@ -164,31 +164,45 @@ def logAction(msg):
             _actionScreen.eventsLabels[i].config(text="")
 
 
-def updateScore(shooter, hit, teamBool, points): #teamBool = False, red : teamBool = True, green
+def updateScore(shooter, hit, teamBool, points):
     global _lastGreenBase, _lastRedBase
 
     determineAction(shooter, hit, teamBool, points)
     
-    # Force UI update after all score changes
-    needs_red_reorder = False
-    needs_green_reorder = False
+    # Print debug info before updates
+    print(f"Updating score: shooter={shooter}, hit={hit}, teamBool={teamBool}, points={points}")
     
     if hit == "53": #green hit red base
-        _actionScreen.greenScores[str(shooter)][0].set(_actionScreen.greenScores[str(shooter)][0].get() + points)
+        current_score = _actionScreen.greenScores[str(shooter)][0].get()
+        new_score = current_score + points
+        print(f"Green player {shooter} base hit: {current_score} -> {new_score}")
+        
+        _actionScreen.greenScores[str(shooter)][0].set(new_score)
         if not _lastGreenBase == -1:
             _actionScreen.greenScores[str(_lastGreenBase)][2].set("")
         _actionScreen.greenScores[str(shooter)][2].set("B")
         _lastGreenBase = shooter
         _actionScreen.greenTotalScore.set(_actionScreen.greenTotalScore.get() + points)
-        needs_green_reorder = True
+        
+        # Force update before reordering
+        _actionScreen.top.update_idletasks()
+        _actionScreen.top.after(100, lambda: reorderPlayersByScore("green"))
+        
     elif hit == "43": #red hit green base
-        _actionScreen.redScores[str(shooter)][0].set(_actionScreen.redScores[str(shooter)][0].get() + points)
+        current_score = _actionScreen.redScores[str(shooter)][0].get()
+        new_score = current_score + points
+        print(f"Red player {shooter} base hit: {current_score} -> {new_score}")
+        
+        _actionScreen.redScores[str(shooter)][0].set(new_score)
         if not _lastRedBase == -1:
             _actionScreen.redScores[str(_lastRedBase)][2].set("")
         _actionScreen.redScores[str(shooter)][2].set("B")
         _lastRedBase = shooter
         _actionScreen.redTotalScore.set(_actionScreen.redTotalScore.get() + points)
-        needs_red_reorder = True
+        
+        # Force update before reordering
+        _actionScreen.top.update_idletasks()
+        _actionScreen.top.after(100, lambda: reorderPlayersByScore("red"))
     elif not teamBool: #shooter is red player
         if points < 0: # friendly fire, hit is red player, take points away from both players
             _actionScreen.redScores[str(shooter)][0].set(_actionScreen.redScores[str(shooter)][0].get() + points)
@@ -264,29 +278,28 @@ def set_server_ip(newip):
 
 def reorderPlayersByScore(team):
     try:
+        # Force a small delay to ensure all IntVar values are fully updated
+        time.sleep(0.05)  # 50ms delay
+        
         if team == "red":
-            # Get player IDs and their scores for red team
+            # Get player IDs and their scores for red team with proper conversion to integers
             player_scores = []
             for player_id, data in _actionScreen.redScores.items():
                 if player_id in _actionScreen.redPlayers and _actionScreen.redPlayers[player_id][1].get() != "":
-                    # Store player ID, score, and special status (like "B" for base)
+                    score = data[0].get()  # Get the actual integer value
                     special_status = data[2].get()  # Save the special status
-                    player_scores.append((player_id, data[0].get(), special_status))
+                    print(f"Red player {player_id} has score {score} and status {special_status}")
+                    player_scores.append((player_id, score, special_status))
             
             # Skip reordering if there are less than 2 players
             if len(player_scores) < 2:
                 return
                 
-            # Get current order
-            current_order = [p[0] for p in player_scores]
-            
             # Sort players by score in descending order
             player_scores.sort(key=lambda x: x[1], reverse=True)
             
-            # Check if order has changed
-            new_order = [p[0] for p in player_scores]
-            if current_order == new_order:
-                return  # No change in order, no need to redraw
+            # Debug sorted order
+            print(f"Sorted red players: {player_scores}")
             
             # Clear the red team frame
             for widget in _actionScreen.redTeamPlayersFrame.winfo_children():
@@ -309,22 +322,25 @@ def reorderPlayersByScore(team):
             player_scores = []
             for player_id, data in _actionScreen.greenScores.items():
                 if player_id in _actionScreen.greenPlayers and _actionScreen.greenPlayers[player_id][1].get() != "":
+                    score = data[0].get()  # Get the actual integer value
                     special_status = data[2].get()  # Save the special status
-                    player_scores.append((player_id, data[0].get(), special_status))
+                    print(f"Green player {player_id} has score {score} and status {special_status}")
+                    player_scores.append((player_id, score, special_status))
             
             if len(player_scores) < 2:
                 return
                 
-            current_order = [p[0] for p in player_scores]
+            # Sort players by score in descending order
             player_scores.sort(key=lambda x: x[1], reverse=True)
-            new_order = [p[0] for p in player_scores]
             
-            if current_order == new_order:
-                return
+            # Debug sorted order
+            print(f"Sorted green players: {player_scores}")
             
+            # Clear the green team frame
             for widget in _actionScreen.greenTeamPlayersFrame.winfo_children():
                 widget.destroy()
             
+            # Recreate the scoreboard with sorted players
             for player_id, _, special_status in player_scores:
                 # Ensure special status is preserved
                 _actionScreen.greenScores[player_id][2].set(special_status)
@@ -337,7 +353,6 @@ def reorderPlayersByScore(team):
                 )
         
         # Force UI update
-        _actionScreen.top.update_idletasks()
         _actionScreen.top.update()
         
     except Exception as e:
