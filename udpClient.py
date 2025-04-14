@@ -28,24 +28,27 @@ def startGame():
     if _actionScreen:
         _actionScreen.top.after(100, poll_udp_socket)
 
-def flashWinningTeam(): #false = redTeam, True = greenTeam
+def flashWinningTeam(): 
     winningTeam = "green" if _actionScreen.redTotalScore.get() < _actionScreen.greenTotalScore.get() else "red"
     
-    def flash(frame, count=0):
-        if count >= 10:  # number of flashes (5 on/off cycles)
-            frame.config(bg="SystemButtonFace")  # reset to default
+    def flash(frame, default_bg, count=0):
+        if count >= 10:  # number of flashes (5 on/off)
+            frame.config(bg=default_bg)
             return
         current_color = frame.cget("bg")
-        new_color = "yellow" if current_color == "SystemButtonFace" else "SystemButtonFace"
+        new_color = "yellow" if current_color == default_bg else default_bg
         frame.config(bg=new_color)
-        _actionScreen.top.after(300, lambda: flash(frame, count + 1))  # toggle every 300 ms
+        _actionScreen.top.after(300, lambda: flash(frame, default_bg, count + 1))
 
     if winningTeam == "green":
-        flash(_actionScreen.greenTotalFrame)
-        _actionScreen.redTotalFrame.config(bg="SystemButtonFace")  # turn off red flash
+        default_bg = _actionScreen.greenTotalFrame.cget("bg")
+        flash(_actionScreen.greenTotalFrame, default_bg)
+        _actionScreen.redTotalFrame.config(bg=_actionScreen.redTotalFrame.cget("bg"))  # reset red
     else:
-        flash(_actionScreen.redTotalFrame)
-        _actionScreen.greenTotalFrame.config(bg="SystemButtonFace")  # turn off green flash
+        default_bg = _actionScreen.redTotalFrame.cget("bg")
+        flash(_actionScreen.redTotalFrame, default_bg)
+        _actionScreen.greenTotalFrame.config(bg=_actionScreen.greenTotalFrame.cget("bg"))  # reset green
+
 
 
 
