@@ -28,6 +28,27 @@ def startGame():
     if _actionScreen:
         _actionScreen.top.after(100, poll_udp_socket)
 
+def flashWinningTeam(): #false = redTeam, True = greenTeam
+    winningTeam = "green" if _actionScreen.redTotalScore.get() < _actionScreen.greenTotalScore.get() else "red"
+    
+    def flash(frame, count=0):
+        if count >= 10:  # number of flashes (5 on/off cycles)
+            frame.config(bg="SystemButtonFace")  # reset to default
+            return
+        current_color = frame.cget("bg")
+        new_color = "yellow" if current_color == "SystemButtonFace" else "SystemButtonFace"
+        frame.config(bg=new_color)
+        _actionScreen.top.after(300, lambda: flash(frame, count + 1))  # toggle every 300 ms
+
+    if winningTeam == "green":
+        flash(_actionScreen.greenTotalFrame)
+        _actionScreen.redTotalFrame.config(bg="SystemButtonFace")  # turn off red flash
+    else:
+        flash(_actionScreen.redTotalFrame)
+        _actionScreen.greenTotalFrame.config(bg="SystemButtonFace")  # turn off green flash
+
+
+
 def poll_udp_socket():
     global _gameOnline
 
@@ -41,11 +62,12 @@ def poll_udp_socket():
 
         print(f"Client received: {data}")
 
-        if data == "221":
+        if data == "221":  #why did I do this????
             endGame()
             return  # Stop polling
         else:
-            sock.sendto(splitThemUp[0].encode(), (UDP_IP, UDP_PORT))
+            sock.sendto(splitThemUp[1].encode(), (UDP_IP, UDP_PORT)) #should send hit player now...
+            flashWinningTeam()
 
             if _actionScreen is not None:
                 print("test")
