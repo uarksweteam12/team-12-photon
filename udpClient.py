@@ -31,23 +31,25 @@ def startGame():
 def flashWinningTeam(): 
     winningTeam = "green" if _actionScreen.redTotalScore.get() < _actionScreen.greenTotalScore.get() else "red"
     
-    def flash(frame, default_bg, count=0):
+    def flash(frame, defaultBg, count=0):
         if count >= 10:  # number of flashes (5 on/off)
-            frame.config(bg=default_bg)
+            frame.config(bg=defaultBg)
             return
-        current_color = frame.cget("bg")
-        new_color = "yellow" if current_color == default_bg else default_bg
-        frame.config(bg=new_color)
-        _actionScreen.top.after(300, lambda: flash(frame, default_bg, count + 1))
+        currentColor = frame.cget("bg")
+        newColor = "yellow" if currentColor == defaultBg else defaultBg
+        print(f"Flashing {frame} to {newColor}")  # debug print
+        frame.config(bg=newColor)
+        _actionScreen.top.after(300, lambda: flash(frame, defaultBg, count + 1))
 
     if winningTeam == "green":
-        default_bg = _actionScreen.greenTotalFrame.cget("bg")
-        flash(_actionScreen.greenTotalFrame, default_bg)
+        defaultBg = _actionScreen.greenTotalFrame.cget("bg")
+        flash(_actionScreen.greenTotalFrame, defaultBg)
         _actionScreen.redTotalFrame.config(bg=_actionScreen.redTotalFrame.cget("bg"))  # reset red
     else:
-        default_bg = _actionScreen.redTotalFrame.cget("bg")
-        flash(_actionScreen.redTotalFrame, default_bg)
+        defaultBg = _actionScreen.redTotalFrame.cget("bg")
+        flash(_actionScreen.redTotalFrame, defaultBg)
         _actionScreen.greenTotalFrame.config(bg=_actionScreen.greenTotalFrame.cget("bg"))  # reset green
+
 
 
 
@@ -70,9 +72,9 @@ def poll_udp_socket():
             return  # Stop polling
         else:
             sock.sendto(splitThemUp[1].encode(), (UDP_IP, UDP_PORT)) #should send hit player now...
-            flashWinningTeam()
 
             if _actionScreen is not None:
+                flashWinningTeam()
                 print("test")
                 _actionScreen.top.after(10, lambda: updateUI(splitThemUp[0], splitThemUp[1]))
 
