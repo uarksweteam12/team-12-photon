@@ -28,26 +28,33 @@ def startGame():
     if _actionScreen:
         _actionScreen.top.after(100, poll_udp_socket)
 
-def flashWinningTeam(): 
+def flashWinningTeam():
     winningTeam = "green" if _actionScreen.redTotalScore.get() < _actionScreen.greenTotalScore.get() else "red"
     
     def flash(frame, count=0):
         if count >= 10:
-            frame.config(bg="white")  # end with white
+            setFrameColor(frame, "white")
             return
         currentColor = frame.cget("bg")
         newColor = "yellow" if currentColor == "white" else "white"
         print(f"Flashing {frame} to {newColor}")
-        frame.config(bg=newColor)
+        setFrameColor(frame, newColor)
         _actionScreen.top.update()
         _actionScreen.top.after(300, lambda: flash(frame, count + 1))
 
+    def setFrameColor(frame, color):
+        frame.config(bg=color)
+        for child in frame.winfo_children():
+            if isinstance(child, tk.Label) or isinstance(child, tk.Entry):
+                child.config(bg=color)
+
     if winningTeam == "green":
         flash(_actionScreen.greenTotalFrame)
-        _actionScreen.redTotalFrame.config(bg="white")
+        setFrameColor(_actionScreen.redTotalFrame, "white")
     else:
         flash(_actionScreen.redTotalFrame)
-        _actionScreen.greenTotalFrame.config(bg="white")
+        setFrameColor(_actionScreen.greenTotalFrame, "white")
+
 
 def poll_udp_socket():
     global _gameOnline
