@@ -31,25 +31,22 @@ def startGame():
 def flashWinningTeam(): 
     winningTeam = "green" if _actionScreen.redTotalScore.get() < _actionScreen.greenTotalScore.get() else "red"
     
-    def flash(frame, defaultBg, count=0):
-        if count >= 10:  # number of flashes (5 on/off)
-            frame.config(bg=defaultBg)
+    def flash(frame, count=0):
+        if count >= 10:
+            frame.config(bg="white")  # end with white
             return
         currentColor = frame.cget("bg")
-        newColor = "yellow" if currentColor == defaultBg else defaultBg
-        print(f"Flashing {frame} to {newColor}")  # debug print
+        newColor = "yellow" if currentColor == "white" else "white"
+        print(f"Flashing {frame} to {newColor}")
         frame.config(bg=newColor)
-        _actionScreen.top.update_idletasks()
-        _actionScreen.top.after(300, lambda: flash(frame, defaultBg, count + 1))
+        _actionScreen.top.after(300, lambda: flash(frame, count + 1))
 
     if winningTeam == "green":
-        defaultBg = _actionScreen.greenTotalFrame.cget("bg")
-        flash(_actionScreen.greenTotalFrame, defaultBg)
-        _actionScreen.redTotalFrame.config(bg=_actionScreen.redTotalFrame.cget("bg"))  # reset red
+        flash(_actionScreen.greenTotalFrame)
+        _actionScreen.redTotalFrame.config(bg="white")
     else:
-        defaultBg = _actionScreen.redTotalFrame.cget("bg")
-        flash(_actionScreen.redTotalFrame, defaultBg)
-        _actionScreen.greenTotalFrame.config(bg=_actionScreen.greenTotalFrame.cget("bg"))  # reset green
+        flash(_actionScreen.redTotalFrame)
+        _actionScreen.greenTotalFrame.config(bg="white")
 
 def poll_udp_socket():
     global _gameOnline
