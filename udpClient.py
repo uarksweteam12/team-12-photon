@@ -30,32 +30,41 @@ def startGame():
     if _actionScreen:
         _actionScreen.top.after(100, poll_udp_socket)
 
-def flashWinningTeam():
-    winningTeam = "green" if _actionScreen.redTotalScore.get() < _actionScreen.greenTotalScore.get() else "red"
-    
-    def flash(frame, count=0):
-        if count >= 10:
-            setFrameColor(frame, "white")
-            return
-        currentColor = frame.cget("bg")
-        newColor = "yellow" if currentColor == "white" else "white"
-        print(f"Flashing {frame} to {newColor}")
-        setFrameColor(frame, newColor)
-        _actionScreen.top.update()
-        _actionScreen.top.after(300, lambda: flash(frame, count + 1))
+def flash(frame, team, count=0):
+    if count >= 10:
+        setFrameColor(frame, "white")
+        return
+
+    currentColor = frame.cget("bg")
+    newColor = "yellow" if currentColor == "white" else "white"
+    print(f"Flashing {frame} to {newColor}")
+    setFrameColor(frame, newColor)
+    _actionScreen.top.update()
+
+    if team == "green":
+        if _actionScreen.redTotalScore.get() < _actionScreen.greenTotalScore.get():
+            _actionScreen.top.after(300, lambda: flash(frame, team, count + 1))
+        else:
+            setFrameColor(frame, "white")  # team changed, stop flashing
+    else:
+        if _actionScreen.greenTotalScore.get() < _actionScreen.redTotalScore.get():
+            _actionScreen.top.after(300, lambda: flash(frame, team, count + 1))
+        else:
+            setFrameColor(frame, "white")  # team changed, stop flashing
 
     def setFrameColor(frame, color):
         frame.config(bg=color)
         for child in frame.winfo_children():
-            if isinstance(child, tk.Label) or isinstance(child, tk.Entry):
+            if isinstance(child, tk.Label):
                 child.config(bg=color)
+            elif isinstance(child, tk.Entry):
+                # Update both normal and disabled backgrounds
+                child.config(bg=color, disabledbackground=color)
 
-    if winningTeam == "green":
-        flash(_actionScreen.greenTotalFrame)
-        setFrameColor(_actionScreen.redTotalFrame, "white")
-    else:
-        flash(_actionScreen.redTotalFrame)
-        setFrameColor(_actionScreen.greenTotalFrame, "white")
+    # Removed the `if winningTeam == "green":` block, as it is handled by dynamic conditions
+    flash(_actionScreen.greenTotalFrame, "green")  # Flash based on current winning conditions
+    setFrameColor(_actionScreen.redTotalFrame, "white")  # Reset the other team's frame to white
+
 
 
 def poll_udp_socket():
