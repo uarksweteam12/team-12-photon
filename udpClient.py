@@ -41,9 +41,9 @@ def setFrameColor(frame, color):
 
 def flash(frame, team, count=0):
     # Stop flashing after 10 iterations
-    if count >= 10:
-        setFrameColor(frame, "white")
-        return
+    #if count >= 10:
+    #    setFrameColor(frame, "white")
+    #    return
 
     # Alternate the color of the frame between yellow and white
     currentColor = frame.cget("bg")
