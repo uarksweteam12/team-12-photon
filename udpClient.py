@@ -41,14 +41,13 @@ def setFrameColor(frame, color):
 
 def flash(frame, team, count=0):
     # Stop flashing after 10 iterations
-    if count >= 10:
-        setFrameColor(frame, "white")
-        return
+    #if count >= 10:
+    #    setFrameColor(frame, "white")
+    #    return
 
     # Alternate the color of the frame between yellow and white
     currentColor = frame.cget("bg")
     newColor = "yellow" if currentColor == "white" else "white"
-    print(f"Flashing {frame} to {newColor}")
     setFrameColor(frame, newColor)
     _actionScreen.top.update()
 
@@ -87,8 +86,6 @@ def poll_udp_socket():
             sock.sendto(splitThemUp[1].encode(), (UDP_IP, UDP_PORT)) #should send hit player now...
 
             if _actionScreen is not None:
-                flash(_actionScreen.greenTotalFrame, "green")  
-                flash(_actionScreen.redTotalFrame, "red") 
                 _actionScreen.top.after(10, lambda: updateUI(splitThemUp[0], splitThemUp[1]))
 
     except BlockingIOError:
@@ -132,6 +129,9 @@ def updateUI(player1, player2):
                     updateScore(shooterID, hitID, True, -10)
                 else: # green hit red
                     updateScore(shooterID, hitID, True, 10)
+
+    flash(_actionScreen.greenTotalFrame, "green")  
+    flash(_actionScreen.redTotalFrame, "red") 
 
 def determineAction(shooter, hit, teamBool, points):
     if hit == "53": #green hit red base
@@ -202,9 +202,9 @@ def updateScore(shooter, hit, teamBool, points): #teamBool = False, red : teamBo
             _actionScreen.greenScores[str(shooter)][0].set(_actionScreen.greenScores[str(shooter)][0].get() + points)
             _actionScreen.greenTotalScore.set(_actionScreen.greenTotalScore.get() + points)
     
-    #_actionScreen.redScores[str(0)][0].set(300)
+    sort_teams()
     _actionScreen.top.update_idletasks()
-
+    
 
 def findPlayerByHardwareID(hwid):
     rtnID = None
@@ -248,3 +248,103 @@ def send_equipment_code(hardwareid) -> bool:
 def set_server_ip(newip):
     global UDP_IP
     UDP_IP = newip
+
+def sort_team_by_score(team_color):
+    if not _actionScreen:
+        print("Action screen not initialized")
+        return
+    
+    if team_color.lower() == "red":
+        team_frame = None
+        for widget in _actionScreen.top.winfo_children():
+            if isinstance(widget, tk.Frame) and widget.winfo_children():
+                for child in widget.winfo_children():
+                    if isinstance(child, tk.Frame) and child.winfo_children():
+                        for grandchild in child.winfo_children():
+                            if isinstance(grandchild, tk.Frame) and grandchild.cget("bg") == "red":
+                                team_frame = grandchild
+                                break
+        
+        team_scores = _actionScreen.redScores
+        players = _actionScreen.redPlayers
+    elif team_color.lower() == "green":
+        team_frame = None
+        for widget in _actionScreen.top.winfo_children():
+            if isinstance(widget, tk.Frame) and widget.winfo_children():
+                for child in widget.winfo_children():
+                    if isinstance(child, tk.Frame) and child.winfo_children():
+                        for grandchild in child.winfo_children():
+                            if isinstance(grandchild, tk.Frame) and grandchild.cget("bg") == "green":
+                                team_frame = grandchild
+                                break
+        
+        team_scores = _actionScreen.greenScores
+        players = _actionScreen.greenPlayers
+    else:
+        print(f"Invalid team color: {team_color}")
+        return
+    
+    if not team_frame:
+        print(f"Could not find {team_color} team frame")
+        return
+    
+    team_label = None
+    for child in team_frame.winfo_children():
+        if isinstance(child, tk.Label) and child.cget("text") in ["Red Team", "Green Team"]:
+            team_label = child
+            break
+    
+    if not team_label and team_frame.winfo_children():
+        first_child = team_frame.winfo_children()[0]
+        if isinstance(first_child, tk.Label):
+            team_label = first_child
+    
+    total_frame = None
+    for child in reversed(team_frame.winfo_children()):
+        if isinstance(child, tk.Frame) and "Total" in str(child):
+            total_frame = child
+            break
+    
+    if not total_frame and team_frame.winfo_children():
+        total_frame = team_frame.winfo_children()[-1]
+    
+    player_frames = []
+    for child in team_frame.winfo_children():
+        if child != team_label and child != total_frame and isinstance(child, tk.Frame):
+            player_frames.append(child)
+    
+    player_data = []
+    for player_id in team_scores:
+        if players.get(player_id) and players[player_id][1].get() != "":
+            score = team_scores[player_id][0].get()
+            for frame in player_frames:
+                player_found = False
+                for widget in frame.winfo_children():
+                    if isinstance(widget, tk.Label) and widget.cget("text") == players[player_id][1].get():
+                        player_data.append((player_id, score, frame))
+                        player_found = True
+                        break
+                if player_found:
+                    break
+    
+    player_data.sort(key=lambda x: x[1], reverse=True)
+    
+    for _, _, frame in player_data:
+        frame.pack_forget()
+    
+    if team_label:
+        team_label.pack_forget()
+        team_label.pack(padx=10, pady=5)
+    
+    for _, _, frame in player_data:
+        frame.pack(pady=2, fill="both")
+    
+    if total_frame:
+        total_frame.pack_forget()
+        total_frame.pack(pady=5, padx=5, side=tk.BOTTOM)
+    
+    _actionScreen.top.update_idletasks()
+
+def sort_teams():
+    sort_team_by_score("red")
+    sort_team_by_score("green")
