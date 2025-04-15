@@ -202,8 +202,10 @@ def updateScore(shooter, hit, teamBool, points): #teamBool = False, red : teamBo
             _actionScreen.greenScores[str(shooter)][0].set(_actionScreen.greenScores[str(shooter)][0].get() + points)
             _actionScreen.greenTotalScore.set(_actionScreen.greenTotalScore.get() + points)
     
-    #_actionScreen.redScores[str(0)][0].set(300)
     _actionScreen.top.update_idletasks()
+    
+    # Sort teams by score after updating
+    sort_teams()
 
 
 def findPlayerByHardwareID(hwid):
@@ -248,3 +250,94 @@ def send_equipment_code(hardwareid) -> bool:
 def set_server_ip(newip):
     global UDP_IP
     UDP_IP = newip
+
+def sort_team_by_score(team_color):
+    """
+    Sort players on a team according to their score in descending order.
+    
+    Args:
+        team_color (str): Either "red" or "green" to specify which team to sort
+    """
+    if not _actionScreen:
+        print("Action screen not initialized")
+        return
+    
+    # Get the correct frame and scores based on team color
+    if team_color.lower() == "red":
+        team_frame = None
+        for widget in _actionScreen.top.winfo_children():
+            if isinstance(widget, tk.Frame) and widget.winfo_children():
+                for child in widget.winfo_children():
+                    if isinstance(child, tk.Frame) and child.winfo_children():
+                        for grandchild in child.winfo_children():
+                            if isinstance(grandchild, tk.Frame) and grandchild.cget("bg") == "red":
+                                team_frame = grandchild
+                                break
+        
+        team_scores = _actionScreen.redScores
+        players = _actionScreen.redPlayers
+    elif team_color.lower() == "green":
+        team_frame = None
+        for widget in _actionScreen.top.winfo_children():
+            if isinstance(widget, tk.Frame) and widget.winfo_children():
+                for child in widget.winfo_children():
+                    if isinstance(child, tk.Frame) and child.winfo_children():
+                        for grandchild in child.winfo_children():
+                            if isinstance(grandchild, tk.Frame) and grandchild.cget("bg") == "green":
+                                team_frame = grandchild
+                                break
+        
+        team_scores = _actionScreen.greenScores
+        players = _actionScreen.greenPlayers
+    else:
+        print(f"Invalid team color: {team_color}")
+        return
+    
+    if not team_frame:
+        print(f"Could not find {team_color} team frame")
+        return
+    
+    # Save the team label and total score frame
+    team_label = team_frame.winfo_children()[0]  # First child is the team label
+    total_frame = team_frame.winfo_children()[-1]  # Last child is the total score frame
+    
+    # Get player frames and their scores
+    player_frames = team_frame.winfo_children()[1:-1]  # All children except first and last
+    
+    # Create list of (player_id, score, frame) tuples for sorting
+    player_data = []
+    for i, player_id in enumerate(team_scores):
+        if players.get(player_id) and players[player_id][1].get() != "":
+            score = team_scores[player_id][0].get()
+            # Find the frame for this player
+            for frame in player_frames:
+                # Check if this frame belongs to this player
+                for widget in frame.winfo_children():
+                    if isinstance(widget, tk.Label) and widget.cget("text") == players[player_id][1].get():
+                        player_data.append((player_id, score, frame))
+                        break
+    
+    # Sort player data by score in descending order
+    player_data.sort(key=lambda x: x[1], reverse=True)
+    
+    # Remove all player frames
+    for _, _, frame in player_data:
+        frame.pack_forget()
+    
+    # Repack in sorted order
+    for _, _, frame in player_data:
+        frame.pack(pady=2, fill="both")
+    
+    # Make sure team label stays at top and total frame stays at bottom
+    team_label.pack_forget()
+    total_frame.pack_forget()
+    team_label.pack(padx=10, pady=5)
+    total_frame.pack(pady=5, padx=5, side=tk.BOTTOM)
+    
+    # Update the UI
+    _actionScreen.top.update_idletasks()
+
+def sort_teams():
+    """Sort both teams by score"""
+    sort_team_by_score("red")
+    sort_team_by_score("green")
