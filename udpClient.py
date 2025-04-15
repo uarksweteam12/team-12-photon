@@ -48,7 +48,6 @@ def flash(frame, team, count=0):
     # Alternate the color of the frame between yellow and white
     currentColor = frame.cget("bg")
     newColor = "yellow" if currentColor == "white" else "white"
-    print(f"Flashing {frame} to {newColor}")
     setFrameColor(frame, newColor)
     _actionScreen.top.update()
 
@@ -202,11 +201,9 @@ def updateScore(shooter, hit, teamBool, points): #teamBool = False, red : teamBo
             _actionScreen.greenScores[str(shooter)][0].set(_actionScreen.greenScores[str(shooter)][0].get() + points)
             _actionScreen.greenTotalScore.set(_actionScreen.greenTotalScore.get() + points)
     
+    sort_teams()
     _actionScreen.top.update_idletasks()
     
-    # Sort teams by score after updating
-    sort_teams()
-
 
 def findPlayerByHardwareID(hwid):
     rtnID = None
@@ -252,12 +249,6 @@ def set_server_ip(newip):
     UDP_IP = newip
 
 def sort_team_by_score(team_color):
-    """
-    Sort players on a team according to their score in descending order.
-    
-    Args:
-        team_color (str): Either "red" or "green" to specify which team to sort
-    """
     if not _actionScreen:
         print("Action screen not initialized")
         return
@@ -338,6 +329,5 @@ def sort_team_by_score(team_color):
     _actionScreen.top.update_idletasks()
 
 def sort_teams():
-    """Sort both teams by score"""
     sort_team_by_score("red")
     sort_team_by_score("green")
