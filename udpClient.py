@@ -288,25 +288,52 @@ def sort_team_by_score(team_color):
         print(f"Could not find {team_color} team frame")
         return
     
-    # Save the team label and total score frame
-    team_label = team_frame.winfo_children()[0]  # First child is the team label
-    total_frame = team_frame.winfo_children()[-1]  # Last child is the total score frame
+    # Find the team label (it's a Label widget with text "Red Team" or "Green Team")
+    team_label = None
+    for child in team_frame.winfo_children():
+        if isinstance(child, tk.Label) and child.cget("text") in ["Red Team", "Green Team"]:
+            team_label = child
+            break
     
-    # Get player frames and their scores
-    player_frames = team_frame.winfo_children()[1:-1]  # All children except first and last
+    # If we didn't find it directly, it might be in the first child if that's a Frame
+    if not team_label and team_frame.winfo_children():
+        first_child = team_frame.winfo_children()[0]
+        if isinstance(first_child, tk.Label):
+            team_label = first_child
+    
+    # Find the total score frame (it's the last Frame in the team_frame)
+    total_frame = None
+    for child in reversed(team_frame.winfo_children()):
+        if isinstance(child, tk.Frame) and "Total" in str(child):
+            total_frame = child
+            break
+    
+    # If we didn't find it, assume it's the last child
+    if not total_frame and team_frame.winfo_children():
+        total_frame = team_frame.winfo_children()[-1]
+    
+    # Get player frames - all frames except the team label and total frame
+    player_frames = []
+    for child in team_frame.winfo_children():
+        if child != team_label and child != total_frame and isinstance(child, tk.Frame):
+            player_frames.append(child)
     
     # Create list of (player_id, score, frame) tuples for sorting
     player_data = []
-    for i, player_id in enumerate(team_scores):
+    for player_id in team_scores:
         if players.get(player_id) and players[player_id][1].get() != "":
             score = team_scores[player_id][0].get()
             # Find the frame for this player
             for frame in player_frames:
-                # Check if this frame belongs to this player
+                # Check if this frame belongs to this player by looking for a label with the player name
+                player_found = False
                 for widget in frame.winfo_children():
                     if isinstance(widget, tk.Label) and widget.cget("text") == players[player_id][1].get():
                         player_data.append((player_id, score, frame))
+                        player_found = True
                         break
+                if player_found:
+                    break
     
     # Sort player data by score in descending order
     player_data.sort(key=lambda x: x[1], reverse=True)
@@ -315,15 +342,19 @@ def sort_team_by_score(team_color):
     for _, _, frame in player_data:
         frame.pack_forget()
     
-    # Repack in sorted order
+    # If we found the team label, repack it first
+    if team_label:
+        team_label.pack_forget()
+        team_label.pack(padx=10, pady=5)
+    
+    # Repack player frames in sorted order
     for _, _, frame in player_data:
         frame.pack(pady=2, fill="both")
     
-    # Make sure team label stays at top and total frame stays at bottom
-    team_label.pack_forget()
-    total_frame.pack_forget()
-    team_label.pack(padx=10, pady=5)
-    total_frame.pack(pady=5, padx=5, side=tk.BOTTOM)
+    # Repack total frame at the bottom
+    if total_frame:
+        total_frame.pack_forget()
+        total_frame.pack(pady=5, padx=5, side=tk.BOTTOM)
     
     # Update the UI
     _actionScreen.top.update_idletasks()
