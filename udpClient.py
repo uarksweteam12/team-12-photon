@@ -86,8 +86,6 @@ def poll_udp_socket():
             sock.sendto(splitThemUp[1].encode(), (UDP_IP, UDP_PORT)) #should send hit player now...
 
             if _actionScreen is not None:
-                flash(_actionScreen.greenTotalFrame, "green")  
-                flash(_actionScreen.redTotalFrame, "red") 
                 _actionScreen.top.after(10, lambda: updateUI(splitThemUp[0], splitThemUp[1]))
 
     except BlockingIOError:
@@ -131,6 +129,9 @@ def updateUI(player1, player2):
                     updateScore(shooterID, hitID, True, -10)
                 else: # green hit red
                     updateScore(shooterID, hitID, True, 10)
+
+    flash(_actionScreen.greenTotalFrame, "green")  
+    flash(_actionScreen.redTotalFrame, "red") 
 
 def determineAction(shooter, hit, teamBool, points):
     if hit == "53": #green hit red base
