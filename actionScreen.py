@@ -49,7 +49,7 @@ class ActionScreen:
 
         udpClient.setActionScreen(self)
 
-        # This must be at the end of the __init__ function, don't move!
+        # this must be at the end of the __init__ function, don't move!
         self.centerWindow()
         self.top.wait_window(self.top)
 
